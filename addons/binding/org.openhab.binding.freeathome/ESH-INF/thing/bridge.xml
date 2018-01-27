@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<thing:thing-descriptions bindingId="freeathome" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:thing="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0"
+	xsi:schemaLocation="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0 http://eclipse.org/smarthome/schemas/thing-description-1.0.0.xsd">
+
+	<bridge-type id="bridge">
+		<label>FreeAtHome Bridge</label>
+		<description>This bridge represents the Free At Home Gateway.
+		</description>
+
+
+		<config-description>
+			<parameter-group name="identification">
+				<label>Identification</label>
+				<description>Hardware &amp; location identification</description>
+				<advanced>false</advanced>
+			</parameter-group>
+			<parameter-group name="network">
+				<label>Connection</label>
+				<description>Connection Settings</description>
+				<advanced>false</advanced>
+			</parameter-group>
+
+
+			<parameter name="ipAddress" type="text" required="true" groupName="network">
+				<context>network-address</context>
+				<label>LAN gateway IP</label>
+				<description>The IP address of the BJ gateway
+				</description>
+				<default>192.168.192.100</default>
+			</parameter>
+			<parameter name="port" type="integer" required="false" min="1" max="65335" groupName="network">				
+				<label>BJ gateway port</label>
+				<description>Port of the LAN gateway</description>
+				<default>5280</default>
+				<advanced>true</advanced>
+			</parameter>
+			<parameter name="login" type="text" required="true" groupName="identification">
+				<label>Login name</label>
+				<description>The login name</description>
+				<default>installer</default>
+			</parameter>
+			<parameter name="password" type="text" required="true" groupName="identification">
+				<label>Password</label>
+				<description>Password for gateway
+				</description>
+				<default>12345</default>
+			</parameter>
+		</config-description>
+	</bridge-type>
+
+
+</thing:thing-descriptions>

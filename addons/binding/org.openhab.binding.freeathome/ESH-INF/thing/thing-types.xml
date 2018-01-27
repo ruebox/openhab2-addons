@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<thing:thing-descriptions bindingId="freeathome"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:thing="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0"
+        xsi:schemaLocation="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0 http://eclipse.org/smarthome/schemas/thing-description-1.0.0.xsd">
+
+    <thing-type id="raffstore">
+        <supported-bridge-type-refs>
+            <bridge-type-ref id="bridge" />
+        </supported-bridge-type-refs>
+        
+        
+        <label>Raffstore switch</label>
+        <description>This switch controls raffstore shutters</description>
+        
+        <channels>
+            <channel id="raffstoreshutter_stepwise" typeId="raffstoreshutter_stepwise" />
+            <channel id="raffstoreshutter_complete" typeId="raffstoreshutter_complete" />
+        </channels>
+        
+        <config-description>
+            <parameter name="DeviceId" type="text" required="true">
+                <label>Id of device</label>
+                <description>This Id has to be fetched by spying</description>
+                <default>ABB123454</default>
+            </parameter>
+            <parameter name="ChannelId" type="text" required="true">
+                <label>The used channel of the BJ device </label>
+                <description>This channel of the current device (start counting by 0)</description>
+                <default>ch0000</default>
+            </parameter>
+            <parameter name="InputIdComplete" type="text" required="true">
+                <label>Input for complete run </label>
+                <description></description>
+                <default>idp0000</default>
+                <advanced>true</advanced>
+            </parameter>
+            <parameter name="InputIdStepwise" type="text" required="true">
+                <label>Input for stepwise run </label>
+                <description></description>
+                <default>idp0001</default>
+                <advanced>true</advanced>
+            </parameter>
+        </config-description>
+    </thing-type>
+    
+    <channel-type id="raffstoreshutter_stepwise">
+        <item-type>Rollershutter</item-type>
+        <label>Shutter stepwise</label>
+        <description>Shutter for raffstores: Stepwise</description>
+        <category>Blinds</category>
+    </channel-type>
+    <channel-type id="raffstoreshutter_complete">
+        <item-type>Rollershutter</item-type>
+        <label>Shutter complete</label>
+        <description>Shutter for raffstores: Complete</description>
+        <category>Blinds</category>
+    </channel-type>
+
+
+   <thing-type id="scene">
+        <supported-bridge-type-refs>
+            <bridge-type-ref id="bridge" />
+        </supported-bridge-type-refs>
+        
+        
+        <label>Scene</label>
+        <description>This is a switch to activate a scene</description>
+        
+        <channels>
+            <channel id="scene_activate" typeId="scene_activate" />
+        </channels>
+        
+        <config-description>
+            <parameter name="SceneId" type="text" required="true">
+                <label>Id of scence</label>
+                <description>This Id has to be fetched by spying</description>
+                <default>FFFF00000000</default>
+            </parameter>
+            <parameter name="ChannelId" type="text" required="true">
+                <label>The used channel of the BJ device </label>
+                <description>This channel of the current device (start counting by 0)</description>
+                <default>ch0000</default>
+            </parameter>
+            <parameter name="OutputId" type="text" required="true">
+                <label>Output for complete run </label>
+                <description></description>
+                <default>odp0000</default>
+                <advanced>true</advanced>
+            </parameter>
+            <parameter name="DataPoint" type="text" required="true">
+                <label>Data point to set </label>
+                <description></description>
+                <default>1</default>
+                <advanced>true</advanced>
+            </parameter>
+        </config-description>
+    </thing-type>        
+    
+    <channel-type id="scene_activate">
+        <item-type>Switch</item-type>
+        <label>Activate scene</label>
+        <description>This activates a scene</description>
+        <category>Switch</category>
+    </channel-type>
+    
+    
+   <thing-type id="scenario_selector">
+        <label>Scenario selector</label>
+        <description>This thing can be used to provide user switches to configure different scenarios e.g. @Home.
+        The status of these switches can be used by rules to setup different scenarios.
+        </description>        
+        <channels>
+            <channel id="scenario_selector_channel" typeId="scenario_selector_channel_type" />
+        </channels>
+    </thing-type>
+    <channel-type id="scenario_selector_channel_type">
+        <item-type>Switch</item-type>
+        <label>Activate scenario</label>
+        <description>This activates a scenario</description>
+        <category>Switch</category>
+    </channel-type>
+
+</thing:thing-descriptions>

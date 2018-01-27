@@ -1,0 +1,22 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: FreeAtHome Binding
+Bundle-SymbolicName: org.openhab.binding.freeathome;singleton:=true
+Bundle-Vendor: openHAB
+Bundle-Version: 2.0.0.qualifier
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-ClassPath: .,lib/xmpp-addr-0.6.2.jar,lib/xmpp-core-0.6.2.jar,lib/xmpp-core-client-0.6.2.jar,lib/xmpp-extensions-0.6.2.jar,lib/xmpp-extensions-client-0.6.2.jar
+Import-Package: 
+ org.openhab.binding.freeathome,
+ org.openhab.binding.freeathome.handler,
+ org.eclipse.smarthome.config.core,
+ org.eclipse.smarthome.core.library.types,
+ org.eclipse.smarthome.core.thing,
+ org.eclipse.smarthome.core.thing.binding,
+ org.eclipse.smarthome.core.thing.binding.builder,
+ org.eclipse.smarthome.core.thing.type,
+ org.eclipse.smarthome.core.types,
+ org.slf4j
+Service-Component: OSGI-INF/*.xml
+Export-Package: org.openhab.binding.freeathome,
+ org.openhab.binding.freeathome.handler
