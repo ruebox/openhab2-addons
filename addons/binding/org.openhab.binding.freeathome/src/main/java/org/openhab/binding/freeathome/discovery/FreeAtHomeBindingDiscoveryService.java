@@ -47,10 +47,10 @@ public class FreeAtHomeBindingDiscoveryService extends AbstractDiscoveryService 
     public void startScan() {
         // TODO Auto-generated method stub
         FreeAtHomeBridgeHandler fh = FreeAtHomeBridgeHandler.g_freeAtHomeBridgeHandler;
-        ThingUID bridgeUID = fh.getThing().getUID();
 
         if (fh != null) {
             logger.debug("start scan");
+            ThingUID bridgeUID = fh.getThing().getUID();
 
             String xmlTree = fh.getAll();
             FreeAtHomeBindingInventoryIterator iter = new FreeAtHomeBindingInventoryIterator(xmlTree);
