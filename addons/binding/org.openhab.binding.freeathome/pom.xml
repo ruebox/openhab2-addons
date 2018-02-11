@@ -16,4 +16,19 @@
   <name>FreeAtHome Binding</name>
   <packaging>eclipse-plugin</packaging>
 
+  <description>This binding currently supports:
+
+    Gateway connection
+    Scene activation
+    Raffstore/Shutter control: stepwise and complete incl. raffstore groups
+    Discovery
+
+The binding currently does not support (yet):
+    Switch
+    Light
+    Heating
+</description>
+  <organization>
+  	<name>ruebox</name>
+  </organization>
 </project>

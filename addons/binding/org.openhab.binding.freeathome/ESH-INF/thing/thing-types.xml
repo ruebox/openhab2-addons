@@ -120,5 +120,25 @@
         <description>This activates a scenario</description>
         <category>Switch</category>
     </channel-type>
+    
+    
+    <thing-type id="dummy">
+       <supported-bridge-type-refs>
+            <bridge-type-ref id="bridge" />
+       </supported-bridge-type-refs>
+       
+        <label>Dummy item</label>
+        <description>This is a dummy item for development purpose
+        </description>        
+        <channels>
+            <channel id="dummy_channel" typeId="dummy_channel_type" />
+        </channels>
+    </thing-type>
+    <channel-type id="dummy_channel_type">
+        <item-type>Text</item-type>
+        <label>Description</label>
+        <description>Device description</description>
+        <category>Text</category>
+    </channel-type>
 
 </thing:thing-descriptions>

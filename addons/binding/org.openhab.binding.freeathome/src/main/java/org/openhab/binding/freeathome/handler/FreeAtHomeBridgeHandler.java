@@ -8,6 +8,8 @@
  */
 package org.openhab.binding.freeathome.handler;
 
+import java.io.File;
+
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
@@ -70,6 +72,8 @@ import rocks.xmpp.im.subscription.PresenceManager;
  */
 public class FreeAtHomeBridgeHandler extends BaseBridgeHandler {
 
+    public static FreeAtHomeBridgeHandler g_freeAtHomeBridgeHandler = null;
+
     private Logger logger = LoggerFactory.getLogger(FreeAtHomeBridgeHandler.class);
 
     private BoshConnectionConfiguration m_BoshConfiguration;
@@ -102,6 +106,10 @@ public class FreeAtHomeBridgeHandler extends BaseBridgeHandler {
         logger.debug("Password        {}.", m_Configuration.password);
 
         connectGateway();
+
+        // getAll();
+
+        g_freeAtHomeBridgeHandler = this;
     }
 
     @Override
@@ -164,6 +172,42 @@ public class FreeAtHomeBridgeHandler extends BaseBridgeHandler {
             e.printStackTrace();
             // If the responder responded with an application level XML-RPC fault.
         }
+    }
+
+    public String getAll() {
+        try {
+            // ArrayList parameter = new ArrayList();
+            // parameter.add("ABB260851E51/ch0003/idp0000");
+            // parameter.add(1);
+            // Elevate EG Raffstore
+            // <body rid='531107' sid='2c1433b0-af08-4624-b043-1ff8dca805c6'
+            // xmlns='http://jabber.org/protocol/httpbind' key='03bee55104d73ca72418239c85b2178703a39249'><iq
+            // xmlns="jabber:client" to="mrha@busch-jaeger.de/rpc" type="set" id="1454004737242"><query
+            //
+            // xmlns="jabber:iq:rpc"><methodCall><methodName>RemoteInterface.setDatapoint</methodName><params><param><value><string>FFFF00000000/ch0000/odp0003</string></value></param><param><value><string>0</string></value></param></params></methodCall></query></iq></body>
+            // Value para1 = Value.of("ABB260851E51/ch0003/idp0000");
+
+            Value para0 = Value.of("de");
+            Value para1 = Value.of(0);
+
+            Value response = m_RpcManager.call(Jid.of("mrha@busch-jaeger.de/rpc"), "RemoteInterface.getAll", para0,
+                    para1, para1, para1);
+            logger.debug("Response from RPC RemoteInterface.setDatapoint: " + response.getAsString());
+            String resp = response.getAsString();
+
+            return resp;
+
+        } catch (XmppException e) {
+            logger.error("XMPP Exception: " + e.getMessage());
+            e.printStackTrace();
+            // E.g. a StanzaException, if the responder does not support the protocol or an
+            // // internal-server-error has occurred.
+        } catch (RpcException e) {
+            logger.error("RPC Exception: " + e.getMessage());
+            e.printStackTrace();
+            // If the responder responded with an application level XML-RPC fault.
+        }
+        return null;
     }
 
     private void connectGateway() {
@@ -340,7 +384,7 @@ public class FreeAtHomeBridgeHandler extends BaseBridgeHandler {
                             m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
 
                             // Write to File
-                            // m.marshal(p, new File("/tmp/update_" + counter + ".xml"));
+                            m.marshal(p, new File("/tmp/update_" + counter + ".xml"));
                             counter++;
 
                         } catch (JAXBException e1) {
