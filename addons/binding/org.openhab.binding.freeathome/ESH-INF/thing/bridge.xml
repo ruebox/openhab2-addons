@@ -20,6 +20,11 @@
 				<description>Connection Settings</description>
 				<advanced>false</advanced>
 			</parameter-group>
+			<parameter-group name="debugging">
+                <label>Debugging</label>
+                <description>This section configures additional logging for debugging</description>
+                <advanced>true</advanced>
+            </parameter-group>
 
 
 			<parameter name="ipAddress" type="text" required="true" groupName="network">
@@ -46,6 +51,19 @@
 				</description>
 				<default>12345</default>
 			</parameter>
+			<parameter name="log_dir" type="text" required="true" groupName="debugging">
+                <label>Log directory</label>
+                <description>Directory where log information is stored
+                </description>
+                <default>/tmp/</default>
+            </parameter>
+            <parameter name="log_enabled" type="boolean" required="true" groupName="debugging">
+                <label>Debug logging</label>
+                <description>Logging of debugging information to disk is enabled
+                </description>
+                <default>false</default>
+            </parameter>
+			
 		</config-description>
 	</bridge-type>
 

@@ -26,4 +26,8 @@ public class FreeAtHomeBridgeConfig {
     public String login;
 
     public String password;
+
+    public String log_dir;
+
+    public Boolean log_enabled;
 }

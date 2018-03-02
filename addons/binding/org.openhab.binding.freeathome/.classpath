@@ -8,5 +8,6 @@
 	<classpathentry kind="lib" path="/home/rue/homeAuto/xmpp.rocks/xmpp-core-client/target/xmpp-core-client-0.6.2.jar" sourcepath="/home/rue/homeAuto/xmpp.rocks/xmpp-core-client/target/xmpp-core-client-0.6.2-sources.jar"/>
 	<classpathentry kind="lib" path="/home/rue/homeAuto/xmpp.rocks/xmpp-extensions/target/xmpp-extensions-0.6.2.jar" sourcepath="/home/rue/homeAuto/xmpp.rocks/xmpp-extensions/target/xmpp-extensions-0.6.2-sources.jar"/>
 	<classpathentry kind="lib" path="/home/rue/homeAuto/xmpp.rocks/xmpp-extensions-client/target/xmpp-extensions-client-0.6.2.jar" sourcepath="/home/rue/homeAuto/xmpp.rocks/xmpp-extensions-client/target/xmpp-extensions-client-0.6.2-sources.jar"/>
+	<classpathentry kind="lib" path="lib/json-simple-1.1.1.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

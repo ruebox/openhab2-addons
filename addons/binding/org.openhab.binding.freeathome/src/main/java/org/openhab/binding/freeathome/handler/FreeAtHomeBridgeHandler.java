@@ -8,7 +8,15 @@
  */
 package org.openhab.binding.freeathome.handler;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.Iterator;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -21,6 +29,9 @@ import org.eclipse.smarthome.core.thing.ThingStatusDetail;
 import org.eclipse.smarthome.core.thing.binding.BaseBridgeHandler;
 import org.eclipse.smarthome.core.types.Command;
 import org.eclipse.smarthome.core.types.RefreshType;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.openhab.binding.freeathome.config.FreeAtHomeBridgeConfig;
 import org.openhab.binding.freeathome.xmpp.rocks.extension.abb.com.protocol.update.Update;
 import org.openhab.binding.freeathome.xmpp.rocks.extension.abb.com.protocol.update.UpdateEvent;
@@ -100,16 +111,22 @@ public class FreeAtHomeBridgeHandler extends BaseBridgeHandler {
 
         m_Configuration = configuration;
 
-        logger.debug("Gateway IP      {}.", m_Configuration.ipAddress);
-        logger.debug("Port            {}.", m_Configuration.port);
-        logger.debug("Login           {}.", m_Configuration.login);
-        logger.debug("Password        {}.", m_Configuration.password);
+        logger.debug("Gateway IP            {}.", m_Configuration.ipAddress);
+        logger.debug("Port                  {}.", m_Configuration.port);
+        logger.debug("Login                 {}.", m_Configuration.login);
+        logger.debug("Password              {}.", m_Configuration.password);
+        logger.debug("log_enabled           {}.", m_Configuration.log_enabled);
+        logger.debug("log_dir               {}.", m_Configuration.log_dir);
 
         connectGateway();
 
-        // getAll();
+        if (m_Configuration.log_enabled) {
+            String xml = this.getAll();
+            this.writeStringToFile(xml, m_Configuration.log_dir + "/getAll.xml");
+        }
 
         g_freeAtHomeBridgeHandler = this;
+
     }
 
     @Override
@@ -212,6 +229,17 @@ public class FreeAtHomeBridgeHandler extends BaseBridgeHandler {
 
     private void connectGateway() {
 
+        // If old session is still connected -> close xmpp session
+        if (m_XmppClient != null) {
+            try {
+                m_XmppClient.close();
+            } catch (XmppException e1) {
+                // TODO Auto-generated catch block
+                e1.printStackTrace();
+                logger.error(e1.getMessage());
+            }
+        }
+
         m_BoshConfiguration = BoshConnectionConfiguration.builder().hostname(m_Configuration.ipAddress)
                 .port(m_Configuration.port).file("/http-bind/")
                 // .sslContext(getTrustAllSslContext())
@@ -258,13 +286,31 @@ public class FreeAtHomeBridgeHandler extends BaseBridgeHandler {
 
         // Login
         try {
-            m_XmppClient.login(m_Configuration.login, m_Configuration.password);
+            // Extract jID
+            String jid = this.getJid(m_Configuration.login);
+            m_XmppClient.login(jid, m_Configuration.password);
+
         } catch (XmppException e1) {
             onConnectionLost(ThingStatusDetail.CONFIGURATION_ERROR);
             logger.error("Can not login with: " + m_Configuration.login);
             logger.error(e1.getMessage());
             e1.printStackTrace();
+            try {
+                m_XmppClient.close();
+            } catch (XmppException e2) {
+                // TODO Auto-generated catch block
+                e2.printStackTrace();
+            }
             return;
+        } catch (Exception e) {
+            onConnectionLost(ThingStatusDetail.CONFIGURATION_ERROR);
+            logger.error("Can not reach SysAP");
+            try {
+                m_XmppClient.close();
+            } catch (XmppException e1) {
+                // TODO Auto-generated catch block
+                e1.printStackTrace();
+            }
         }
 
         // updateManager.publish(Update.builder().data("Test").build());
@@ -317,6 +363,67 @@ public class FreeAtHomeBridgeHandler extends BaseBridgeHandler {
         // Notify on connection established
 
         onConnectionEstablished();
+
+    }
+
+    private String getJid(String userName) throws Exception {
+
+        /*
+         * Read settings.json from SysAP
+         */
+        String url = "http://" + m_Configuration.ipAddress + "/settings.json"; // settings stores mapping to jid
+
+        URL obj = new URL(url);
+        HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+
+        // optional default is GET
+        con.setRequestMethod("GET");
+        String USER_AGENT = "Mozilla/5.0";
+        // add request header
+        con.setRequestProperty("User-Agent", USER_AGENT);
+
+        int responseCode = con.getResponseCode();
+        System.out.println("\nSending 'GET' request to URL : " + url);
+        System.out.println("Response Code : " + responseCode);
+
+        BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+        String inputLine;
+        StringBuffer response = new StringBuffer();
+
+        while ((inputLine = in.readLine()) != null) {
+            response.append(inputLine);
+        }
+        in.close();
+
+        if (m_Configuration.log_enabled) {
+            this.writeStringToFile(response.toString(), m_Configuration.log_dir + "/settings.json");
+        }
+
+        /*
+         * Parse json to find mapping to jid
+         */
+        Object o = new JSONParser().parse(response.toString());
+
+        JSONObject jo = (JSONObject) o;
+
+        JSONArray ja = (JSONArray) jo.get("users");
+        Iterator itr2 = ja.iterator();
+
+        String foundJid = "";
+
+        while (itr2.hasNext()) {
+            JSONObject currentUser = ((JSONObject) itr2.next());
+            String login = (String) currentUser.get("name");
+            String jid = (String) currentUser.get("jid");
+            logger.info("Login: " + login + "      with the current jid: " + jid);
+            if (login.equals(userName)) {
+                foundJid = jid.substring(0, jid.indexOf("@"));
+            }
+        }
+
+        logger.info("Matching jid for login(" + userName + ")      " + foundJid);
+
+        return foundJid;
 
     }
 
@@ -384,8 +491,10 @@ public class FreeAtHomeBridgeHandler extends BaseBridgeHandler {
                             m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
 
                             // Write to File
-                            m.marshal(p, new File("/tmp/update_" + counter + ".xml"));
-                            counter++;
+                            if (this.m_Configuration.log_enabled) {
+                                m.marshal(p, new File(this.m_Configuration.log_dir + "/update_" + counter + ".xml"));
+                                counter++;
+                            }
 
                         } catch (JAXBException e1) {
                             // TODO Auto-generated catch block
@@ -405,6 +514,25 @@ public class FreeAtHomeBridgeHandler extends BaseBridgeHandler {
 
     private void onUpdateEvent(UpdateEvent e) {
         logger.debug("UpdateEvent:" + e.toString());
+    }
+
+    private void writeStringToFile(String content, String file) {
+        BufferedWriter out = null;
+        try {
+            out = new BufferedWriter(new FileWriter(file));
+            out.write(content); // Replace with the string
+                                // you are trying to write
+        } catch (IOException e) {
+            System.out.println("Exception ");
+
+        } finally {
+            try {
+                out.close();
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
     }
 
 }
