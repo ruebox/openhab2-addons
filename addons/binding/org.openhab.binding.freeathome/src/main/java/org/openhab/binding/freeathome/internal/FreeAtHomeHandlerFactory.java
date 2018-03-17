@@ -21,12 +21,15 @@ import org.openhab.binding.freeathome.handler.FreeAtHomeDummyHandler;
 import org.openhab.binding.freeathome.handler.FreeAtHomeRaffStoreHandler;
 import org.openhab.binding.freeathome.handler.FreeAtHomeScenarioSelectorHandler;
 import org.openhab.binding.freeathome.handler.FreeAtHomeSceneHandler;
+import org.openhab.binding.freeathome.handler.FreeAtHomeSwitchHandler;
+import org.openhab.binding.freeathome.handler.FreeAtHomeThermostatHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
  * The {@link FreeAtHomeHandlerFactory} is responsible for creating things and thing
  * handlers.
+ *
  *
  * @author ruebox - Initial contribution
  */
@@ -63,6 +66,18 @@ public class FreeAtHomeHandlerFactory extends BaseThingHandlerFactory {
         if (thingTypeUID.equals(SCENARIO_SELECTOR_THING_TYPEUID)) {
             logger.debug("create Scenario Selector Handler");
             FreeAtHomeScenarioSelectorHandler handler = new FreeAtHomeScenarioSelectorHandler(thing);
+            return handler;
+        }
+
+        if (thingTypeUID.equals(SWITCH_THING_TYPEUID)) {
+            logger.debug("create Switch Handler");
+            FreeAtHomeSwitchHandler handler = new FreeAtHomeSwitchHandler(thing);
+            return handler;
+        }
+
+        if (thingTypeUID.equals(THERMOSTAT_THING_TYPEUID)) {
+            logger.debug("create thermostat Handler");
+            FreeAtHomeThermostatHandler handler = new FreeAtHomeThermostatHandler(thing);
             return handler;
         }
 

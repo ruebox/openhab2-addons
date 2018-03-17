@@ -47,6 +47,7 @@ public class FreeAtHomeRaffStoreHandler extends BaseThingHandler {
         if (bridge == null) {
             logger.error("No bridge connected");
             updateStatus(ThingStatus.OFFLINE);
+            return;
         }
 
         if (command instanceof RefreshType) {

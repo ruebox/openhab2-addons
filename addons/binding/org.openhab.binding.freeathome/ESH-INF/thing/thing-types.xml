@@ -14,8 +14,8 @@
         <description>This switch controls raffstore shutters</description>
         
         <channels>
-            <channel id="raffstoreshutter_stepwise" typeId="raffstoreshutter_stepwise" />
-            <channel id="raffstoreshutter_complete" typeId="raffstoreshutter_complete" />
+            <channel id="stepwise" typeId="raffstoreshutter_stepwise_type" />
+            <channel id="complete" typeId="raffstoreshutter_complete_type" />
         </channels>
         
         <config-description>
@@ -44,13 +44,13 @@
         </config-description>
     </thing-type>
     
-    <channel-type id="raffstoreshutter_stepwise">
+    <channel-type id="raffstoreshutter_stepwise_type">
         <item-type>Rollershutter</item-type>
         <label>Shutter stepwise</label>
         <description>Shutter for raffstores: Stepwise</description>
         <category>Blinds</category>
     </channel-type>
-    <channel-type id="raffstoreshutter_complete">
+    <channel-type id="raffstoreshutter_complete_type">
         <item-type>Rollershutter</item-type>
         <label>Shutter complete</label>
         <description>Shutter for raffstores: Complete</description>
@@ -68,7 +68,7 @@
         <description>This is a switch to activate a scene</description>
         
         <channels>
-            <channel id="scene_activate" typeId="scene_activate" />
+            <channel id="activate" typeId="scene_activate_type" />
         </channels>
         
         <config-description>
@@ -97,7 +97,7 @@
         </config-description>
     </thing-type>        
     
-    <channel-type id="scene_activate">
+    <channel-type id="scene_activate_type">
         <item-type>Switch</item-type>
         <label>Activate scene</label>
         <description>This activates a scene</description>
@@ -111,15 +111,128 @@
         The status of these switches can be used by rules to setup different scenarios.
         </description>        
         <channels>
-            <channel id="scenario_selector_channel" typeId="scenario_selector_channel_type" />
+            <channel id="selector" typeId="scenario_selector_channel_type" />
         </channels>
     </thing-type>
     <channel-type id="scenario_selector_channel_type">
         <item-type>Switch</item-type>
-        <label>Activate scenario</label>
+        <label>Activate</label>
         <description>This activates a scenario</description>
         <category>Switch</category>
     </channel-type>
+    
+    
+    
+   <thing-type id="switch">
+           <supported-bridge-type-refs>
+            <bridge-type-ref id="bridge" />
+        </supported-bridge-type-refs>
+   
+        <label>Switch</label>
+        <description>This is a binary switch.
+        </description>        
+        <channels>
+            <channel id="fh_switch_channel" typeId="fh_switch_channel_type">
+                <label>Activate</label>
+                <description>Switch on/off</description>
+            </channel>
+        </channels>
+        
+         <config-description>
+            <parameter name="deviceId" type="text" required="true">
+                <label>Id of the device</label>
+                <description>DeviceId</description>
+                <default>FFFF00000000</default>
+            </parameter>
+            <parameter name="channelId" type="text" required="true">
+                <label>The used channel of the BJ device </label>
+                <description>This channel of the current device (start counting by 0)</description>
+                <default>ch0000</default>
+                <advanced>true</advanced>
+            </parameter>
+            <parameter name="dataPointId" type="text" required="true">
+                <label>Id of data point </label>
+                <description></description>
+                <default>idp0000</default>
+                <advanced>true</advanced>
+            </parameter>
+        </config-description>
+        
+    </thing-type>
+    
+    
+    <channel-type id="fh_switch_channel_type">
+        <item-type>Switch</item-type>
+        <label>Activate</label>
+        <description>Switch on/off</description>
+        <category>Switch</category>
+    </channel-type>
+    
+    <channel-type id="fh_temp_channel_type">
+        <item-type>Number</item-type>
+        <label>Temperature</label>
+        <description>Temperature of device</description>
+        <category>Temperature</category>
+    </channel-type>
+    
+    
+       <thing-type id="thermostat">
+           <supported-bridge-type-refs>
+            <bridge-type-ref id="bridge" />
+        </supported-bridge-type-refs>
+   
+        <label>Thermostat</label>
+        <description>This is a thermostat.
+        </description>        
+        <channels>
+            <channel id="therm_target_temp" typeId="fh_temp_channel_type">
+                <label>Target temp</label>
+                <description>Set target temperature of device</description>
+            </channel>
+            <channel id="therm_switch" typeId="fh_switch_channel_type">
+                <label>Activate</label>
+                <description>Switch termostat on/off</description>
+            </channel>
+            <channel id="therm_eco_switch" typeId="fh_switch_channel_type">
+                <label>Eco mode</label>
+                <description>Switch eco mode on/off</description>
+            </channel>
+        </channels>
+        
+         <config-description>
+            <parameter name="deviceId" type="text" required="true">
+                <label>Id of the device</label>
+                <description>DeviceId</description>
+                <default>FFFF00000000</default>
+            </parameter>
+            <parameter name="channelId" type="text" required="true">
+                <label>The used channel of the BJ device </label>
+                <description>This channel of the current device (start counting by 0)</description>
+                <default>ch0000</default>
+                <advanced>true</advanced>
+            </parameter>
+            <parameter name="dataPointIdTarget" type="text" required="true">
+                <label>Id for target temperature</label>
+                <description></description>
+                <default>idp0016</default>
+                <advanced>true</advanced>
+            </parameter>
+            <parameter name="dataPointIdSwitch" type="text" required="true">
+                <label>Id to switch on/off </label>
+                <description></description>
+                <default>idp0012</default>
+                <advanced>true</advanced>
+            </parameter>
+            <parameter name="dataPointIdEco" type="text" required="true">
+                <label>Id to switch eco mode on/off</label>
+                <description></description>
+                <default>idp0011</default>
+                <advanced>true</advanced>
+            </parameter>
+        </config-description>
+        
+    </thing-type>
+    
     
     
     <thing-type id="dummy">

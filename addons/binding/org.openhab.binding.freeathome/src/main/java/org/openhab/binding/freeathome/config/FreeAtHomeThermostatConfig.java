@@ -6,30 +6,19 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  */
-
 package org.openhab.binding.freeathome.config;
 
 /**
- * Configuration of bridge
+ * Configuration of a thermostat
  *
  * @author ruebox
  *
  */
-public class FreeAtHomeBridgeConfig {
-    /*
-     * IP adress of gateway
-     */
-    public String ipAddress;
+public class FreeAtHomeThermostatConfig {
+    public String deviceId;
+    public String channelId;
+    public String dataPointIdTarget;
+    public String dataPointIdSwitch;
+    public String dataPointIdEco;
 
-    public Integer port;
-
-    public String login;
-
-    public String password;
-
-    public String log_dir;
-
-    public Boolean log_enabled;
-
-    public Boolean dummy_things_enabled;
 }

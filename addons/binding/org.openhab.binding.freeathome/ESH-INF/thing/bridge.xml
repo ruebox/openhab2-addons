@@ -43,7 +43,7 @@
 			<parameter name="login" type="text" required="true" groupName="identification">
 				<label>Login name</label>
 				<description>The login name</description>
-				<default>installer</default>
+				<default>Installer</default>
 			</parameter>
 			<parameter name="password" type="text" required="true" groupName="identification">
 				<label>Password</label>
@@ -60,6 +60,12 @@
             <parameter name="log_enabled" type="boolean" required="true" groupName="debugging">
                 <label>Debug logging</label>
                 <description>Logging of debugging information to disk is enabled
+                </description>
+                <default>false</default>
+            </parameter>
+            <parameter name="dummy_things_enabled" type="boolean" required="true" groupName="debugging">
+                <label>Dummy things enabled</label>
+                <description>If enabled also unsupported things will be discovered but as dummy items without functionality
                 </description>
                 <default>false</default>
             </parameter>

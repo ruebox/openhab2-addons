@@ -80,6 +80,75 @@ public class FreeAtHomeBindingDiscoveryService extends AbstractDiscoveryService 
                             thingDiscovered(discoveryResult);
                         }
                         break;
+                    // Jalousieaktor 1-fach, REG
+                    case "1013":
+                        for (int i = 0; i < 1; i++) // 1013 provides 4 different channels
+                        {
+                            String channelId = "ch000" + i;
+                            ThingUID uid = new ThingUID(FreeAtHomeBindingConstants.RAFFSTORE_THING_TYPEUID,
+                                    device.Serial + "_" + channelId);
+                            Map<String, Object> properties = new HashMap<>(1);
+                            properties.put("DeviceId", device.Serial);
+                            properties.put("ChannelId", channelId);
+
+                            DiscoveryResult discoveryResult = DiscoveryResultBuilder.create(uid)
+                                    .withLabel(device.DeviceDisplayName + "_" + device.DeviceTypeName + "_"
+                                            + device.Serial + "_" + channelId)
+                                    .withBridge(bridgeUID).withProperties(properties).build();
+                            thingDiscovered(discoveryResult);
+                        }
+                        break;
+                    // // Schaltaktor 4-fach, 16A, REG
+                    case "B002":
+                        for (int i = 0; i < 4; i++) // B002 provides 4 different channels
+                        {
+                            String channelId = "ch000" + i;
+                            ThingUID uid = new ThingUID(FreeAtHomeBindingConstants.SWITCH_THING_TYPEUID,
+                                    device.Serial + "_" + channelId);
+                            Map<String, Object> properties = new HashMap<>(1);
+                            properties.put("deviceId", device.Serial);
+                            properties.put("channelId", channelId);
+
+                            DiscoveryResult discoveryResult = DiscoveryResultBuilder.create(uid)
+                                    .withLabel(device.DeviceDisplayName + "_" + device.DeviceTypeName + "_"
+                                            + device.Serial + "_" + channelId)
+                                    .withBridge(bridgeUID).withProperties(properties).build();
+                            thingDiscovered(discoveryResult);
+                        }
+                        break;
+                    case "B008":
+                        for (int i = 0; i < 8; i++) // B008 provides 8 different channels
+                        {
+                            String channelId = "ch000" + i;
+                            ThingUID uid = new ThingUID(FreeAtHomeBindingConstants.SWITCH_THING_TYPEUID,
+                                    device.Serial + "_" + channelId);
+                            Map<String, Object> properties = new HashMap<>(1);
+                            properties.put("deviceId", device.Serial);
+                            properties.put("channelId", channelId);
+
+                            DiscoveryResult discoveryResult = DiscoveryResultBuilder.create(uid)
+                                    .withLabel(device.DeviceDisplayName + "_" + device.DeviceTypeName + "_"
+                                            + device.Serial + "_" + channelId)
+                                    .withBridge(bridgeUID).withProperties(properties).build();
+                            thingDiscovered(discoveryResult);
+                        }
+                        break;
+                    // // Switch group
+                    case "4000": {
+                        String channelId = "ch0000";
+                        ThingUID uid = new ThingUID(FreeAtHomeBindingConstants.SWITCH_THING_TYPEUID, device.Serial);
+                        Map<String, Object> properties = new HashMap<>(1);
+                        properties.put("deviceId", device.Serial);
+                        properties.put("channelId", channelId);
+                        properties.put("dataPointId", "odp0002");
+
+                        DiscoveryResult discoveryResult = DiscoveryResultBuilder
+                                .create(uid).withLabel(device.DeviceDisplayName + "_" + device.DeviceTypeName + "_"
+                                        + device.Serial + "_" + channelId)
+                                .withBridge(bridgeUID).withProperties(properties).build();
+                        thingDiscovered(discoveryResult);
+                        break;
+                    }
                     // Jalousiegruppe
                     case "4001": {
                         String channelId = "ch0000";
@@ -89,6 +158,18 @@ public class FreeAtHomeBindingDiscoveryService extends AbstractDiscoveryService 
                         properties.put("ChannelId", channelId);
                         properties.put("InputIdComplete", "odp0003");
                         properties.put("InputIdStepwise", "odp0004");
+
+                        DiscoveryResult discoveryResult = DiscoveryResultBuilder.create(uid)
+                                .withLabel(device.DeviceDisplayName + "_" + device.DeviceTypeName + "_" + device.Serial)
+                                .withBridge(bridgeUID).withProperties(properties).build();
+                        thingDiscovered(discoveryResult);
+                        break;
+                    }
+                    // thermostat
+                    case "9004": {
+                        ThingUID uid = new ThingUID(FreeAtHomeBindingConstants.THERMOSTAT_THING_TYPEUID, device.Serial);
+                        Map<String, Object> properties = new HashMap<>(1);
+                        properties.put("deviceId", device.Serial);
 
                         DiscoveryResult discoveryResult = DiscoveryResultBuilder.create(uid)
                                 .withLabel(device.DeviceDisplayName + "_" + device.DeviceTypeName + "_" + device.Serial)
@@ -108,13 +189,18 @@ public class FreeAtHomeBindingDiscoveryService extends AbstractDiscoveryService 
                         thingDiscovered(discoveryResult);
                         break;
 
-                    default:
-                        ThingUID uid1 = new ThingUID(FreeAtHomeBindingConstants.DUMMY_THING_TYPEUID, device.Serial);
+                    default: {
+                        if (fh.dummyThingsEnabled()) {
 
-                        DiscoveryResult discoveryResult1 = DiscoveryResultBuilder.create(uid1).withLabel(
-                                "Dummy_" + device.DeviceDisplayName + "_" + device.DeviceTypeName + "_" + device.Serial)
-                                .withBridge(bridgeUID).build();
-                        thingDiscovered(discoveryResult1);
+                            ThingUID uid1 = new ThingUID(FreeAtHomeBindingConstants.DUMMY_THING_TYPEUID, device.Serial);
+
+                            DiscoveryResult discoveryResult1 = DiscoveryResultBuilder
+                                    .create(uid1).withLabel("Dummy_" + device.DeviceDisplayName + "_"
+                                            + device.DeviceTypeName + "_" + device.Serial)
+                                    .withBridge(bridgeUID).build();
+                            thingDiscovered(discoveryResult1);
+                        }
+                    }
                 }
 
                 iter.iter_next();

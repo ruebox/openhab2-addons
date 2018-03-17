@@ -29,6 +29,8 @@ public class FreeAtHomeBindingConstants {
     public static final String SCENE_ID = "scene";
     public static final String SCENARIO_SELECTOR_ID = "scenario_selector";
     public static final String DUMMY_ID = "dummy";
+    public static final String SWITCH_ID = "switch";
+    public static final String THERMOSTAT_ID = "thermostat";
 
     // List of all Thing Type UIDs
     public final static ThingTypeUID RAFFSTORE_THING_TYPEUID = new ThingTypeUID(BINDING_ID, RAFFSTORE_ID);
@@ -37,19 +39,27 @@ public class FreeAtHomeBindingConstants {
     public final static ThingTypeUID SCENARIO_SELECTOR_THING_TYPEUID = new ThingTypeUID(BINDING_ID,
             SCENARIO_SELECTOR_ID);
     public final static ThingTypeUID DUMMY_THING_TYPEUID = new ThingTypeUID(BINDING_ID, DUMMY_ID);
+    public final static ThingTypeUID SWITCH_THING_TYPEUID = new ThingTypeUID(BINDING_ID, SWITCH_ID);
+    public final static ThingTypeUID THERMOSTAT_THING_TYPEUID = new ThingTypeUID(BINDING_ID, THERMOSTAT_ID);
 
     // List of all Channel ids
-    public final static String RAFFSTORE_THING_CHANNEL_STEPWISE = "raffstoreshutter_stepwise";
-    public final static String RAFFSTORE_THING_CHANNEL_COMPLETE = "raffstoreshutter_complete";
+    public final static String RAFFSTORE_THING_CHANNEL_STEPWISE = "stepwise";
+    public final static String RAFFSTORE_THING_CHANNEL_COMPLETE = "complete";
 
-    public final static String SCENE_THING_CHANNEL_ACTIVATE = "scene_activate";
+    public final static String SCENE_THING_CHANNEL_ACTIVATE = "activate";
 
-    public final static String SCENARIO_SELECTOR_THING_CHANNEL = "scenario_selector_channel";
+    public final static String SCENARIO_SELECTOR_THING_CHANNEL = "selector";
 
     public final static String DUMMY_THING_CHANNEL = "dummy_channel";
 
-    public final static Set<ThingTypeUID> SUPPORTED_THING_TYPES_UIDS = new HashSet<>(
-            Arrays.asList(RAFFSTORE_THING_TYPEUID, BRIDGE_THING_TYPEUID, SCENE_THING_TYPEUID,
-                    SCENARIO_SELECTOR_THING_TYPEUID, DUMMY_THING_TYPEUID));
+    public final static String SWITCH_THING_CHANNEL = "fh_switch_channel";
+
+    public final static String THERMOSTAT_TARGET_TEMP_THING_CHANNEL = "therm_target_temp";
+    public final static String THERMOSTAT_SWITCH_THING_CHANNEL = "therm_switch";
+    public final static String THERMOSTAT_ECO_THING_CHANNEL = "therm_eco_switch";
+
+    public final static Set<ThingTypeUID> SUPPORTED_THING_TYPES_UIDS = new HashSet<>(Arrays.asList(
+            RAFFSTORE_THING_TYPEUID, BRIDGE_THING_TYPEUID, SCENE_THING_TYPEUID, SCENARIO_SELECTOR_THING_TYPEUID,
+            DUMMY_THING_TYPEUID, SWITCH_THING_TYPEUID, THERMOSTAT_THING_TYPEUID));
 
 }

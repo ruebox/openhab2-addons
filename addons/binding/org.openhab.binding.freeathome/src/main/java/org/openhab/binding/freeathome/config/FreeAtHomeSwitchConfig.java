@@ -6,30 +6,17 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  */
-
 package org.openhab.binding.freeathome.config;
 
 /**
- * Configuration of bridge
+ * Configuration of a switch
  *
  * @author ruebox
  *
  */
-public class FreeAtHomeBridgeConfig {
-    /*
-     * IP adress of gateway
-     */
-    public String ipAddress;
+public class FreeAtHomeSwitchConfig {
+    public String deviceId;
+    public String channelId;
+    public String dataPointId;
 
-    public Integer port;
-
-    public String login;
-
-    public String password;
-
-    public String log_dir;
-
-    public Boolean log_enabled;
-
-    public Boolean dummy_things_enabled;
 }

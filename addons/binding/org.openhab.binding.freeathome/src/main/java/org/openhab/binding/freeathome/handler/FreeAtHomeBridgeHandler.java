@@ -117,6 +117,7 @@ public class FreeAtHomeBridgeHandler extends BaseBridgeHandler {
         logger.debug("Password              {}.", m_Configuration.password);
         logger.debug("log_enabled           {}.", m_Configuration.log_enabled);
         logger.debug("log_dir               {}.", m_Configuration.log_dir);
+        logger.debug("dummy_things_enabled  {}.", m_Configuration.dummy_things_enabled);
 
         connectGateway();
 
@@ -127,6 +128,10 @@ public class FreeAtHomeBridgeHandler extends BaseBridgeHandler {
 
         g_freeAtHomeBridgeHandler = this;
 
+    }
+
+    public boolean dummyThingsEnabled() {
+        return m_Configuration.dummy_things_enabled;
     }
 
     @Override
