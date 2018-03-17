@@ -11,11 +11,9 @@ package org.openhab.binding.freeathome.handler;
 
 import org.eclipse.smarthome.core.thing.ChannelUID;
 import org.eclipse.smarthome.core.thing.Thing;
-import org.eclipse.smarthome.core.thing.ThingStatus;
-import org.eclipse.smarthome.core.thing.binding.BaseThingHandler;
 import org.eclipse.smarthome.core.types.Command;
 
-public class FreeAtHomeDummyHandler extends BaseThingHandler {
+public class FreeAtHomeDummyHandler extends FreeAtHomeBaseHandler {
 
     public FreeAtHomeDummyHandler(Thing thing) {
         super(thing);
@@ -29,7 +27,9 @@ public class FreeAtHomeDummyHandler extends BaseThingHandler {
 
     @Override
     public void initialize() {
-        updateStatus(ThingStatus.ONLINE);
+        // Fetch bridge on initialization to get proper state
+        FreeAtHomeBridgeHandler bridge = getFreeAtHomeBridge();
+        bridge.dummyThingsEnabled();
     }
 
 }

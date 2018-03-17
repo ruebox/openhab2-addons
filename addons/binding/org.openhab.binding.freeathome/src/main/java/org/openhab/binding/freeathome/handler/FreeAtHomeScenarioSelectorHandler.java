@@ -10,8 +10,6 @@ package org.openhab.binding.freeathome.handler;
 
 import org.eclipse.smarthome.core.thing.ChannelUID;
 import org.eclipse.smarthome.core.thing.Thing;
-import org.eclipse.smarthome.core.thing.ThingStatus;
-import org.eclipse.smarthome.core.thing.binding.BaseThingHandler;
 import org.eclipse.smarthome.core.types.Command;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,7 +20,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author ruebox - Initial contribution
  */
-public class FreeAtHomeScenarioSelectorHandler extends BaseThingHandler {
+public class FreeAtHomeScenarioSelectorHandler extends FreeAtHomeBaseHandler {
 
     private Logger logger = LoggerFactory.getLogger(FreeAtHomeScenarioSelectorHandler.class);
 
@@ -37,8 +35,8 @@ public class FreeAtHomeScenarioSelectorHandler extends BaseThingHandler {
 
     @Override
     public void initialize() {
-        // updateStatus(ThingStatus.UNINITIALIZED);
-        // updateStatus(ThingStatus.INITIALIZING);
-        updateStatus(ThingStatus.ONLINE);
+        // Fetch bridge on initialization to get proper state
+        FreeAtHomeBridgeHandler bridge = getFreeAtHomeBridge();
+        bridge.dummyThingsEnabled();
     }
 }

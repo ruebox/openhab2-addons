@@ -137,6 +137,8 @@ public class FreeAtHomeBridgeHandler extends BaseBridgeHandler {
     @Override
     public void dispose() {
 
+        onConnectionLost(ThingStatusDetail.CONFIGURATION_ERROR, "Bridge removed");
+
         try {
             m_XmppClient.close();
         } catch (XmppException e) {
@@ -282,7 +284,8 @@ public class FreeAtHomeBridgeHandler extends BaseBridgeHandler {
         try {
             m_XmppClient.connect();
         } catch (XmppException e1) {
-            onConnectionLost(ThingStatusDetail.COMMUNICATION_ERROR);
+            onConnectionLost(ThingStatusDetail.COMMUNICATION_ERROR,
+                    "Can not connect to SysAP with address: " + m_Configuration.ipAddress);
             logger.error("Can not connect to IP gateway");
             logger.error(e1.getMessage());
             e1.printStackTrace();
@@ -296,7 +299,8 @@ public class FreeAtHomeBridgeHandler extends BaseBridgeHandler {
             m_XmppClient.login(jid, m_Configuration.password);
 
         } catch (XmppException e1) {
-            onConnectionLost(ThingStatusDetail.CONFIGURATION_ERROR);
+            onConnectionLost(ThingStatusDetail.CONFIGURATION_ERROR,
+                    "Login on SysAP with login name: " + m_Configuration.login);
             logger.error("Can not login with: " + m_Configuration.login);
             logger.error(e1.getMessage());
             e1.printStackTrace();
@@ -308,8 +312,10 @@ public class FreeAtHomeBridgeHandler extends BaseBridgeHandler {
             }
             return;
         } catch (Exception e) {
-            onConnectionLost(ThingStatusDetail.CONFIGURATION_ERROR);
-            logger.error("Can not reach SysAP");
+            onConnectionLost(ThingStatusDetail.CONFIGURATION_ERROR,
+                    "Login on SysAP with login name: " + m_Configuration.login + " (Login name could not be resolved)");
+            logger.error(
+                    "Login on SysAP with login name: " + m_Configuration.login + " (Login name could not be resolved)");
             try {
                 m_XmppClient.close();
             } catch (XmppException e1) {
@@ -437,15 +443,19 @@ public class FreeAtHomeBridgeHandler extends BaseBridgeHandler {
         updateStatus(ThingStatus.ONLINE);
     }
 
-    private void onConnectionLost(ThingStatusDetail detail) {
+    private void onConnectionLost(ThingStatusDetail detail, String msg) {
         logger.debug("Bridge connection lost. Updating thing status to OFFLINE.");
-        updateStatus(ThingStatus.OFFLINE, detail);
+        updateStatus(ThingStatus.OFFLINE, detail, msg);
     }
 
     private void onUpdateXMPPStatus(SessionStatusEvent e) {
         logger.debug(e.toString());
         if (e != null && e.getStatus() == XmppSession.Status.DISCONNECTED) {
-            onConnectionLost(ThingStatusDetail.BRIDGE_OFFLINE);
+            onConnectionLost(ThingStatusDetail.BRIDGE_OFFLINE, "XMPP connection lost");
+        }
+
+        if (e != null && e.getStatus() == XmppSession.Status.CONNECTED) {
+            onConnectionEstablished();
         }
     }
 

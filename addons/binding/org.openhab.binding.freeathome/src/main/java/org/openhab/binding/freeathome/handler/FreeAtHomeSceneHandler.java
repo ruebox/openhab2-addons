@@ -11,14 +11,9 @@ package org.openhab.binding.freeathome.handler;
 import static org.openhab.binding.freeathome.FreeAtHomeBindingConstants.SCENE_THING_CHANNEL_ACTIVATE;
 
 import org.eclipse.smarthome.core.library.types.OnOffType;
-import org.eclipse.smarthome.core.thing.Bridge;
 import org.eclipse.smarthome.core.thing.ChannelUID;
 import org.eclipse.smarthome.core.thing.Thing;
-import org.eclipse.smarthome.core.thing.ThingStatus;
-import org.eclipse.smarthome.core.thing.binding.BaseThingHandler;
-import org.eclipse.smarthome.core.thing.binding.ThingHandler;
 import org.eclipse.smarthome.core.types.Command;
-import org.eclipse.smarthome.core.types.RefreshType;
 import org.openhab.binding.freeathome.config.FreeAtHomeSceneConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,7 +24,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author ruebox - Initial contribution
  */
-public class FreeAtHomeSceneHandler extends BaseThingHandler {
+public class FreeAtHomeSceneHandler extends FreeAtHomeBaseHandler {
 
     private Logger logger = LoggerFactory.getLogger(FreeAtHomeSceneHandler.class);
 
@@ -45,13 +40,6 @@ public class FreeAtHomeSceneHandler extends BaseThingHandler {
 
         if (bridge == null) {
             logger.error("No bridge connected");
-            updateStatus(ThingStatus.OFFLINE);
-        }
-
-        if (command instanceof RefreshType) {
-            if (bridge != null) {
-                updateStatus(ThingStatus.ONLINE);
-            }
             return;
         }
 
@@ -83,25 +71,9 @@ public class FreeAtHomeSceneHandler extends BaseThingHandler {
     public void initialize() {
         m_Configuration = getConfigAs(FreeAtHomeSceneConfig.class);
 
-        if (getFreeAtHomeBridge() == null) {
-            updateStatus(ThingStatus.OFFLINE);
-            return;
-        }
-
-        updateStatus(ThingStatus.ONLINE);
-    }
-
-    private FreeAtHomeBridgeHandler getFreeAtHomeBridge() {
-        Bridge bridge = getBridge();
-        if (bridge == null) {
-            return null;
-        }
-
-        ThingHandler handler = bridge.getHandler();
-        if (handler instanceof FreeAtHomeBridgeHandler) {
-            return (FreeAtHomeBridgeHandler) handler;
-        }
-        return null;
+        // Fetch bridge on initialization to get proper state
+        FreeAtHomeBridgeHandler bridge = getFreeAtHomeBridge();
+        bridge.dummyThingsEnabled();
     }
 
 }
