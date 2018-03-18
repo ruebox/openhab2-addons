@@ -31,4 +31,34 @@ The binding currently does not support (yet):
   <organization>
   	<name>ruebox</name>
   </organization>
+  <dependencies>
+<!-- https://mvnrepository.com/artifact/javax.measure/unit-api -->
+<dependency>
+    <groupId>javax.measure</groupId>
+    <artifactId>unit-api</artifactId>
+    <version>1.0</version>
+</dependency>
+<!-- https://mvnrepository.com/artifact/tec.uom/uom-parent -->
+<dependency>
+    <groupId>tec.uom</groupId>
+    <artifactId>uom-parent</artifactId>
+    <version>1.0.5</version>
+    <type>pom</type>
+</dependency>
+<!-- https://mvnrepository.com/artifact/tec.uom.lib/uom-lib-common -->
+<dependency>
+    <groupId>tec.uom.lib</groupId>
+    <artifactId>uom-lib-common</artifactId>
+    <version>1.0.2</version>
+</dependency>
+<!-- https://mvnrepository.com/artifact/tec.uom/uom-se -->
+<dependency>
+    <groupId>tec.uom</groupId>
+    <artifactId>uom-se</artifactId>
+    <version>1.0.9</version>
+</dependency>
+
+
+  
+  </dependencies>
 </project>
