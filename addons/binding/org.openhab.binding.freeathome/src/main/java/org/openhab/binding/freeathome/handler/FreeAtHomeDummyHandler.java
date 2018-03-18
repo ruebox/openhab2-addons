@@ -29,7 +29,10 @@ public class FreeAtHomeDummyHandler extends FreeAtHomeBaseHandler {
     public void initialize() {
         // Fetch bridge on initialization to get proper state
         FreeAtHomeBridgeHandler bridge = getFreeAtHomeBridge();
-        bridge.dummyThingsEnabled();
+        if (bridge != null) {
+            bridge.dummyThingsEnabled();
+        } // dummy call to avoid optimization
+
     }
 
 }

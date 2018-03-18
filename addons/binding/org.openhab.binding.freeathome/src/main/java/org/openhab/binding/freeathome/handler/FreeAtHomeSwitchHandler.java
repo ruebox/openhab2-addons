@@ -75,7 +75,9 @@ public class FreeAtHomeSwitchHandler extends FreeAtHomeBaseHandler {
 
         // Fetch bridge on initialization to get proper state
         FreeAtHomeBridgeHandler bridge = getFreeAtHomeBridge();
-        bridge.dummyThingsEnabled();
+        if (bridge != null) {
+            bridge.dummyThingsEnabled();
+        } // dummy call to avoid optimization
     }
 
 }

@@ -94,6 +94,12 @@
                 <default>1</default>
                 <advanced>true</advanced>
             </parameter>
+            <parameter name="resetTimeout" type="decimal" required="true">
+                <label>Reset Timeout (sec)</label>
+                <description>Time in seconds when scene will be reseted to OFF after activation. If smaller than 0 - no reset</description>
+                <default>2</default>
+                <advanced>true</advanced>
+            </parameter>
         </config-description>
     </thing-type>        
     

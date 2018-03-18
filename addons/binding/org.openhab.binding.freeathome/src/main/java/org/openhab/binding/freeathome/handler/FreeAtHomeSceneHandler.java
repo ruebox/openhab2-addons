@@ -10,6 +10,9 @@ package org.openhab.binding.freeathome.handler;
 
 import static org.openhab.binding.freeathome.FreeAtHomeBindingConstants.SCENE_THING_CHANNEL_ACTIVATE;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 import org.eclipse.smarthome.core.library.types.OnOffType;
 import org.eclipse.smarthome.core.thing.ChannelUID;
 import org.eclipse.smarthome.core.thing.Thing;
@@ -30,8 +33,22 @@ public class FreeAtHomeSceneHandler extends FreeAtHomeBaseHandler {
 
     private FreeAtHomeSceneConfig m_Configuration;
 
+    private Timer m_Timer = new Timer(true);
+
     public FreeAtHomeSceneHandler(Thing thing) {
         super(thing);
+    }
+
+    @Override
+    public void initialize() {
+        m_Configuration = getConfigAs(FreeAtHomeSceneConfig.class);
+
+        logger.debug("Reset Timeout            {}.", m_Configuration.resetTimeout);
+        // Fetch bridge on initialization to get proper state
+        FreeAtHomeBridgeHandler bridge = getFreeAtHomeBridge();
+        if (bridge != null) {
+            bridge.dummyThingsEnabled();
+        } // dummy call to avoid optimization
     }
 
     @Override
@@ -58,22 +75,35 @@ public class FreeAtHomeSceneHandler extends FreeAtHomeBaseHandler {
                     logger.debug("Called channel Scence: " + channel);
                     bridge.setDataPoint(channel, m_Configuration.DataPoint);
 
-                    // Reset scene switch to off after activation.
-                    // logger.debug("Reset scene switch to off after activation");
-                    // updateState(SCENE_THING_CHANNEL_ACTIVATE, OnOffType.OFF);
-                    // Seems not to work properly -> done by rule as workaround
+                    if (m_Configuration.resetTimeout > 0) {
+                        m_Timer.schedule(new ResetTask(this), (long) (m_Configuration.resetTimeout * 1000));
+                        logger.debug("Reset task scheduled");
+                    }
                 }
             }
         }
+
     }
 
-    @Override
-    public void initialize() {
-        m_Configuration = getConfigAs(FreeAtHomeSceneConfig.class);
+    public void ResetSwitch() {
+        logger.debug("Reset scene switch to OFF");
+        updateState(SCENE_THING_CHANNEL_ACTIVATE, OnOffType.OFF);
+    }
 
-        // Fetch bridge on initialization to get proper state
-        FreeAtHomeBridgeHandler bridge = getFreeAtHomeBridge();
-        bridge.dummyThingsEnabled();
+    /*
+     * Class to reset Scene switch asynchronously
+     */
+    class ResetTask extends TimerTask {
+        FreeAtHomeSceneHandler m_Handler = null;
+
+        ResetTask(FreeAtHomeSceneHandler handler) {
+            m_Handler = handler;
+        }
+
+        @Override
+        public void run() {
+            m_Handler.ResetSwitch();
+        }
     }
 
 }

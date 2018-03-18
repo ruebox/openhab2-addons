@@ -19,5 +19,6 @@ public class FreeAtHomeSceneConfig {
     public String ChannelId;
     public String OutputId;
     public String DataPoint;
+    public Float resetTimeout;
 
 }
