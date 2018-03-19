@@ -52,7 +52,7 @@ public class FreeAtHomeSceneHandler extends FreeAtHomeBaseHandler {
     }
 
     @Override
-    public void handleCommand(ChannelUID channelUID, Command command) {
+    public void handleCommand(ChannelUID channelUID, Command command, boolean update) {
         FreeAtHomeBridgeHandler bridge = getFreeAtHomeBridge();
 
         if (bridge == null) {

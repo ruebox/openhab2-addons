@@ -211,6 +211,31 @@ public class FreeAtHomeBridgeHandler extends BaseBridgeHandler {
             // xmlns="jabber:iq:rpc"><methodCall><methodName>RemoteInterface.setDatapoint</methodName><params><param><value><string>FFFF00000000/ch0000/odp0003</string></value></param><param><value><string>0</string></value></param></params></methodCall></query></iq></body>
             // Value para1 = Value.of("ABB260851E51/ch0003/idp0000");
 
+            // Read external xml from file for discovery
+            // FileInputStream inputStream = null;
+            // try {
+            // inputStream = new FileInputStream("/home/rue/getAll.xml");
+            // } catch (FileNotFoundException e1) {
+            // // TODO Auto-generated catch block
+            // e1.printStackTrace();
+            // }
+            // try {
+            // try {
+            // String everything = IOUtils.toString(inputStream);
+            // return everything;
+            // } catch (IOException e) {
+            // // TODO Auto-generated catch block
+            // e.printStackTrace();
+            // }
+            // } finally {
+            // try {
+            // inputStream.close();
+            // } catch (IOException e) {
+            // // TODO Auto-generated catch block
+            // e.printStackTrace();
+            // }
+            // }
+
             Value para0 = Value.of("de");
             Value para1 = Value.of(0);
 

@@ -15,6 +15,7 @@ import org.eclipse.smarthome.core.thing.binding.BaseThingHandlerFactory;
 import org.eclipse.smarthome.core.thing.binding.ThingHandler;
 import org.openhab.binding.freeathome.FreeAtHomeBindingConstants;
 import org.openhab.binding.freeathome.handler.FreeAtHomeBridgeHandler;
+import org.openhab.binding.freeathome.handler.FreeAtHomeDimmerHandler;
 import org.openhab.binding.freeathome.handler.FreeAtHomeDummyHandler;
 import org.openhab.binding.freeathome.handler.FreeAtHomeRaffStoreHandler;
 import org.openhab.binding.freeathome.handler.FreeAtHomeScenarioSelectorHandler;
@@ -76,6 +77,12 @@ public class FreeAtHomeHandlerFactory extends BaseThingHandlerFactory {
         if (thingTypeUID.equals(FreeAtHomeBindingConstants.THERMOSTAT_THING_TYPEUID)) {
             logger.debug("create thermostat Handler");
             FreeAtHomeThermostatHandler handler = new FreeAtHomeThermostatHandler(thing);
+            return handler;
+        }
+
+        if (thingTypeUID.equals(FreeAtHomeBindingConstants.DIMMER_THING_TYPEUID)) {
+            logger.debug("create dimmer Handler");
+            FreeAtHomeDimmerHandler handler = new FreeAtHomeDimmerHandler(thing);
             return handler;
         }
 

@@ -98,6 +98,22 @@ public class FreeAtHomeBindingDiscoveryService extends AbstractDiscoveryService 
                             thingDiscovered(discoveryResult);
                         }
                         break;
+                    // // Hue Schaltaktor
+                    case "10C4": {
+                        String channelId = "ch0000";
+                        ThingUID uid = new ThingUID(FreeAtHomeBindingConstants.SWITCH_THING_TYPEUID,
+                                device.Serial + "_" + channelId);
+                        Map<String, Object> properties = new HashMap<>(1);
+                        properties.put("deviceId", device.Serial);
+                        properties.put("channelId", channelId);
+
+                        DiscoveryResult discoveryResult = DiscoveryResultBuilder
+                                .create(uid).withLabel(device.DeviceDisplayName + "_" + device.DeviceTypeName + "_"
+                                        + device.Serial + "_" + channelId)
+                                .withBridge(bridgeUID).withProperties(properties).build();
+                        thingDiscovered(discoveryResult);
+                    }
+                        break;
                     // // Schaltaktor 4-fach, 16A, REG
                     case "B002":
                         for (int i = 0; i < 4; i++) // B002 provides 4 different channels
@@ -116,6 +132,7 @@ public class FreeAtHomeBindingDiscoveryService extends AbstractDiscoveryService 
                             thingDiscovered(discoveryResult);
                         }
                         break;
+                    // Schaltaktor 8 fach
                     case "B008":
                         for (int i = 0; i < 8; i++) // B008 provides 8 different channels
                         {
@@ -178,7 +195,7 @@ public class FreeAtHomeBindingDiscoveryService extends AbstractDiscoveryService 
                         break;
                     }
                     // neue Szene
-                    case "4800":
+                    case "4800": {
                         ThingUID uid = new ThingUID(FreeAtHomeBindingConstants.SCENE_THING_TYPEUID, device.Serial);
                         Map<String, Object> properties = new HashMap<>(1);
                         properties.put("SceneId", device.Serial);
@@ -188,7 +205,42 @@ public class FreeAtHomeBindingDiscoveryService extends AbstractDiscoveryService 
                                 .withBridge(bridgeUID).withProperties(properties).build();
                         thingDiscovered(discoveryResult);
                         break;
+                    }
+                    // Dimmer 4 channel
+                    case "101C":
+                    case "1021":
+                    case "901C":
+                        for (int i = 0; i < 4; i++) {
+                            String channelId = "ch000" + i;
+                            ThingUID uid = new ThingUID(FreeAtHomeBindingConstants.DIMMER_THING_TYPEUID,
+                                    device.Serial + "_" + channelId);
+                            Map<String, Object> properties = new HashMap<>(1);
+                            properties.put("deviceId", device.Serial);
+                            properties.put("channelId", channelId);
 
+                            DiscoveryResult discoveryResult = DiscoveryResultBuilder.create(uid)
+                                    .withLabel(device.DeviceDisplayName + "_" + device.DeviceTypeName + "_"
+                                            + device.Serial + "_" + channelId)
+                                    .withBridge(bridgeUID).withProperties(properties).build();
+                            thingDiscovered(discoveryResult);
+                        }
+                        break;
+                    case "10C0": // Hue dimmer
+                    {
+                        String channelId = "ch0000";
+                        ThingUID uid = new ThingUID(FreeAtHomeBindingConstants.DIMMER_THING_TYPEUID,
+                                device.Serial + "_" + channelId);
+                        Map<String, Object> properties = new HashMap<>(1);
+                        properties.put("deviceId", device.Serial);
+                        properties.put("channelId", channelId);
+
+                        DiscoveryResult discoveryResult = DiscoveryResultBuilder
+                                .create(uid).withLabel(device.DeviceDisplayName + "_" + device.DeviceTypeName + "_"
+                                        + device.Serial + "_" + channelId)
+                                .withBridge(bridgeUID).withProperties(properties).build();
+                        thingDiscovered(discoveryResult);
+                    }
+                        break;
                     default: {
                         if (fh.dummyThingsEnabled()) {
 
@@ -196,7 +248,7 @@ public class FreeAtHomeBindingDiscoveryService extends AbstractDiscoveryService 
 
                             DiscoveryResult discoveryResult1 = DiscoveryResultBuilder
                                     .create(uid1).withLabel("Dummy_" + device.DeviceDisplayName + "_"
-                                            + device.DeviceTypeName + "_" + device.Serial)
+                                            + device.DeviceTypeName + "_" + deviceTypeId + "_" + device.Serial)
                                     .withBridge(bridgeUID).build();
                             thingDiscovered(discoveryResult1);
                         }

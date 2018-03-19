@@ -29,7 +29,7 @@ public class FreeAtHomeScenarioSelectorHandler extends FreeAtHomeBaseHandler {
     }
 
     @Override
-    public void handleCommand(ChannelUID channelUID, Command command) {
+    public void handleCommand(ChannelUID channelUID, Command command, boolean update) {
 
     }
 

@@ -163,7 +163,6 @@
                 <advanced>true</advanced>
             </parameter>
         </config-description>
-        
     </thing-type>
     
     
@@ -236,10 +235,76 @@
                 <advanced>true</advanced>
             </parameter>
         </config-description>
-        
     </thing-type>
     
+    <thing-type id="dimmer">
+        <supported-bridge-type-refs>
+           <bridge-type-ref id="bridge" />
+       </supported-bridge-type-refs>
+  
+       <label>Dimmer</label>
+       <description>This is a dimmer.
+       </description>        
+       <channels>
+            <channel id="dimmer_switch" typeId="fh_switch_channel_type">
+                <label>Activate</label>
+                <description>Switch dimmer on/off</description>
+            </channel>
+            <channel id="dimmer_fading" typeId="dimmer_fade_channel_type">
+               <label>Fading</label>
+               <description>Fade on/off</description>
+           </channel>
+           <channel id="dimmer_value" typeId="dimmer_value_channel_type">
+           </channel>
+       </channels>
+       
+        <config-description>
+           <parameter name="deviceId" type="text" required="true">
+               <label>Id of the device</label>
+               <description>DeviceId</description>
+               <default>FFFF00000000</default>
+           </parameter>
+           <parameter name="channelId" type="text" required="true">
+               <label>The used channel of the BJ device </label>
+               <description>This channel of the current device (start counting by 0)</description>
+               <default>ch0000</default>
+               <advanced>true</advanced>
+           </parameter>
+           <parameter name="dataPointIdSwitch" type="text" required="true">
+               <label>Id for switch on/off</label>
+               <description></description>
+               <default>idp0000</default>
+               <advanced>true</advanced>
+           </parameter>
+           <parameter name="dataPointIdFade" type="text" required="true">
+               <label>Id to fade up and down </label>
+               <description></description>
+               <default>idp0001</default>
+               <advanced>true</advanced>
+           </parameter>
+           <parameter name="dataPointIdValue" type="text" required="true">
+               <label>Id to set value</label>
+               <description></description>
+               <default>idp0002</default>
+               <advanced>true</advanced>
+           </parameter>
+       </config-description>
+   </thing-type>
+   
+   <channel-type id="dimmer_fade_channel_type">
+        <item-type>Rollershutter</item-type>
+        <label>Fade</label>
+        <description>Fading dimmer up and down</description>
+        <category>Slider</category>
+    </channel-type>
     
+    <channel-type id="dimmer_value_channel_type">
+        <item-type>Number</item-type>
+        <label>Dimmer value</label>
+        <description>Set brightness of dimmer</description>
+        <category>Slider</category>
+        <state min="0" max="0" step="1" readOnly="false"></state>
+    </channel-type>
     
     <thing-type id="dummy">
        <supported-bridge-type-refs>

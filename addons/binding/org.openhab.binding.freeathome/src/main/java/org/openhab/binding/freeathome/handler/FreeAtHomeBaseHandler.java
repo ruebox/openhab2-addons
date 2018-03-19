@@ -9,12 +9,14 @@
 package org.openhab.binding.freeathome.handler;
 
 import org.eclipse.smarthome.core.thing.Bridge;
+import org.eclipse.smarthome.core.thing.ChannelUID;
 import org.eclipse.smarthome.core.thing.Thing;
 import org.eclipse.smarthome.core.thing.ThingStatus;
 import org.eclipse.smarthome.core.thing.ThingStatusDetail;
 import org.eclipse.smarthome.core.thing.ThingStatusInfo;
 import org.eclipse.smarthome.core.thing.binding.BaseThingHandler;
 import org.eclipse.smarthome.core.thing.binding.ThingHandler;
+import org.eclipse.smarthome.core.types.Command;
 
 /**
  * The {@link FreeAtHomeBaseHandler} is responsible for handling common commands, which are
@@ -56,6 +58,13 @@ public abstract class FreeAtHomeBaseHandler extends BaseThingHandler {
         }
         updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.CONFIGURATION_ERROR, "Bridge of incorrect type");
         return null;
+    }
+
+    public abstract void handleCommand(ChannelUID channelUID, Command command, boolean update);
+
+    @Override
+    public void handleCommand(ChannelUID channelUID, Command command) {
+        handleCommand(channelUID, command, false);
     }
 
 }

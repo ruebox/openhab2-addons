@@ -23,6 +23,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author ruebox - Initial contribution
  */
+
 public class FreeAtHomeSwitchHandler extends FreeAtHomeBaseHandler {
 
     public FreeAtHomeSwitchHandler(Thing thing) {
@@ -35,7 +36,7 @@ public class FreeAtHomeSwitchHandler extends FreeAtHomeBaseHandler {
     private FreeAtHomeSwitchConfig m_Configuration;
 
     @Override
-    public void handleCommand(ChannelUID channelUID, Command command) {
+    public void handleCommand(ChannelUID channelUID, Command command, boolean update) {
         FreeAtHomeBridgeHandler bridge = getFreeAtHomeBridge();
 
         if (bridge == null) {

@@ -20,7 +20,7 @@ public class FreeAtHomeDummyHandler extends FreeAtHomeBaseHandler {
     }
 
     @Override
-    public void handleCommand(ChannelUID channelUID, Command command) {
+    public void handleCommand(ChannelUID channelUID, Command command, boolean update) {
         // TODO Auto-generated method stub
 
     }
