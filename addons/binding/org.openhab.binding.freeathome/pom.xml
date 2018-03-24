@@ -32,6 +32,12 @@ The binding currently does not support (yet):
   	<name>ruebox</name>
   </organization>
   <dependencies>
+  <!-- https://mvnrepository.com/artifact/javax.measure/jsr-275 -->
+<dependency>
+    <groupId>javax.measure</groupId>
+    <artifactId>jsr-275</artifactId>
+    <version>0.9.2</version>
+</dependency>
 <!-- https://mvnrepository.com/artifact/javax.measure/unit-api -->
 <dependency>
     <groupId>javax.measure</groupId>
@@ -57,8 +63,7 @@ The binding currently does not support (yet):
     <artifactId>uom-se</artifactId>
     <version>1.0.9</version>
 </dependency>
-
-
   
   </dependencies>
+  
 </project>

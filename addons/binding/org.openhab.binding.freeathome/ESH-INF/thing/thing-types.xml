@@ -303,7 +303,7 @@
         <label>Dimmer value</label>
         <description>Set brightness of dimmer</description>
         <category>Slider</category>
-        <state min="0" max="0" step="1" readOnly="false"></state>
+        <state min="0" max="100" step="1" readOnly="false"></state>
     </channel-type>
     
     <thing-type id="dummy">

@@ -16,7 +16,6 @@ Import-Package:
  org.eclipse.smarthome.core.types,
  org.openhab.binding.freeathome,
  org.openhab.binding.freeathome.handler,
- org.openhab.core.library.types,
  org.slf4j
 Service-Component: OSGI-INF/*.xml
 Export-Package: org.openhab.binding.freeathome,
