@@ -152,25 +152,24 @@ public class FreeAtHomeBindingDiscoveryService extends AbstractDiscoveryService 
                         break;
                     // Schaltaktor 1 fach
                     case "900C": // Switch actuator 1/1
-                        for (int i = 0; i < 1; i++) // 1 channel
-                        {
-                            String channelId = "ch000" + i;
-                            ThingUID uid = new ThingUID(FreeAtHomeBindingConstants.SWITCH_THING_TYPEUID,
-                                    device.Serial + "_" + channelId);
-                            Map<String, Object> properties = new HashMap<>(1);
-                            properties.put("deviceId", device.Serial);
-                            properties.put("channelId", channelId);
+                    {
+                        String channelId = "ch0003";
+                        ThingUID uid = new ThingUID(FreeAtHomeBindingConstants.SWITCH_THING_TYPEUID,
+                                device.Serial + "_" + channelId);
+                        Map<String, Object> properties = new HashMap<>(1);
+                        properties.put("deviceId", device.Serial);
+                        properties.put("channelId", channelId);
 
-                            DiscoveryResult discoveryResult = DiscoveryResultBuilder.create(uid)
-                                    .withLabel(device.DeviceDisplayName + "_" + device.DeviceTypeName + "_"
-                                            + deviceTypeId + "_" + device.Serial + "_" + channelId)
-                                    .withBridge(bridgeUID).withProperties(properties).build();
-                            thingDiscovered(discoveryResult);
-                        }
+                        DiscoveryResult discoveryResult = DiscoveryResultBuilder.create(uid)
+                                .withLabel(device.DeviceDisplayName + "_" + device.DeviceTypeName + "_" + deviceTypeId
+                                        + "_" + device.Serial + "_" + channelId)
+                                .withBridge(bridgeUID).withProperties(properties).build();
+                        thingDiscovered(discoveryResult);
+                    }
                         break;
                     // Schaltaktor 2 fach
                     case "9010": // Switch actuator 2/2
-                        for (int i = 0; i < 2; i++) // 2 channel
+                        for (int i = 6; i < 8; i++) // 2 channel
                         {
                             String channelId = "ch000" + i;
                             ThingUID uid = new ThingUID(FreeAtHomeBindingConstants.SWITCH_THING_TYPEUID,
