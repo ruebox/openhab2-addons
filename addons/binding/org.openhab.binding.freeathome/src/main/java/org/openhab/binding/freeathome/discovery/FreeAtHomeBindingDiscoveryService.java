@@ -75,7 +75,7 @@ public class FreeAtHomeBindingDiscoveryService extends AbstractDiscoveryService 
 
                             DiscoveryResult discoveryResult = DiscoveryResultBuilder.create(uid)
                                     .withLabel(device.DeviceDisplayName + "_" + device.DeviceTypeName + "_"
-                                            + device.Serial + "_" + channelId)
+                                            + deviceTypeId + "_" + device.Serial + "_" + channelId)
                                     .withBridge(bridgeUID).withProperties(properties).build();
                             thingDiscovered(discoveryResult);
                         }
@@ -91,9 +91,9 @@ public class FreeAtHomeBindingDiscoveryService extends AbstractDiscoveryService 
                         properties.put("DeviceId", device.Serial);
                         properties.put("ChannelId", channelId);
 
-                        DiscoveryResult discoveryResult = DiscoveryResultBuilder
-                                .create(uid).withLabel(device.DeviceDisplayName + "_" + device.DeviceTypeName + "_"
-                                        + device.Serial + "_" + channelId)
+                        DiscoveryResult discoveryResult = DiscoveryResultBuilder.create(uid)
+                                .withLabel(device.DeviceDisplayName + "_" + device.DeviceTypeName + "_" + deviceTypeId
+                                        + "_" + device.Serial + "_" + channelId)
                                 .withBridge(bridgeUID).withProperties(properties).build();
                         thingDiscovered(discoveryResult);
                     }
@@ -107,9 +107,9 @@ public class FreeAtHomeBindingDiscoveryService extends AbstractDiscoveryService 
                         properties.put("deviceId", device.Serial);
                         properties.put("channelId", channelId);
 
-                        DiscoveryResult discoveryResult = DiscoveryResultBuilder
-                                .create(uid).withLabel(device.DeviceDisplayName + "_" + device.DeviceTypeName + "_"
-                                        + device.Serial + "_" + channelId)
+                        DiscoveryResult discoveryResult = DiscoveryResultBuilder.create(uid)
+                                .withLabel(device.DeviceDisplayName + "_" + device.DeviceTypeName + "_" + deviceTypeId
+                                        + "_" + device.Serial + "_" + channelId)
                                 .withBridge(bridgeUID).withProperties(properties).build();
                         thingDiscovered(discoveryResult);
                     }
@@ -127,7 +127,7 @@ public class FreeAtHomeBindingDiscoveryService extends AbstractDiscoveryService 
 
                             DiscoveryResult discoveryResult = DiscoveryResultBuilder.create(uid)
                                     .withLabel(device.DeviceDisplayName + "_" + device.DeviceTypeName + "_"
-                                            + device.Serial + "_" + channelId)
+                                            + deviceTypeId + "_" + device.Serial + "_" + channelId)
                                     .withBridge(bridgeUID).withProperties(properties).build();
                             thingDiscovered(discoveryResult);
                         }
@@ -145,7 +145,7 @@ public class FreeAtHomeBindingDiscoveryService extends AbstractDiscoveryService 
 
                             DiscoveryResult discoveryResult = DiscoveryResultBuilder.create(uid)
                                     .withLabel(device.DeviceDisplayName + "_" + device.DeviceTypeName + "_"
-                                            + device.Serial + "_" + channelId)
+                                            + deviceTypeId + "_" + device.Serial + "_" + channelId)
                                     .withBridge(bridgeUID).withProperties(properties).build();
                             thingDiscovered(discoveryResult);
                         }
@@ -163,7 +163,7 @@ public class FreeAtHomeBindingDiscoveryService extends AbstractDiscoveryService 
 
                             DiscoveryResult discoveryResult = DiscoveryResultBuilder.create(uid)
                                     .withLabel(device.DeviceDisplayName + "_" + device.DeviceTypeName + "_"
-                                            + device.Serial + "_" + channelId)
+                                            + deviceTypeId + "_" + device.Serial + "_" + channelId)
                                     .withBridge(bridgeUID).withProperties(properties).build();
                             thingDiscovered(discoveryResult);
                         }
@@ -181,7 +181,7 @@ public class FreeAtHomeBindingDiscoveryService extends AbstractDiscoveryService 
 
                             DiscoveryResult discoveryResult = DiscoveryResultBuilder.create(uid)
                                     .withLabel(device.DeviceDisplayName + "_" + device.DeviceTypeName + "_"
-                                            + device.Serial + "_" + channelId)
+                                            + deviceTypeId + "_" + device.Serial + "_" + channelId)
                                     .withBridge(bridgeUID).withProperties(properties).build();
                             thingDiscovered(discoveryResult);
                         }
@@ -196,9 +196,9 @@ public class FreeAtHomeBindingDiscoveryService extends AbstractDiscoveryService 
                         properties.put("channelId", channelId);
                         properties.put("dataPointId", "odp0002");
 
-                        DiscoveryResult discoveryResult = DiscoveryResultBuilder
-                                .create(uid).withLabel(device.DeviceDisplayName + "_" + device.DeviceTypeName + "_"
-                                        + device.Serial + "_" + channelId)
+                        DiscoveryResult discoveryResult = DiscoveryResultBuilder.create(uid)
+                                .withLabel(device.DeviceDisplayName + "_" + device.DeviceTypeName + "_" + deviceTypeId
+                                        + "_" + device.Serial + "_" + channelId)
                                 .withBridge(bridgeUID).withProperties(properties).build();
                         thingDiscovered(discoveryResult);
                         break;
@@ -213,8 +213,9 @@ public class FreeAtHomeBindingDiscoveryService extends AbstractDiscoveryService 
                         properties.put("InputIdComplete", "odp0003");
                         properties.put("InputIdStepwise", "odp0004");
 
-                        DiscoveryResult discoveryResult = DiscoveryResultBuilder.create(uid)
-                                .withLabel(device.DeviceDisplayName + "_" + device.DeviceTypeName + "_" + device.Serial)
+                        DiscoveryResult discoveryResult = DiscoveryResultBuilder
+                                .create(uid).withLabel(device.DeviceDisplayName + "_" + device.DeviceTypeName + "_"
+                                        + deviceTypeId + "_" + device.Serial)
                                 .withBridge(bridgeUID).withProperties(properties).build();
                         thingDiscovered(discoveryResult);
                         break;
@@ -226,8 +227,9 @@ public class FreeAtHomeBindingDiscoveryService extends AbstractDiscoveryService 
                         Map<String, Object> properties = new HashMap<>(1);
                         properties.put("deviceId", device.Serial);
 
-                        DiscoveryResult discoveryResult = DiscoveryResultBuilder.create(uid)
-                                .withLabel(device.DeviceDisplayName + "_" + device.DeviceTypeName + "_" + device.Serial)
+                        DiscoveryResult discoveryResult = DiscoveryResultBuilder
+                                .create(uid).withLabel(device.DeviceDisplayName + "_" + device.DeviceTypeName + "_"
+                                        + deviceTypeId + "_" + device.Serial)
                                 .withBridge(bridgeUID).withProperties(properties).build();
                         thingDiscovered(discoveryResult);
                         break;
@@ -238,8 +240,9 @@ public class FreeAtHomeBindingDiscoveryService extends AbstractDiscoveryService 
                         Map<String, Object> properties = new HashMap<>(1);
                         properties.put("SceneId", device.Serial);
 
-                        DiscoveryResult discoveryResult = DiscoveryResultBuilder.create(uid)
-                                .withLabel(device.DeviceDisplayName + "_" + device.DeviceTypeName + "_" + device.Serial)
+                        DiscoveryResult discoveryResult = DiscoveryResultBuilder
+                                .create(uid).withLabel(device.DeviceDisplayName + "_" + device.DeviceTypeName + "_"
+                                        + deviceTypeId + "_" + device.Serial)
                                 .withBridge(bridgeUID).withProperties(properties).build();
                         thingDiscovered(discoveryResult);
                         break;
@@ -258,7 +261,7 @@ public class FreeAtHomeBindingDiscoveryService extends AbstractDiscoveryService 
 
                             DiscoveryResult discoveryResult = DiscoveryResultBuilder.create(uid)
                                     .withLabel(device.DeviceDisplayName + "_" + device.DeviceTypeName + "_"
-                                            + device.Serial + "_" + channelId)
+                                            + deviceTypeId + "_" + device.Serial + "_" + channelId)
                                     .withBridge(bridgeUID).withProperties(properties).build();
                             thingDiscovered(discoveryResult);
                         }
@@ -274,9 +277,9 @@ public class FreeAtHomeBindingDiscoveryService extends AbstractDiscoveryService 
                         properties.put("deviceId", device.Serial);
                         properties.put("channelId", channelId);
 
-                        DiscoveryResult discoveryResult = DiscoveryResultBuilder
-                                .create(uid).withLabel(device.DeviceDisplayName + "_" + device.DeviceTypeName + "_"
-                                        + device.Serial + "_" + channelId)
+                        DiscoveryResult discoveryResult = DiscoveryResultBuilder.create(uid)
+                                .withLabel(device.DeviceDisplayName + "_" + device.DeviceTypeName + "_" + deviceTypeId
+                                        + "_" + device.Serial + "_" + channelId)
                                 .withBridge(bridgeUID).withProperties(properties).build();
                         thingDiscovered(discoveryResult);
                     }
