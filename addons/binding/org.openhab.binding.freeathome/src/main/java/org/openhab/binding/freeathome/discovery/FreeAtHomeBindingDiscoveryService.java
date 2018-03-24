@@ -267,7 +267,37 @@ public class FreeAtHomeBindingDiscoveryService extends AbstractDiscoveryService 
                         }
                         break;
                     case "9017": // 1/1 dim actuator
+                    {
+                        String channelId = "ch0003";
+                        ThingUID uid = new ThingUID(FreeAtHomeBindingConstants.DIMMER_THING_TYPEUID,
+                                device.Serial + "_" + channelId);
+                        Map<String, Object> properties = new HashMap<>(1);
+                        properties.put("deviceId", device.Serial);
+                        properties.put("channelId", channelId);
+
+                        DiscoveryResult discoveryResult = DiscoveryResultBuilder.create(uid)
+                                .withLabel(device.DeviceDisplayName + "_" + device.DeviceTypeName + "_" + deviceTypeId
+                                        + "_" + device.Serial + "_" + channelId)
+                                .withBridge(bridgeUID).withProperties(properties).build();
+                        thingDiscovered(discoveryResult);
+                    }
+                        break;
                     case "9019": // 2/1 dim actuator
+                    {
+                        String channelId = "ch0006";
+                        ThingUID uid = new ThingUID(FreeAtHomeBindingConstants.DIMMER_THING_TYPEUID,
+                                device.Serial + "_" + channelId);
+                        Map<String, Object> properties = new HashMap<>(1);
+                        properties.put("deviceId", device.Serial);
+                        properties.put("channelId", channelId);
+
+                        DiscoveryResult discoveryResult = DiscoveryResultBuilder.create(uid)
+                                .withLabel(device.DeviceDisplayName + "_" + device.DeviceTypeName + "_" + deviceTypeId
+                                        + "_" + device.Serial + "_" + channelId)
+                                .withBridge(bridgeUID).withProperties(properties).build();
+                        thingDiscovered(discoveryResult);
+                    }
+                        break;
                     case "10C0": // Hue dimmer
                     {
                         String channelId = "ch0000";
