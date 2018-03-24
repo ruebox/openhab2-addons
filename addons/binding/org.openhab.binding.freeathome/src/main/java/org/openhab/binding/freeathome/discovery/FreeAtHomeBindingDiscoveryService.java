@@ -82,21 +82,21 @@ public class FreeAtHomeBindingDiscoveryService extends AbstractDiscoveryService 
                         break;
                     // Jalousieaktor 1-fach, REG
                     case "1013":
-                        for (int i = 0; i < 1; i++) // 1013 provides 4 different channels
-                        {
-                            String channelId = "ch000" + i;
-                            ThingUID uid = new ThingUID(FreeAtHomeBindingConstants.RAFFSTORE_THING_TYPEUID,
-                                    device.Serial + "_" + channelId);
-                            Map<String, Object> properties = new HashMap<>(1);
-                            properties.put("DeviceId", device.Serial);
-                            properties.put("ChannelId", channelId);
+                    // 1013 provides 1 channel, but it runs on channel ch0003
+                    {
+                        String channelId = "ch0003";
+                        ThingUID uid = new ThingUID(FreeAtHomeBindingConstants.RAFFSTORE_THING_TYPEUID,
+                                device.Serial + "_" + channelId);
+                        Map<String, Object> properties = new HashMap<>(1);
+                        properties.put("DeviceId", device.Serial);
+                        properties.put("ChannelId", channelId);
 
-                            DiscoveryResult discoveryResult = DiscoveryResultBuilder.create(uid)
-                                    .withLabel(device.DeviceDisplayName + "_" + device.DeviceTypeName + "_"
-                                            + device.Serial + "_" + channelId)
-                                    .withBridge(bridgeUID).withProperties(properties).build();
-                            thingDiscovered(discoveryResult);
-                        }
+                        DiscoveryResult discoveryResult = DiscoveryResultBuilder
+                                .create(uid).withLabel(device.DeviceDisplayName + "_" + device.DeviceTypeName + "_"
+                                        + device.Serial + "_" + channelId)
+                                .withBridge(bridgeUID).withProperties(properties).build();
+                        thingDiscovered(discoveryResult);
+                    }
                         break;
                     // // Hue Schaltaktor
                     case "10C4": {
