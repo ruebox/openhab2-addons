@@ -44,7 +44,7 @@ public abstract class FreeAtHomeBaseHandler extends BaseThingHandler {
     }
 
     protected FreeAtHomeBridgeHandler getFreeAtHomeBridge() {
-        Bridge bridge = getBridge();
+        Bridge bridge = this.getBridge();
         if (bridge == null) {
             updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.CONFIGURATION_ERROR, "No bridge available");
             return null;

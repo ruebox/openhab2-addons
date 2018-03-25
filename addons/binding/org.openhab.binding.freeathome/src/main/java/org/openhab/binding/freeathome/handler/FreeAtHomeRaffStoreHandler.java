@@ -51,7 +51,7 @@ public class FreeAtHomeRaffStoreHandler extends FreeAtHomeBaseHandler {
                         + m_Configuration.InputIdStepwise;
 
                 logger.debug("Stop complete run" + channel);
-                bridge.setDataPoint(channel, "0");
+                bridge.setDataPoint(channel, "1");
             }
         }
 

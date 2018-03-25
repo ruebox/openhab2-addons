@@ -48,6 +48,8 @@ public class FreeAtHomeBindingDiscoveryService extends AbstractDiscoveryService 
         // TODO Auto-generated method stub
         FreeAtHomeBridgeHandler fh = FreeAtHomeBridgeHandler.g_freeAtHomeBridgeHandler;
 
+        this.removeOlderResults(getTimestampOfLastScan());
+
         if (fh != null) {
             logger.debug("start scan");
             ThingUID bridgeUID = fh.getThing().getUID();
@@ -81,10 +83,29 @@ public class FreeAtHomeBindingDiscoveryService extends AbstractDiscoveryService 
                         }
                         break;
                     // Jalousieaktor 1-fach, REG
+                    case "9013":
                     case "1013":
                     // 1013 provides 1 channel, but it runs on channel ch0003
                     {
                         String channelId = "ch0003";
+                        ThingUID uid = new ThingUID(FreeAtHomeBindingConstants.RAFFSTORE_THING_TYPEUID,
+                                device.Serial + "_" + channelId);
+                        Map<String, Object> properties = new HashMap<>(1);
+                        properties.put("DeviceId", device.Serial);
+                        properties.put("ChannelId", channelId);
+
+                        DiscoveryResult discoveryResult = DiscoveryResultBuilder.create(uid)
+                                .withLabel(device.DeviceDisplayName + "_" + device.DeviceTypeName + "_" + deviceTypeId
+                                        + "_" + device.Serial + "_" + channelId)
+                                .withBridge(bridgeUID).withProperties(properties).build();
+                        thingDiscovered(discoveryResult);
+                    }
+                        break;
+                    // Jalousieaktor 1-fach, REG ?2-fac
+                    case "9015":
+                    // 9015 provides 1 channel, but it runs on channel ch0006
+                    {
+                        String channelId = "ch0006";
                         ThingUID uid = new ThingUID(FreeAtHomeBindingConstants.RAFFSTORE_THING_TYPEUID,
                                 device.Serial + "_" + channelId);
                         Map<String, Object> properties = new HashMap<>(1);
@@ -134,9 +155,12 @@ public class FreeAtHomeBindingDiscoveryService extends AbstractDiscoveryService 
                         break;
                     // Schaltaktor 8 fach
                     case "B008":
-                        for (int i = 0; i < 8; i++) // B008 provides 8 different channels
+                        for (int i = 12; i < 12 + 8; i++) // B008 provides 8 different channels
                         {
-                            String channelId = "ch000" + i;
+                            String n = Integer.toHexString(i).toUpperCase();
+
+                            String result = ("0000" + n).substring(n.length());
+                            String channelId = "ch" + result;
                             ThingUID uid = new ThingUID(FreeAtHomeBindingConstants.SWITCH_THING_TYPEUID,
                                     device.Serial + "_" + channelId);
                             Map<String, Object> properties = new HashMap<>(1);
