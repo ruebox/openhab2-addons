@@ -191,6 +191,23 @@ public class FreeAtHomeBindingDiscoveryService extends AbstractDiscoveryService 
                         thingDiscovered(discoveryResult);
                     }
                         break;
+                    // Motion sensor with switch 1 fach
+                    case "900A": // Switch actuator 1/1
+                    {
+                        String channelId = "ch0001";
+                        ThingUID uid = new ThingUID(FreeAtHomeBindingConstants.SWITCH_THING_TYPEUID,
+                                device.Serial + "_" + channelId);
+                        Map<String, Object> properties = new HashMap<>(1);
+                        properties.put("deviceId", device.Serial);
+                        properties.put("channelId", channelId);
+
+                        DiscoveryResult discoveryResult = DiscoveryResultBuilder.create(uid)
+                                .withLabel(device.DeviceDisplayName + "_" + device.DeviceTypeName + "_" + deviceTypeId
+                                        + "_" + device.Serial + "_" + channelId)
+                                .withBridge(bridgeUID).withProperties(properties).build();
+                        thingDiscovered(discoveryResult);
+                    }
+                        break;
                     // Schaltaktor 2 fach
                     case "9010": // Switch actuator 2/2
                         for (int i = 6; i < 8; i++) // 2 channel
