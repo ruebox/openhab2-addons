@@ -19,4 +19,5 @@ public class FreeAtHomeRaffStoreConfig {
     public String ChannelId;
     public String InputIdComplete;
     public String InputIdStepwise;
+    public String InputIdPercentage;
 }

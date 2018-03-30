@@ -47,6 +47,7 @@ public class FreeAtHomeBindingConstants {
     // List of all Channel ids
     public final static String RAFFSTORE_THING_CHANNEL_STEPWISE = "stepwise";
     public final static String RAFFSTORE_THING_CHANNEL_COMPLETE = "complete";
+    public final static String RAFFSTORE_THING_CHANNEL_PERCENTAGE = "percentage";
 
     public final static String SCENE_THING_CHANNEL_ACTIVATE = "activate";
 

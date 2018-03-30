@@ -16,6 +16,7 @@
         <channels>
             <channel id="stepwise" typeId="raffstoreshutter_stepwise_type" />
             <channel id="complete" typeId="raffstoreshutter_complete_type" />
+            <channel id="percentage" typeId="raffstoreshutter_percentage_channel_type" />
         </channels>
         
         <config-description>
@@ -41,6 +42,12 @@
                 <default>idp0001</default>
                 <advanced>true</advanced>
             </parameter>
+            <parameter name="InputIdPercentage" type="text" required="true">
+                <label>Input for percentage value </label>
+                <description></description>
+                <default>idp0002</default>
+                <advanced>true</advanced>
+            </parameter>
         </config-description>
     </thing-type>
     
@@ -56,7 +63,13 @@
         <description>Shutter for raffstores: Complete</description>
         <category>Blinds</category>
     </channel-type>
-
+    <channel-type id="raffstoreshutter_percentage_channel_type">
+        <item-type>Dimmer</item-type>
+        <label>Percentage</label>
+        <description>Set raffstore percentage</description>
+        <category>Slider</category>
+        <state min="0" max="100" step="1" readOnly="false"></state>
+    </channel-type>
 
    <thing-type id="scene">
         <supported-bridge-type-refs>

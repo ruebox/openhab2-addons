@@ -10,11 +10,13 @@ package org.openhab.binding.freeathome.handler;
 
 import static org.openhab.binding.freeathome.FreeAtHomeBindingConstants.*;
 
+import org.eclipse.smarthome.core.library.types.DecimalType;
 import org.eclipse.smarthome.core.library.types.StopMoveType;
 import org.eclipse.smarthome.core.library.types.UpDownType;
 import org.eclipse.smarthome.core.thing.ChannelUID;
 import org.eclipse.smarthome.core.thing.Thing;
 import org.eclipse.smarthome.core.types.Command;
+import org.openhab.binding.freeathome.FreeAtHomeBindingConstants;
 import org.openhab.binding.freeathome.config.FreeAtHomeRaffStoreConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,6 +44,22 @@ public class FreeAtHomeRaffStoreHandler extends FreeAtHomeBaseHandler {
         if (bridge == null) {
             logger.error("No bridge connected");
             return;
+        }
+
+        /*
+         * Value
+         */
+        if (command instanceof DecimalType) {
+
+            // Switch on/off
+            if (channelUID.getId().equals(FreeAtHomeBindingConstants.RAFFSTORE_THING_CHANNEL_PERCENTAGE)) {
+                DecimalType udCommand = (DecimalType) command;
+                String channel = m_Configuration.DeviceId + "/" + m_Configuration.ChannelId + "/"
+                        + m_Configuration.InputIdPercentage;
+
+                logger.debug("Set percentage value: " + channel + "   value(" + udCommand.toString() + ")");
+                bridge.setDataPoint(channel, udCommand.toString());
+            }
         }
 
         if (command instanceof StopMoveType && channelUID.getId().equals(RAFFSTORE_THING_CHANNEL_COMPLETE)) {
