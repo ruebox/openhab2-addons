@@ -301,14 +301,14 @@ public class FreeAtHomeBridgeHandler extends BaseBridgeHandler {
         m_XmppClient = new XmppClient("busch-jaeger.de", m_XmppConfiguration, m_BoshConfiguration);
 
         // Listen for inbound messages.
-        m_XmppClient.addInboundMessageListener(e -> logger.info("Received: " + e.getMessage()));
+        m_XmppClient.addInboundMessageListener(e -> logger.debug("Received: " + e.getMessage()));
         m_XmppClient.addInboundMessageListener(e -> onMessageEvent(e));
         m_XmppClient.addOutboundMessageListener(e -> onMessageEvent(e));
-        m_XmppClient.addInboundIQListener(e -> logger.info("Received IQ: " + e.toString()));
+        m_XmppClient.addInboundIQListener(e -> logger.debug("Received IQ: " + e.toString()));
         m_XmppClient.addInboundIQListener(e -> onIQEvent(e));
 
         // Listen for inbound presence.
-        m_XmppClient.addInboundPresenceListener(e -> logger.info("Received: " + e.getPresence()));
+        m_XmppClient.addInboundPresenceListener(e -> logger.debug("Received: " + e.getPresence()));
         m_XmppClient.addInboundPresenceListener(e -> onPresenceEvent(e));
 
         m_XmppClient.addSessionStatusListener(e -> onUpdateXMPPStatus(e));
