@@ -18,6 +18,7 @@ import org.eclipse.smarthome.core.thing.Thing;
 import org.eclipse.smarthome.core.types.Command;
 import org.openhab.binding.freeathome.FreeAtHomeBindingConstants;
 import org.openhab.binding.freeathome.config.FreeAtHomeRaffStoreConfig;
+import org.openhab.binding.freeathome.internal.FreeAtHomeUpdateChannel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,7 +39,7 @@ public class FreeAtHomeRaffStoreHandler extends FreeAtHomeBaseHandler {
     }
 
     @Override
-    public void handleCommand(ChannelUID channelUID, Command command, boolean update) {
+    public void handleCommand(ChannelUID channelUID, Command command) {
         FreeAtHomeBridgeHandler bridge = getFreeAtHomeBridge();
 
         if (bridge == null) {
@@ -112,14 +113,22 @@ public class FreeAtHomeRaffStoreHandler extends FreeAtHomeBaseHandler {
     }
 
     @Override
-    public void initialize() {
+    public void setUp() {
         m_Configuration = getConfigAs(FreeAtHomeRaffStoreConfig.class);
 
         // Fetch bridge on initialization to get proper state
         FreeAtHomeBridgeHandler bridge = getFreeAtHomeBridge();
         if (bridge != null) {
-            bridge.dummyThingsEnabled();
-        } // dummy call to avoid optimization
+
+        }
+
+        m_UpdateChannels.add(new FreeAtHomeUpdateChannel(this, RAFFSTORE_THING_CHANNEL_PERCENTAGE, new DecimalType(),
+                m_Configuration.DeviceId, m_Configuration.ChannelId, m_Configuration.OutputIdPercentage));
+
+    }
+
+    @Override
+    public void tearDown() {
 
     }
 

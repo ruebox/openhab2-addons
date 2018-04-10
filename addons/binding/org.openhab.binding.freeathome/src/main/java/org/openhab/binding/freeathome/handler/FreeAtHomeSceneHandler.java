@@ -40,7 +40,12 @@ public class FreeAtHomeSceneHandler extends FreeAtHomeBaseHandler {
     }
 
     @Override
-    public void initialize() {
+    public void tearDown() {
+
+    }
+
+    @Override
+    public void setUp() {
         m_Configuration = getConfigAs(FreeAtHomeSceneConfig.class);
 
         logger.debug("Reset Timeout            {}.", m_Configuration.resetTimeout);
@@ -52,7 +57,7 @@ public class FreeAtHomeSceneHandler extends FreeAtHomeBaseHandler {
     }
 
     @Override
-    public void handleCommand(ChannelUID channelUID, Command command, boolean update) {
+    public void handleCommand(ChannelUID channelUID, Command command) {
         FreeAtHomeBridgeHandler bridge = getFreeAtHomeBridge();
 
         if (bridge == null) {

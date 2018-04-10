@@ -69,11 +69,6 @@ public final class Update {
         return data;
     }
 
-    @Override
-    public final String toString() {
-        return data;
-    }
-
     /**
      * A builder class to which builds geo location objects.
      */

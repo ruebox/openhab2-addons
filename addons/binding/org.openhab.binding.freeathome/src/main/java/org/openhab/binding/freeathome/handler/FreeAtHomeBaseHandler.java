@@ -8,6 +8,9 @@
  */
 package org.openhab.binding.freeathome.handler;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.smarthome.core.thing.Bridge;
 import org.eclipse.smarthome.core.thing.ChannelUID;
 import org.eclipse.smarthome.core.thing.Thing;
@@ -16,7 +19,10 @@ import org.eclipse.smarthome.core.thing.ThingStatusDetail;
 import org.eclipse.smarthome.core.thing.ThingStatusInfo;
 import org.eclipse.smarthome.core.thing.binding.BaseThingHandler;
 import org.eclipse.smarthome.core.thing.binding.ThingHandler;
-import org.eclipse.smarthome.core.types.Command;
+import org.eclipse.smarthome.core.types.State;
+import org.openhab.binding.freeathome.internal.FreeAtHomeUpdateChannel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * The {@link FreeAtHomeBaseHandler} is responsible for handling common commands, which are
@@ -26,9 +32,14 @@ import org.eclipse.smarthome.core.types.Command;
  */
 public abstract class FreeAtHomeBaseHandler extends BaseThingHandler {
 
+    protected List<FreeAtHomeUpdateChannel> m_UpdateChannels;
+    private Logger logger = LoggerFactory.getLogger(FreeAtHomeBaseHandler.class);
+
     public FreeAtHomeBaseHandler(Thing thing) {
         super(thing);
         // TODO Auto-generated constructor stub
+
+        m_UpdateChannels = new ArrayList<FreeAtHomeUpdateChannel>();
     }
 
     @Override
@@ -60,11 +71,61 @@ public abstract class FreeAtHomeBaseHandler extends BaseThingHandler {
         return null;
     }
 
-    public abstract void handleCommand(ChannelUID channelUID, Command command, boolean update);
+    public void notifyUpdate(ChannelUID cUID, State state) {
+        updateState(cUID, state);
+    }
+
+    public void registerUpdate() {
+
+        FreeAtHomeBridgeHandler bridge = getFreeAtHomeBridge();
+
+        if (bridge == null) {
+            logger.error("No bridge found -> nothing to register");
+            return;
+        }
+
+        for (int i = 0; i < m_UpdateChannels.size(); i++) {
+            logger.debug("Register: " + m_UpdateChannels.get(i).toString());
+            bridge.m_UpdateHandler.Register(m_UpdateChannels.get(i));
+        }
+
+    }
+
+    public void unregisterUpdate() {
+        FreeAtHomeBridgeHandler bridge = getFreeAtHomeBridge();
+
+        if (bridge == null) {
+            logger.error("No bridge found -> nothing to register");
+            return;
+        }
+
+        for (int i = 0; i < m_UpdateChannels.size(); i++) {
+            logger.debug("Register: " + m_UpdateChannels.get(i).toString());
+            bridge.m_UpdateHandler.Unregister(m_UpdateChannels.get(i));
+        }
+
+    }
+
+    /*
+     * Called during initialize
+     */
+    public abstract void setUp();
+
+    /*
+     * Called during dispose
+     */
+    public abstract void tearDown();
 
     @Override
-    public void handleCommand(ChannelUID channelUID, Command command) {
-        handleCommand(channelUID, command, false);
+    public void initialize() {
+        this.setUp();
+        this.registerUpdate();
+    }
+
+    @Override
+    public void dispose() {
+        this.tearDown();
+        this.unregisterUpdate();
     }
 
 }

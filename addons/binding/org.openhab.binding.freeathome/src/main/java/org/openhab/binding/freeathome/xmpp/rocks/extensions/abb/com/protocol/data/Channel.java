@@ -49,7 +49,7 @@ public class Channel {
 
     @XmlElementWrapper(name = "inputs")
     @XmlElement(name = "dataPoint")
-    private List<DataPoint> dataPoints;
+    private List<DataPoint> inputs;
 
     @XmlElementWrapper(name = "outputs")
     @XmlElement(name = "dataPoint")
@@ -60,48 +60,56 @@ public class Channel {
     private List<String> parameters;
 
     public Channel() {
-        this.dataPoints = new ArrayList<DataPoint>();
+        this.inputs = new ArrayList<DataPoint>();
         this.outputs = new ArrayList<DataPoint>();
         this.parameters = new ArrayList<String>();
     }
 
-    void setState(String state) {
+    public void setState(String state) {
         this.state = state;
     }
 
-    String getState() {
+    public String getState() {
         return this.state;
     }
 
-    void setI(String i) {
+    public void setI(String i) {
         this.i = i;
     }
 
-    String getI() {
+    public String getI() {
         return this.i;
     }
 
-    void setCid(String cid) {
+    public void setCid(String cid) {
         this.cid = cid;
     }
 
-    String getCid() {
+    public String getCid() {
         return this.cid;
     }
 
-    void setOutputs(List<DataPoint> outputs) {
-        this.outputs = outputs;
+    public void setInputs(List<DataPoint> inputs) {
+        this.inputs = inputs;
     }
 
-    List<DataPoint> getOutputs() {
+    public List<DataPoint> getInputs() {
         return this.outputs;
     }
 
-    void setParameters(List<String> parameters) {
+    public void setOutputs(List<DataPoint> outputs) {
+        this.outputs = outputs;
+    }
+
+    public List<DataPoint> getOutputs() {
+        return this.outputs;
+    }
+
+    public void setParameters(List<String> parameters) {
         this.parameters = parameters;
     }
 
-    List<String> getParameters() {
+    public List<String> getParameters() {
         return this.parameters;
     }
 

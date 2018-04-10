@@ -60,44 +60,52 @@ public class Device {
         this.channels = new ArrayList<Channel>();
     }
 
-    void setSoftwareVersion(String softwareVersion) {
+    public void setSoftwareVersion(String softwareVersion) {
         this.softwareVersion = softwareVersion;
     }
 
-    String getSoftwareVersion() {
+    public String getSoftwareVersion() {
         return this.softwareVersion;
     }
 
-    void setDomainAddress(String domainAddress) {
+    public void setDomainAddress(String domainAddress) {
         this.domainAddress = domainAddress;
     }
 
-    String getDomainAddress() {
+    public String getDomainAddress() {
         return this.domainAddress;
     }
 
-    void setSerialNumber(String serialNumber) {
+    public void setSerialNumber(String serialNumber) {
         this.serialNumber = serialNumber;
     }
 
-    String getSerialNumber() {
+    public String getSerialNumber() {
         return this.serialNumber;
     }
 
-    void setState(String state) {
+    public void setState(String state) {
         this.state = state;
     }
 
-    String getState() {
+    public String getState() {
         return this.state;
     }
 
-    void setCommissioningState(String commissioningState) {
+    public void setCommissioningState(String commissioningState) {
         this.commissioningState = commissioningState;
     }
 
-    String getCommissioningState() {
+    public String getCommissioningState() {
         return this.commissioningState;
+    }
+
+    public void setChannels(List<Channel> channels) {
+        this.channels = channels;
+    }
+
+    public List<Channel> getChannels() {
+        return this.channels;
     }
 
 }

@@ -20,13 +20,18 @@ public class FreeAtHomeDummyHandler extends FreeAtHomeBaseHandler {
     }
 
     @Override
-    public void handleCommand(ChannelUID channelUID, Command command, boolean update) {
+    public void handleCommand(ChannelUID channelUID, Command command) {
         // TODO Auto-generated method stub
 
     }
 
     @Override
-    public void initialize() {
+    public void tearDown() {
+
+    }
+
+    @Override
+    public void setUp() {
         // Fetch bridge on initialization to get proper state
         FreeAtHomeBridgeHandler bridge = getFreeAtHomeBridge();
         if (bridge != null) {

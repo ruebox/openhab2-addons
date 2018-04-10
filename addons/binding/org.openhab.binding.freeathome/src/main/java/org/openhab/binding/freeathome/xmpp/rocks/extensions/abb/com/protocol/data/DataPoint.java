@@ -32,7 +32,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
-class DataPoint {
+public class DataPoint {
 
     @XmlAttribute
     private String state;
@@ -43,27 +43,27 @@ class DataPoint {
     @XmlElement
     private String value;
 
-    void setState(String state) {
+    public void setState(String state) {
         this.state = state;
     }
 
-    String getState() {
+    public String getState() {
         return this.state;
     }
 
-    void setI(String i) {
+    public void setI(String i) {
         this.i = i;
     }
 
-    String getI() {
+    public String getI() {
         return this.i;
     }
 
-    void setValue(String value) {
+    public void setValue(String value) {
         this.value = value;
     }
 
-    String getValue() {
+    public String getValue() {
         return this.value;
     }
 

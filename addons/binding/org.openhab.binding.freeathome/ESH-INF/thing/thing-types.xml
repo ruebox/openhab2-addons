@@ -48,6 +48,12 @@
                 <default>idp0002</default>
                 <advanced>true</advanced>
             </parameter>
+            <parameter name="OutputIdPercentage" type="text" required="true">
+                <label>Id of update event to notify percentage </label>
+                <description></description>
+                <default>odp0001</default>
+                <advanced>true</advanced>
+            </parameter>
         </config-description>
     </thing-type>
     

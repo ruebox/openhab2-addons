@@ -16,7 +16,10 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.Iterator;
+import java.util.List;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -33,9 +36,13 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.openhab.binding.freeathome.config.FreeAtHomeBridgeConfig;
+import org.openhab.binding.freeathome.internal.FreeAtHomeUpdateHandler;
 import org.openhab.binding.freeathome.xmpp.rocks.extension.abb.com.protocol.update.Update;
 import org.openhab.binding.freeathome.xmpp.rocks.extension.abb.com.protocol.update.UpdateEvent;
 import org.openhab.binding.freeathome.xmpp.rocks.extension.abb.com.protocol.update.UpdateManager;
+import org.openhab.binding.freeathome.xmpp.rocks.extensions.abb.com.protocol.data.Channel;
+import org.openhab.binding.freeathome.xmpp.rocks.extensions.abb.com.protocol.data.DataPoint;
+import org.openhab.binding.freeathome.xmpp.rocks.extensions.abb.com.protocol.data.Device;
 import org.openhab.binding.freeathome.xmpp.rocks.extensions.abb.com.protocol.data.Project;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -98,6 +105,8 @@ public class FreeAtHomeBridgeHandler extends BaseBridgeHandler {
      */
     protected FreeAtHomeBridgeConfig m_Configuration;
 
+    public FreeAtHomeUpdateHandler m_UpdateHandler;
+
     public FreeAtHomeBridgeHandler(Bridge bridge) {
         super(bridge);
         // TODO Auto-generated constructor stub
@@ -128,6 +137,10 @@ public class FreeAtHomeBridgeHandler extends BaseBridgeHandler {
 
         g_freeAtHomeBridgeHandler = this;
 
+        m_UpdateHandler = new FreeAtHomeUpdateHandler();
+
+        // TODO iterate over things and register update
+
     }
 
     public boolean dummyThingsEnabled() {
@@ -138,6 +151,8 @@ public class FreeAtHomeBridgeHandler extends BaseBridgeHandler {
     public void dispose() {
 
         onConnectionLost(ThingStatusDetail.CONFIGURATION_ERROR, "Bridge removed");
+
+        m_UpdateHandler = null;
 
         try {
             m_XmppClient.close();
@@ -166,6 +181,7 @@ public class FreeAtHomeBridgeHandler extends BaseBridgeHandler {
      * Call set data point via XMPP service
      */
     public void setDataPoint(String adress, String value) {
+
         try {
             // ArrayList parameter = new ArrayList();
             // parameter.add("ABB260851E51/ch0003/idp0000");
@@ -507,6 +523,20 @@ public class FreeAtHomeBridgeHandler extends BaseBridgeHandler {
         logger.debug(message.getBody());
         Event event = message.getExtension(Event.class);
         logger.debug(event.toString());
+
+        // Open update log file
+        BufferedWriter bw = null;
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss");
+
+        if (this.m_Configuration.log_enabled) {
+            try {
+                bw = new BufferedWriter(new FileWriter(this.m_Configuration.log_dir + "/update.csv", true));
+            } catch (IOException e3) {
+                // TODO Auto-generated catch block
+                e3.printStackTrace();
+            }
+        }
+
         if (event != null) {
             if (Update.NAMESPACE.equals(event.getNode())) {
                 for (Item item : event.getItems()) {
@@ -536,6 +566,47 @@ public class FreeAtHomeBridgeHandler extends BaseBridgeHandler {
                                 counter++;
                             }
 
+                            try {
+                                List<Device> devices = p.getDevices();
+                                for (int i = 0; i < devices.size(); i++) {
+                                    Device currentDevice = devices.get(i);
+
+                                    logger.debug("Update from " + currentDevice.getSerialNumber());
+                                    List<Channel> channels = currentDevice.getChannels();
+
+                                    for (int j = 0; j < channels.size(); j++) {
+                                        Channel channel = channels.get(j);
+
+                                        /*
+                                         * Outputs
+                                         */
+                                        List<DataPoint> dataPointsOut = channel.getOutputs();
+                                        for (int d = 0; d < dataPointsOut.size(); d++) {
+                                            DataPoint datapoint = dataPointsOut.get(d);
+
+                                            logger.debug("Serial: " + currentDevice.getSerialNumber() + "  Channel: "
+                                                    + channel.getI() + "  DataPoint: " + datapoint.getI() + "  Value: "
+                                                    + datapoint.getValue());
+
+                                            if (bw != null && this.m_Configuration.log_enabled) {
+                                                Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+                                                bw.write(sdf.format(timestamp) + " ; " + currentDevice.getSerialNumber()
+                                                        + " ; " + channel.getI() + " ; " + datapoint.getI() + " ; "
+                                                        + datapoint.getValue() + " ; ");
+                                                bw.newLine();
+                                                bw.flush();
+                                            }
+
+                                            m_UpdateHandler.NotifyThing(currentDevice.getSerialNumber(), channel.getI(),
+                                                    datapoint.getI(), datapoint.getValue());
+                                        }
+                                    }
+                                }
+
+                            } catch (Exception e2) {
+                                e2.printStackTrace();
+                            }
+
                         } catch (JAXBException e1) {
                             // TODO Auto-generated catch block
                             e1.printStackTrace();
@@ -546,6 +617,16 @@ public class FreeAtHomeBridgeHandler extends BaseBridgeHandler {
                 }
             }
         }
+
+        if (bw != null) {
+            try {
+                bw.close();
+            } catch (IOException e1) {
+                // TODO Auto-generated catch block
+                e1.printStackTrace();
+            }
+        }
+
     }
 
     private void onIQEvent(IQEvent e) {

@@ -36,7 +36,7 @@ public class FreeAtHomeSwitchHandler extends FreeAtHomeBaseHandler {
     private FreeAtHomeSwitchConfig m_Configuration;
 
     @Override
-    public void handleCommand(ChannelUID channelUID, Command command, boolean update) {
+    public void handleCommand(ChannelUID channelUID, Command command) {
         FreeAtHomeBridgeHandler bridge = getFreeAtHomeBridge();
 
         if (bridge == null) {
@@ -71,7 +71,12 @@ public class FreeAtHomeSwitchHandler extends FreeAtHomeBaseHandler {
     }
 
     @Override
-    public void initialize() {
+    public void tearDown() {
+
+    }
+
+    @Override
+    public void setUp() {
         m_Configuration = getConfigAs(FreeAtHomeSwitchConfig.class);
 
         // Fetch bridge on initialization to get proper state

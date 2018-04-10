@@ -39,7 +39,7 @@ public class FreeAtHomeDimmerHandler extends FreeAtHomeBaseHandler {
     private FreeAtHomeDimmerConfig m_Configuration;
 
     @Override
-    public void handleCommand(ChannelUID channelUID, Command command, boolean update) {
+    public void handleCommand(ChannelUID channelUID, Command command) {
         FreeAtHomeBridgeHandler bridge = getFreeAtHomeBridge();
 
         if (bridge == null) {
@@ -127,7 +127,12 @@ public class FreeAtHomeDimmerHandler extends FreeAtHomeBaseHandler {
     }
 
     @Override
-    public void initialize() {
+    public void tearDown() {
+
+    }
+
+    @Override
+    public void setUp() {
         m_Configuration = getConfigAs(FreeAtHomeDimmerConfig.class);
 
         // Fetch bridge on initialization to get proper state

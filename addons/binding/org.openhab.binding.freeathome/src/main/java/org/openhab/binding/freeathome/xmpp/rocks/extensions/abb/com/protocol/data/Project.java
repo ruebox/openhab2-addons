@@ -40,8 +40,9 @@ import javax.xml.bind.annotation.XmlRootElement;
  *
  * @see <a href="http://xmpp.org/extensions/xep-0163.html">XEP-0163: Personal Eventing Protocol</a>
  */
-@XmlRootElement
+
 @XmlAccessorType(XmlAccessType.FIELD)
+@XmlRootElement(name = "project")
 public class Project {
 
     @XmlAttribute
@@ -79,51 +80,51 @@ public class Project {
         this.type = "type";
     }
 
-    void setTimeStamp(String timeStamp) {
+    public void setTimeStamp(String timeStamp) {
         this.timeStamp = timeStamp;
     }
 
-    String getTimeStamp() {
+    public String getTimeStamp() {
         return timeStamp;
     }
 
-    void setType(String type) {
+    public void setType(String type) {
         this.type = type;
     }
 
-    String getType() {
+    public String getType() {
         return type;
     }
 
-    void setMrhaVersion(String mrhaVersion) {
+    public void setMrhaVersion(String mrhaVersion) {
         this.mrhaVersion = mrhaVersion;
     }
 
-    String getMrhaVersion() {
+    public String getMrhaVersion() {
         return this.mrhaVersion;
     }
 
-    void setDevices(List<Device> devices) {
+    public void setDevices(List<Device> devices) {
         this.devices = devices;
     }
 
-    List<Device> getDevices() {
+    public List<Device> getDevices() {
         return this.devices;
     }
 
-    void setTimerPrograms(List<String> timerPrograms) {
+    public void setTimerPrograms(List<String> timerPrograms) {
         this.timerPrograms = timerPrograms;
     }
 
-    List<String> getTimerPrograms() {
+    public List<String> getTimerPrograms() {
         return this.timerPrograms;
     }
 
-    void setDescriptions(String descriptions) {
+    public void setDescriptions(String descriptions) {
         this.descriptions = descriptions;
     }
 
-    String getDescriptions() {
+    public String getDescriptions() {
         return this.descriptions;
     }
 

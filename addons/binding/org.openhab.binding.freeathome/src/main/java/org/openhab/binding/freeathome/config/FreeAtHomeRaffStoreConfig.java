@@ -20,4 +20,5 @@ public class FreeAtHomeRaffStoreConfig {
     public String InputIdComplete;
     public String InputIdStepwise;
     public String InputIdPercentage;
+    public String OutputIdPercentage;
 }
