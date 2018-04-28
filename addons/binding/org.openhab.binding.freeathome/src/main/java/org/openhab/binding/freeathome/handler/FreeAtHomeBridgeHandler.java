@@ -337,7 +337,11 @@ public class FreeAtHomeBridgeHandler extends BaseBridgeHandler {
         try {
             // Extract jID
             String jid = this.getJid(m_Configuration.login);
-            m_XmppClient.login(jid, m_Configuration.password);
+            m_XmppClient.login(jid.substring(0, jid.indexOf("@")), m_Configuration.password);
+
+            Presence presence = new Presence(Jid.of("mrha@busch-jaeger.de/rpc"), Presence.Type.SUBSCRIBE, null, null, null, null, Jid.of(jid), null, null, null);
+            m_XmppClient.send(presence);
+
 
         } catch (XmppException e1) {
             onConnectionLost(ThingStatusDetail.CONFIGURATION_ERROR,
@@ -393,14 +397,14 @@ public class FreeAtHomeBridgeHandler extends BaseBridgeHandler {
         // m_XmppClient.getManager(PresenceManager.class).requestSubscription(j, "");
         // m_XmppClient.getManager(PresenceManager.class).approveSubscription(j);
 
-        // Presence presence = new Presence(j);
+         Presence presence = new Presence();
 
         // EntityCapabilities c = new EntityCapabilities("http://gonicus.de/caps", "", "1.0");
         // presence.addExtension(c);
 
         // logger.debug(c.getVerificationString());
 
-        // m_XmppClient.send(presence);
+         m_XmppClient.send(presence);
 
         // try {
         // InfoNode result = m_XmppClient.getManager(EntityCapabilitiesManager.class).discoverCapabilities(j);
@@ -469,7 +473,7 @@ public class FreeAtHomeBridgeHandler extends BaseBridgeHandler {
             String jid = (String) currentUser.get("jid");
             logger.info("Login: " + login + "      with the current jid: " + jid);
             if (login.equals(userName)) {
-                foundJid = jid.substring(0, jid.indexOf("@"));
+                foundJid = jid;
             }
         }
 
