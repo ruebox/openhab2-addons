@@ -128,6 +128,8 @@ public class FreeAtHomeBridgeHandler extends BaseBridgeHandler {
         logger.debug("log_dir               {}.", m_Configuration.log_dir);
         logger.debug("dummy_things_enabled  {}.", m_Configuration.dummy_things_enabled);
 
+        m_UpdateHandler = new FreeAtHomeUpdateHandler();
+
         connectGateway();
 
         if (m_Configuration.log_enabled) {
@@ -136,8 +138,6 @@ public class FreeAtHomeBridgeHandler extends BaseBridgeHandler {
         }
 
         g_freeAtHomeBridgeHandler = this;
-
-        m_UpdateHandler = new FreeAtHomeUpdateHandler();
 
         // TODO iterate over things and register update
 
@@ -301,14 +301,14 @@ public class FreeAtHomeBridgeHandler extends BaseBridgeHandler {
         m_XmppClient = new XmppClient("busch-jaeger.de", m_XmppConfiguration, m_BoshConfiguration);
 
         // Listen for inbound messages.
-        m_XmppClient.addInboundMessageListener(e -> logger.debug("Received: " + e.getMessage()));
+        m_XmppClient.addInboundMessageListener(e -> logger.debug("Received Message: " + e.getMessage()));
         m_XmppClient.addInboundMessageListener(e -> onMessageEvent(e));
         m_XmppClient.addOutboundMessageListener(e -> onMessageEvent(e));
         m_XmppClient.addInboundIQListener(e -> logger.debug("Received IQ: " + e.toString()));
         m_XmppClient.addInboundIQListener(e -> onIQEvent(e));
 
         // Listen for inbound presence.
-        m_XmppClient.addInboundPresenceListener(e -> logger.debug("Received: " + e.getPresence()));
+        m_XmppClient.addInboundPresenceListener(e -> logger.debug("Received Presence: " + e.getPresence()));
         m_XmppClient.addInboundPresenceListener(e -> onPresenceEvent(e));
 
         m_XmppClient.addSessionStatusListener(e -> onUpdateXMPPStatus(e));
@@ -320,6 +320,7 @@ public class FreeAtHomeBridgeHandler extends BaseBridgeHandler {
         updateManager.setEnabled(true);
 
         updateManager.addUpdateListener(e -> onUpdateEvent(e));
+        updateManager.addUpdateListener(e -> logger.debug("Received UpdateEvent"));
 
         // Connect
         try {
@@ -337,7 +338,11 @@ public class FreeAtHomeBridgeHandler extends BaseBridgeHandler {
         try {
             // Extract jID
             String jid = this.getJid(m_Configuration.login);
-            m_XmppClient.login(jid, m_Configuration.password);
+            m_XmppClient.login(jid.substring(0, jid.indexOf("@")), m_Configuration.password);
+
+            Presence presence = new Presence(Jid.of("mrha@busch-jaeger.de/rpc"), Presence.Type.SUBSCRIBE, null, null,
+                    null, null, Jid.of(jid), null, null, null);
+            m_XmppClient.send(presence);
 
         } catch (XmppException e1) {
             onConnectionLost(ThingStatusDetail.CONFIGURATION_ERROR,
@@ -393,14 +398,14 @@ public class FreeAtHomeBridgeHandler extends BaseBridgeHandler {
         // m_XmppClient.getManager(PresenceManager.class).requestSubscription(j, "");
         // m_XmppClient.getManager(PresenceManager.class).approveSubscription(j);
 
-        // Presence presence = new Presence(j);
+        Presence presence = new Presence();
 
         // EntityCapabilities c = new EntityCapabilities("http://gonicus.de/caps", "", "1.0");
         // presence.addExtension(c);
 
         // logger.debug(c.getVerificationString());
 
-        // m_XmppClient.send(presence);
+        m_XmppClient.send(presence);
 
         // try {
         // InfoNode result = m_XmppClient.getManager(EntityCapabilitiesManager.class).discoverCapabilities(j);
@@ -469,7 +474,7 @@ public class FreeAtHomeBridgeHandler extends BaseBridgeHandler {
             String jid = (String) currentUser.get("jid");
             logger.info("Login: " + login + "      with the current jid: " + jid);
             if (login.equals(userName)) {
-                foundJid = jid.substring(0, jid.indexOf("@"));
+                foundJid = jid;
             }
         }
 
@@ -495,12 +500,17 @@ public class FreeAtHomeBridgeHandler extends BaseBridgeHandler {
             onConnectionLost(ThingStatusDetail.BRIDGE_OFFLINE, "XMPP connection lost");
         }
 
-        if (e != null && e.getStatus() == XmppSession.Status.CONNECTED) {
+        if (e != null && e.getStatus() == XmppSession.Status.CONNECTED
+                && e.getStatus() == XmppSession.Status.AUTHENTICATED) {
             onConnectionEstablished();
         }
     }
 
+    /*
+     * XMPP Event handlers
+     */
     private void onPresenceEvent(PresenceEvent e) {
+        logger.debug("PresenceEvent Handler called");
         Presence presence = e.getPresence();
         // EntityCapabilities c = presence.getExtension(EntityCapabilities.class);
         if (presence.getType() == Presence.Type.SUBSCRIBE) {
@@ -519,10 +529,9 @@ public class FreeAtHomeBridgeHandler extends BaseBridgeHandler {
      * @param e
      */
     private void onMessageEvent(MessageEvent e) {
+        logger.debug("MessageEvent Handler called");
         Message message = e.getMessage();
-        logger.debug(message.getBody());
         Event event = message.getExtension(Event.class);
-        logger.debug(event.toString());
 
         // Open update log file
         BufferedWriter bw = null;
@@ -534,14 +543,24 @@ public class FreeAtHomeBridgeHandler extends BaseBridgeHandler {
             } catch (IOException e3) {
                 // TODO Auto-generated catch block
                 e3.printStackTrace();
+                logger.error(e3.getMessage());
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                logger.error(ex.getMessage());
             }
         }
 
+        if (event == null) {
+            logger.debug("Event.class extension can not be extracted");
+            return;
+        }
+
         if (event != null) {
+            logger.debug("Namespace: " + event.getNode());
             if (Update.NAMESPACE.equals(event.getNode())) {
                 for (Item item : event.getItems()) {
 
-                    logger.debug(item.getPayload().toString());
+                    logger.debug("Payload of item" + item.getPayload().toString());
 
                     if (item.getPayload() instanceof org.openhab.binding.freeathome.xmpp.rocks.extension.abb.com.protocol.update.Update) {
                         org.openhab.binding.freeathome.xmpp.rocks.extension.abb.com.protocol.update.Update updateData = (org.openhab.binding.freeathome.xmpp.rocks.extension.abb.com.protocol.update.Update) item
@@ -605,16 +624,24 @@ public class FreeAtHomeBridgeHandler extends BaseBridgeHandler {
 
                             } catch (Exception e2) {
                                 e2.printStackTrace();
+                                logger.error("Exception" + e2.getMessage());
                             }
 
                         } catch (JAXBException e1) {
                             // TODO Auto-generated catch block
                             e1.printStackTrace();
+                            logger.error("JaxbException" + e1.getMessage());
+                        } catch (Exception ex) {
+                            logger.error("Generic Exception" + ex.getMessage());
                         }
 
                         // ...
+                    } else {
+                        logger.debug("Payload is not instance of extension.abb.com.protocol.update.Update");
                     }
                 }
+            } else {
+                logger.debug("Message does not have namespace" + Update.NAMESPACE);
             }
         }
 
@@ -630,7 +657,7 @@ public class FreeAtHomeBridgeHandler extends BaseBridgeHandler {
     }
 
     private void onIQEvent(IQEvent e) {
-        logger.debug(e.toString());
+        logger.debug("IQEvent Handler called");
     }
 
     private void onUpdateEvent(UpdateEvent e) {
