@@ -58,6 +58,7 @@ public class FreeAtHomeBindingConstants {
     public final static String SWITCH_THING_CHANNEL = "fh_switch_channel";
 
     public final static String THERMOSTAT_TARGET_TEMP_THING_CHANNEL = "therm_target_temp";
+    public final static String THERMOSTAT_ROOM_TEMP_THING_CHANNEL = "therm_room_temp";
     public final static String THERMOSTAT_SWITCH_THING_CHANNEL = "therm_switch";
     public final static String THERMOSTAT_ECO_THING_CHANNEL = "therm_eco_switch";
 

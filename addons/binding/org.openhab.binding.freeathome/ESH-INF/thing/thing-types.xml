@@ -223,6 +223,10 @@
                 <label>Target temp</label>
                 <description>Set target temperature of device</description>
             </channel>
+            <channel id="therm_room_temp" typeId="fh_temp_channel_type">
+                <label>Room temperature</label>
+                <description>Current room temperature (read only)</description>
+            </channel>
         </channels>
         
          <config-description>
@@ -253,6 +257,18 @@
                 <label>Id to switch eco mode on/off</label>
                 <description></description>
                 <default>idp0011</default>
+                <advanced>true</advanced>
+            </parameter>
+            <parameter name="dataPointIdTargetUpdate" type="text" required="true">
+                <label>Update channel id of target temperature </label>
+                <description></description>
+                <default>odp0006</default>
+                <advanced>true</advanced>
+            </parameter>
+            <parameter name="dataPointIdRoomUpdate" type="text" required="true">
+                <label>Update channel id of room temperature</label>
+                <description></description>
+                <default>odp0010</default>
                 <advanced>true</advanced>
             </parameter>
         </config-description>
