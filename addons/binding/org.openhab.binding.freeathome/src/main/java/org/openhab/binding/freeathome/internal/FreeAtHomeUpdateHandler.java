@@ -14,6 +14,7 @@ import java.util.Map;
 
 import org.eclipse.smarthome.core.library.types.DecimalType;
 import org.eclipse.smarthome.core.library.types.OnOffType;
+import org.eclipse.smarthome.core.library.types.PercentType;
 import org.eclipse.smarthome.core.thing.ChannelUID;
 import org.eclipse.smarthome.core.types.State;
 import org.openhab.binding.freeathome.handler.FreeAtHomeBaseHandler;
@@ -87,6 +88,11 @@ public class FreeAtHomeUpdateHandler {
             // Decimal Type
             if (gState instanceof DecimalType) {
                 sState = new DecimalType(value);
+            }
+
+            // PercentType is a subclass of DecimalType!
+            if (gState instanceof PercentType) {
+                sState = new PercentType(value);
             }
 
             // OnOffType

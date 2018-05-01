@@ -128,6 +128,8 @@ public class FreeAtHomeBridgeHandler extends BaseBridgeHandler {
         logger.debug("log_dir               {}.", m_Configuration.log_dir);
         logger.debug("dummy_things_enabled  {}.", m_Configuration.dummy_things_enabled);
 
+        m_UpdateHandler = new FreeAtHomeUpdateHandler();
+
         connectGateway();
 
         if (m_Configuration.log_enabled) {
@@ -136,8 +138,6 @@ public class FreeAtHomeBridgeHandler extends BaseBridgeHandler {
         }
 
         g_freeAtHomeBridgeHandler = this;
-
-        m_UpdateHandler = new FreeAtHomeUpdateHandler();
 
         // TODO iterate over things and register update
 
@@ -340,9 +340,9 @@ public class FreeAtHomeBridgeHandler extends BaseBridgeHandler {
             String jid = this.getJid(m_Configuration.login);
             m_XmppClient.login(jid.substring(0, jid.indexOf("@")), m_Configuration.password);
 
-            Presence presence = new Presence(Jid.of("mrha@busch-jaeger.de/rpc"), Presence.Type.SUBSCRIBE, null, null, null, null, Jid.of(jid), null, null, null);
+            Presence presence = new Presence(Jid.of("mrha@busch-jaeger.de/rpc"), Presence.Type.SUBSCRIBE, null, null,
+                    null, null, Jid.of(jid), null, null, null);
             m_XmppClient.send(presence);
-
 
         } catch (XmppException e1) {
             onConnectionLost(ThingStatusDetail.CONFIGURATION_ERROR,
@@ -390,7 +390,6 @@ public class FreeAtHomeBridgeHandler extends BaseBridgeHandler {
 
         m_RpcManager = m_XmppClient.getManager(RpcManager.class);
 
-
         // Write to System.out for debugging
         // m.marshal(emp, System.out);
 
@@ -399,14 +398,14 @@ public class FreeAtHomeBridgeHandler extends BaseBridgeHandler {
         // m_XmppClient.getManager(PresenceManager.class).requestSubscription(j, "");
         // m_XmppClient.getManager(PresenceManager.class).approveSubscription(j);
 
-         Presence presence = new Presence();
+        Presence presence = new Presence();
 
         // EntityCapabilities c = new EntityCapabilities("http://gonicus.de/caps", "", "1.0");
         // presence.addExtension(c);
 
         // logger.debug(c.getVerificationString());
 
-         m_XmppClient.send(presence);
+        m_XmppClient.send(presence);
 
         // try {
         // InfoNode result = m_XmppClient.getManager(EntityCapabilitiesManager.class).discoverCapabilities(j);
@@ -501,7 +500,8 @@ public class FreeAtHomeBridgeHandler extends BaseBridgeHandler {
             onConnectionLost(ThingStatusDetail.BRIDGE_OFFLINE, "XMPP connection lost");
         }
 
-        if (e != null && e.getStatus() == XmppSession.Status.CONNECTED) {
+        if (e != null && e.getStatus() == XmppSession.Status.CONNECTED
+                && e.getStatus() == XmppSession.Status.AUTHENTICATED) {
             onConnectionEstablished();
         }
     }
