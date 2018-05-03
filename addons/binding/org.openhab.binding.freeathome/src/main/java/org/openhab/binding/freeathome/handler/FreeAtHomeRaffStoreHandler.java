@@ -11,7 +11,6 @@ package org.openhab.binding.freeathome.handler;
 import static org.openhab.binding.freeathome.FreeAtHomeBindingConstants.*;
 
 import org.eclipse.smarthome.core.library.types.DecimalType;
-import org.eclipse.smarthome.core.library.types.PercentType;
 import org.eclipse.smarthome.core.library.types.StopMoveType;
 import org.eclipse.smarthome.core.library.types.UpDownType;
 import org.eclipse.smarthome.core.thing.ChannelUID;
@@ -20,6 +19,7 @@ import org.eclipse.smarthome.core.types.Command;
 import org.openhab.binding.freeathome.FreeAtHomeBindingConstants;
 import org.openhab.binding.freeathome.config.FreeAtHomeRaffStoreConfig;
 import org.openhab.binding.freeathome.internal.FreeAtHomeUpdateChannel;
+import org.openhab.binding.freeathome.internal.stateconvert.DefaultPercentTypeConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -123,8 +123,9 @@ public class FreeAtHomeRaffStoreHandler extends FreeAtHomeBaseHandler {
 
         }
 
-        m_UpdateChannels.add(new FreeAtHomeUpdateChannel(this, RAFFSTORE_THING_CHANNEL_PERCENTAGE, new PercentType(),
-                m_Configuration.DeviceId, m_Configuration.ChannelId, m_Configuration.OutputIdPercentage));
+        m_UpdateChannels.add(
+                new FreeAtHomeUpdateChannel(this, RAFFSTORE_THING_CHANNEL_PERCENTAGE, new DefaultPercentTypeConverter(),
+                        m_Configuration.DeviceId, m_Configuration.ChannelId, m_Configuration.OutputIdPercentage));
 
     }
 

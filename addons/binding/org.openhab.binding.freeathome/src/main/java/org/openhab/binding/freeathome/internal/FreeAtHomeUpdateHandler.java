@@ -12,12 +12,10 @@ package org.openhab.binding.freeathome.internal;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.eclipse.smarthome.core.library.types.DecimalType;
-import org.eclipse.smarthome.core.library.types.OnOffType;
-import org.eclipse.smarthome.core.library.types.PercentType;
 import org.eclipse.smarthome.core.thing.ChannelUID;
 import org.eclipse.smarthome.core.types.State;
 import org.openhab.binding.freeathome.handler.FreeAtHomeBaseHandler;
+import org.openhab.binding.freeathome.internal.stateconvert.StateConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,12 +33,12 @@ public class FreeAtHomeUpdateHandler {
     public class FreeAtHomeThingChannel {
         public FreeAtHomeBaseHandler m_BaseHandler = null;;
         public ChannelUID m_Channel = null;
-        public State m_State = null;
+        public StateConverter m_StateConverter = null;
 
-        public FreeAtHomeThingChannel(FreeAtHomeBaseHandler h, ChannelUID c, State s) {
+        public FreeAtHomeThingChannel(FreeAtHomeBaseHandler h, ChannelUID c, StateConverter s) {
             m_BaseHandler = h;
             m_Channel = c;
-            m_State = s;
+            m_StateConverter = s;
         }
     }
 
@@ -55,11 +53,11 @@ public class FreeAtHomeUpdateHandler {
     }
 
     public void Register(FreeAtHomeUpdateChannel channel) {
-        this.RegisterThing(channel.m_Thing, channel.m_OhThingChanneId, channel.m_OhThingState, channel.m_FhSerial,
-                channel.m_FhChannel, channel.m_FhDataPoint);
+        this.RegisterThing(channel.m_Thing, channel.m_OhThingChanneId, channel.m_OhThingStateConverter,
+                channel.m_FhSerial, channel.m_FhChannel, channel.m_FhDataPoint);
     }
 
-    private void RegisterThing(FreeAtHomeBaseHandler thing, String channelId, State state, String serial,
+    private void RegisterThing(FreeAtHomeBaseHandler thing, String channelId, StateConverter state, String serial,
             String channel, String dataPoint) {
 
         ChannelUID cUid = thing.getThing().getChannel(channelId).getUID();
@@ -81,28 +79,12 @@ public class FreeAtHomeUpdateHandler {
         FreeAtHomeThingChannel thing = m_RegisteredThings.get(this.GenerateId(serial, channel, dataPoint));
 
         if (thing != null) {
-            State gState = thing.m_State;
-
-            State sState = null;
-
-            // Decimal Type
-            if (gState instanceof DecimalType) {
-                sState = new DecimalType(value);
-            }
-
-            // PercentType is a subclass of DecimalType!
-            if (gState instanceof PercentType) {
-                sState = new PercentType(value);
-            }
-
-            // OnOffType
-            if (gState instanceof OnOffType) {
-                if (value.equals("1")) {
-                    sState = OnOffType.ON;
-                } else {
-                    sState = OnOffType.OFF;
-                }
-            }
+            /*
+             * For each channel a specific converter can be registered that
+             * generates a State from string value
+             */
+            StateConverter sConvert = thing.m_StateConverter;
+            State sState = sConvert.convert(value);
 
             if (sState != null) {
                 thing.m_BaseHandler.notifyUpdate(thing.m_Channel, sState);

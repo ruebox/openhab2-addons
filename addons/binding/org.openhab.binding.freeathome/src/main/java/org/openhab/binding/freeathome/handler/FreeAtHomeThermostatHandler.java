@@ -16,6 +16,7 @@ import org.eclipse.smarthome.core.types.Command;
 import org.openhab.binding.freeathome.FreeAtHomeBindingConstants;
 import org.openhab.binding.freeathome.config.FreeAtHomeThermostatConfig;
 import org.openhab.binding.freeathome.internal.FreeAtHomeUpdateChannel;
+import org.openhab.binding.freeathome.internal.stateconvert.DefaultDecimalTypeConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -117,11 +118,11 @@ public class FreeAtHomeThermostatHandler extends FreeAtHomeBaseHandler {
         FreeAtHomeBridgeHandler bridge = getFreeAtHomeBridge();
         if (bridge != null) {
             m_UpdateChannels.add(new FreeAtHomeUpdateChannel(this,
-                    FreeAtHomeBindingConstants.THERMOSTAT_TARGET_TEMP_THING_CHANNEL, new DecimalType(),
+                    FreeAtHomeBindingConstants.THERMOSTAT_TARGET_TEMP_THING_CHANNEL, new DefaultDecimalTypeConverter(),
                     m_Configuration.deviceId, m_Configuration.channelId, m_Configuration.dataPointIdTargetUpdate));
 
             m_UpdateChannels.add(new FreeAtHomeUpdateChannel(this,
-                    FreeAtHomeBindingConstants.THERMOSTAT_ROOM_TEMP_THING_CHANNEL, new DecimalType(),
+                    FreeAtHomeBindingConstants.THERMOSTAT_ROOM_TEMP_THING_CHANNEL, new DefaultDecimalTypeConverter(),
                     m_Configuration.deviceId, m_Configuration.channelId, m_Configuration.dataPointIdRoomUpdate));
 
         } // dummy call to avoid optimization
