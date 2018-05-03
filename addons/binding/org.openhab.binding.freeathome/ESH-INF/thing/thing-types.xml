@@ -181,6 +181,12 @@
                 <default>idp0000</default>
                 <advanced>true</advanced>
             </parameter>
+            <parameter name="dataPointIdUpdate" type="text" required="true">
+                <label>Id of update switch state </label>
+                <description></description>
+                <default>odp0000</default>
+                <advanced>true</advanced>
+            </parameter>
         </config-description>
     </thing-type>
     

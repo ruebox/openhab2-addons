@@ -18,5 +18,6 @@ public class FreeAtHomeSwitchConfig {
     public String deviceId;
     public String channelId;
     public String dataPointId;
+    public String dataPointIdUpdate;
 
 }

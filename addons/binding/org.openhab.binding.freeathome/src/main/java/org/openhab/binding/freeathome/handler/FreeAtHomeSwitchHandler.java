@@ -14,6 +14,8 @@ import org.eclipse.smarthome.core.thing.Thing;
 import org.eclipse.smarthome.core.types.Command;
 import org.openhab.binding.freeathome.FreeAtHomeBindingConstants;
 import org.openhab.binding.freeathome.config.FreeAtHomeSwitchConfig;
+import org.openhab.binding.freeathome.internal.FreeAtHomeUpdateChannel;
+import org.openhab.binding.freeathome.internal.stateconvert.DefaultOnOffTypeConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -82,7 +84,9 @@ public class FreeAtHomeSwitchHandler extends FreeAtHomeBaseHandler {
         // Fetch bridge on initialization to get proper state
         FreeAtHomeBridgeHandler bridge = getFreeAtHomeBridge();
         if (bridge != null) {
-            bridge.dummyThingsEnabled();
+            m_UpdateChannels.add(new FreeAtHomeUpdateChannel(this, FreeAtHomeBindingConstants.SWITCH_THING_CHANNEL,
+                    new DefaultOnOffTypeConverter(), m_Configuration.deviceId, m_Configuration.channelId,
+                    m_Configuration.dataPointIdUpdate));
         } // dummy call to avoid optimization
     }
 
