@@ -22,5 +22,7 @@ public class FreeAtHomeThermostatConfig {
     public String dataPointIdEco;
     public String dataPointIdTargetUpdate;
     public String dataPointIdRoomUpdate;
+    public String dataPointIdSwitchUpdate;
+    public String dataPointIdEcoUpdate;
 
 }

@@ -13,10 +13,13 @@ import org.eclipse.smarthome.core.library.types.OnOffType;
 import org.eclipse.smarthome.core.thing.ChannelUID;
 import org.eclipse.smarthome.core.thing.Thing;
 import org.eclipse.smarthome.core.types.Command;
+import org.eclipse.smarthome.core.types.State;
 import org.openhab.binding.freeathome.FreeAtHomeBindingConstants;
 import org.openhab.binding.freeathome.config.FreeAtHomeThermostatConfig;
 import org.openhab.binding.freeathome.internal.FreeAtHomeUpdateChannel;
 import org.openhab.binding.freeathome.internal.stateconvert.DefaultDecimalTypeConverter;
+import org.openhab.binding.freeathome.internal.stateconvert.DefaultOnOffTypeConverter;
+import org.openhab.binding.freeathome.internal.stateconvert.StateConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -117,13 +120,36 @@ public class FreeAtHomeThermostatHandler extends FreeAtHomeBaseHandler {
         // Fetch bridge on initialization to get proper state
         FreeAtHomeBridgeHandler bridge = getFreeAtHomeBridge();
         if (bridge != null) {
+            // Target temperature update
             m_UpdateChannels.add(new FreeAtHomeUpdateChannel(this,
                     FreeAtHomeBindingConstants.THERMOSTAT_TARGET_TEMP_THING_CHANNEL, new DefaultDecimalTypeConverter(),
                     m_Configuration.deviceId, m_Configuration.channelId, m_Configuration.dataPointIdTargetUpdate));
 
+            // Room temperature update
             m_UpdateChannels.add(new FreeAtHomeUpdateChannel(this,
                     FreeAtHomeBindingConstants.THERMOSTAT_ROOM_TEMP_THING_CHANNEL, new DefaultDecimalTypeConverter(),
                     m_Configuration.deviceId, m_Configuration.channelId, m_Configuration.dataPointIdRoomUpdate));
+
+            // Switch on/off update
+            m_UpdateChannels.add(new FreeAtHomeUpdateChannel(this,
+                    FreeAtHomeBindingConstants.THERMOSTAT_SWITCH_THING_CHANNEL, new DefaultOnOffTypeConverter(),
+                    m_Configuration.deviceId, m_Configuration.channelId, m_Configuration.dataPointIdSwitchUpdate));
+
+            // Switch eco on/off
+            // Nested class for eco switch
+            class EcoModeOnOffTypeConverter implements StateConverter {
+                @Override
+                public State convert(String value) {
+                    if (value.equals("68")) {
+                        return OnOffType.ON;
+                    } else { // expected "65"
+                        return OnOffType.OFF;
+                    }
+                }
+            }
+            m_UpdateChannels.add(new FreeAtHomeUpdateChannel(this,
+                    FreeAtHomeBindingConstants.THERMOSTAT_ECO_THING_CHANNEL, new EcoModeOnOffTypeConverter(),
+                    m_Configuration.deviceId, m_Configuration.channelId, m_Configuration.dataPointIdEcoUpdate));
 
         } // dummy call to avoid optimization
     }

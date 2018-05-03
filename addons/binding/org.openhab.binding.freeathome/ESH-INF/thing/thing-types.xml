@@ -271,6 +271,18 @@
                 <default>odp0010</default>
                 <advanced>true</advanced>
             </parameter>
+                        <parameter name="dataPointIdSwitchUpdate" type="text" required="true">
+                <label>Update channel id of switch thermostat on/off </label>
+                <description></description>
+                <default>odp0008</default>
+                <advanced>true</advanced>
+            </parameter>
+            <parameter name="dataPointIdEcoUpdate" type="text" required="true">
+                <label>Update channel id of eco mode on/off</label>
+                <description></description>
+                <default>odp0009</default>
+                <advanced>true</advanced>
+            </parameter>
         </config-description>
     </thing-type>
     
