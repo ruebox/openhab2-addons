@@ -133,8 +133,13 @@ public class FreeAtHomeBridgeHandler extends BaseBridgeHandler {
         connectGateway();
 
         if (m_Configuration.log_enabled) {
-            String xml = this.getAll();
-            this.writeStringToFile(xml, m_Configuration.log_dir + "/getAll.xml");
+            try {
+                String xml = this.getAll();
+                this.writeStringToFile(xml, m_Configuration.log_dir + "/getAll.xml");
+            } catch (Exception e) {
+                logger.warn(
+                        "Could not successfully get the getAll.xml from sysAP. Can happen if connecting to server takes too long.");
+            }
         }
 
         g_freeAtHomeBridgeHandler = this;
