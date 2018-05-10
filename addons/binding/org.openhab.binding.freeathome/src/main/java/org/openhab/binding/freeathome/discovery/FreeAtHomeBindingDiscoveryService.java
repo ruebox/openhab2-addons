@@ -134,6 +134,22 @@ public class FreeAtHomeBindingDiscoveryService extends AbstractDiscoveryService 
                                 .withBridge(bridgeUID).withProperties(properties).build();
                         thingDiscovered(discoveryResult);
                     }
+                    // // Sensor/Schaltaktor 2/1-fach
+                    // http://www.busch-jaeger-katalog.de/artikel.php?bereich=1013622&programm=1013638&gruppe=1013642&produkt=1013643
+                    case "1015": {
+                        String channelId = "ch0006";
+                        ThingUID uid = new ThingUID(FreeAtHomeBindingConstants.SWITCH_THING_TYPEUID,
+                                device.Serial + "_" + channelId);
+                        Map<String, Object> properties = new HashMap<>(1);
+                        properties.put("deviceId", device.Serial);
+                        properties.put("channelId", channelId);
+
+                        DiscoveryResult discoveryResult = DiscoveryResultBuilder.create(uid)
+                                .withLabel(device.DeviceDisplayName + "_" + device.DeviceTypeName + "_" + deviceTypeId
+                                        + "_" + device.Serial + "_" + channelId)
+                                .withBridge(bridgeUID).withProperties(properties).build();
+                        thingDiscovered(discoveryResult);
+                    }
                         break;
                     // // Schaltaktor 4-fach, 16A, REG
                     case "B002":
