@@ -124,7 +124,7 @@ public class FreeAtHomeThermostatHandler extends FreeAtHomeBaseHandler {
             class TargetTempDecimalTypeConverter implements StateConverter {
                 @Override
                 public State convert(String value) {
-                    if (value.equals("35")) // reported if thermostat is switched of
+                    if (value.equals("35")) // reported if thermostat is switched off
                     {
                         return new DecimalType(Double.NaN);
                     } else {

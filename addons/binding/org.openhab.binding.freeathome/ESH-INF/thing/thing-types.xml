@@ -343,6 +343,12 @@
                <default>idp0002</default>
                <advanced>true</advanced>
            </parameter>
+           <parameter name="dataPointIdSwitchUpdate" type="text" required="true">
+               <label>Id to update the switch status</label>
+               <description></description>
+               <default>odp0000</default>
+               <advanced>true</advanced>
+           </parameter>
            <parameter name="dataPointIdValueUpdate" type="text" required="true">
                <label>Id to update the percentage value</label>
                <description></description>

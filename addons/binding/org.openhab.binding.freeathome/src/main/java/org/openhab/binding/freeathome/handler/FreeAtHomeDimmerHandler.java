@@ -18,6 +18,7 @@ import org.eclipse.smarthome.core.types.Command;
 import org.openhab.binding.freeathome.FreeAtHomeBindingConstants;
 import org.openhab.binding.freeathome.config.FreeAtHomeDimmerConfig;
 import org.openhab.binding.freeathome.internal.FreeAtHomeUpdateChannel;
+import org.openhab.binding.freeathome.internal.stateconvert.DefaultOnOffTypeConverter;
 import org.openhab.binding.freeathome.internal.stateconvert.DefaultPercentTypeConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -140,6 +141,10 @@ public class FreeAtHomeDimmerHandler extends FreeAtHomeBaseHandler {
         // Fetch bridge on initialization to get proper state
         FreeAtHomeBridgeHandler bridge = getFreeAtHomeBridge();
         if (bridge != null) {
+
+            m_UpdateChannels.add(new FreeAtHomeUpdateChannel(this,
+                    FreeAtHomeBindingConstants.DIMMER_SWITCH_THING_CHANNEL, new DefaultOnOffTypeConverter(),
+                    m_Configuration.deviceId, m_Configuration.channelId, m_Configuration.dataPointIdSwitchUpdate));
 
             m_UpdateChannels.add(new FreeAtHomeUpdateChannel(this,
                     FreeAtHomeBindingConstants.DIMMER_VALUE_THING_CHANNEL, new DefaultPercentTypeConverter(),
