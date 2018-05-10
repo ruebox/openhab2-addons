@@ -20,5 +20,7 @@ public class FreeAtHomeDimmerConfig {
     public String dataPointIdSwitch;
     public String dataPointIdFade;
     public String dataPointIdValue;
+    public String dataPointIdSwitchUpdate;
+    public String dataPointIdValueUpdate;
 
 }

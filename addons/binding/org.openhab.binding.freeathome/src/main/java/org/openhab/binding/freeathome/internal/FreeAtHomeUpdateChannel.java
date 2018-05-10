@@ -3,8 +3,8 @@
  */
 package org.openhab.binding.freeathome.internal;
 
-import org.eclipse.smarthome.core.types.State;
 import org.openhab.binding.freeathome.handler.FreeAtHomeBaseHandler;
+import org.openhab.binding.freeathome.internal.stateconvert.StateConverter;
 
 /**
  * @author rue
@@ -13,16 +13,16 @@ import org.openhab.binding.freeathome.handler.FreeAtHomeBaseHandler;
 public class FreeAtHomeUpdateChannel {
     public FreeAtHomeBaseHandler m_Thing;
     public String m_OhThingChanneId;
-    public State m_OhThingState;
+    public StateConverter m_OhThingStateConverter;
     public String m_FhSerial;
     public String m_FhChannel;
     public String m_FhDataPoint;
 
-    public FreeAtHomeUpdateChannel(FreeAtHomeBaseHandler thing, String channelId, State state, String serial,
-            String channel, String dataPoint) {
+    public FreeAtHomeUpdateChannel(FreeAtHomeBaseHandler thing, String channelId, StateConverter stateConverter,
+            String serial, String channel, String dataPoint) {
         m_Thing = thing;
         m_OhThingChanneId = channelId;
-        m_OhThingState = state;
+        m_OhThingStateConverter = stateConverter;
         m_FhSerial = serial;
         m_FhChannel = channel;
         m_FhDataPoint = dataPoint;
@@ -30,7 +30,7 @@ public class FreeAtHomeUpdateChannel {
 
     @Override
     public String toString() {
-        return m_Thing.toString() + "_" + m_OhThingChanneId + "_" + m_OhThingState.toString() + "_" + m_FhSerial + "_"
-                + m_FhChannel + "_" + m_FhDataPoint;
+        return m_Thing.toString() + "_" + m_OhThingChanneId + "_" + m_OhThingStateConverter.toString() + "_"
+                + m_FhSerial + "_" + m_FhChannel + "_" + m_FhDataPoint;
     }
 }
