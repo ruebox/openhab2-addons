@@ -121,9 +121,23 @@ public class FreeAtHomeThermostatHandler extends FreeAtHomeBaseHandler {
         FreeAtHomeBridgeHandler bridge = getFreeAtHomeBridge();
         if (bridge != null) {
             // Target temperature update
-            m_UpdateChannels.add(new FreeAtHomeUpdateChannel(this,
-                    FreeAtHomeBindingConstants.THERMOSTAT_TARGET_TEMP_THING_CHANNEL, new DefaultDecimalTypeConverter(),
-                    m_Configuration.deviceId, m_Configuration.channelId, m_Configuration.dataPointIdTargetUpdate));
+            class TargetTempDecimalTypeConverter implements StateConverter {
+                @Override
+                public State convert(String value) {
+                    if (value.equals("35")) // reported if thermostat is switched of
+                    {
+                        return new DecimalType(Double.NaN);
+                    } else {
+                        return new DecimalType(value);
+                    }
+                }
+
+            }
+
+            m_UpdateChannels.add(
+                    new FreeAtHomeUpdateChannel(this, FreeAtHomeBindingConstants.THERMOSTAT_TARGET_TEMP_THING_CHANNEL,
+                            new TargetTempDecimalTypeConverter(), m_Configuration.deviceId, m_Configuration.channelId,
+                            m_Configuration.dataPointIdTargetUpdate));
 
             // Room temperature update
             m_UpdateChannels.add(new FreeAtHomeUpdateChannel(this,
