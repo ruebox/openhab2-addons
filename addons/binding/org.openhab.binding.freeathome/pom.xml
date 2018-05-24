@@ -11,7 +11,7 @@
 
   <groupId>org.openhab.binding</groupId>
   <artifactId>org.openhab.binding.freeathome</artifactId>
-  <version>2.0.0-SNAPSHOT</version>
+  <version>0.9.0-SNAPSHOT</version>
 
   <name>FreeAtHome Binding</name>
   <packaging>eclipse-plugin</packaging>
@@ -21,13 +21,14 @@
     Gateway connection
     Scene activation
     Raffstore/Shutter control: stepwise and complete incl. raffstore groups
+    Switch
+    Dimmer
+    Thermostat
+    Weather station
+and
     Discovery
 
-The binding currently does not support (yet):
-    Switch
-    Light
-    Heating
-</description>
+Events of the physical devices are fed back to binding.</description>
   <organization>
   	<name>ruebox</name>
   </organization>
@@ -66,4 +67,9 @@ The binding currently does not support (yet):
   
   </dependencies>
   
+  <url>https://github.com/ruebox/openhab2-addons/tree/feature_binding_freeathome/addons/binding/org.openhab.binding.freeathome</url>
+  <issueManagement>
+  	<system>Github</system>
+  	<url>https://github.com/ruebox/openhab2-addons/issues</url>
+  </issueManagement>
 </project>

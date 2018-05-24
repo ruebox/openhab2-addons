@@ -4,10 +4,19 @@
         xmlns:binding="http://eclipse.org/smarthome/schemas/binding/v1.0.0"
         xsi:schemaLocation="http://eclipse.org/smarthome/schemas/binding/v1.0.0 http://eclipse.org/smarthome/schemas/binding-1.0.0.xsd">
 
-    <name>B+J FreeAtHome Binding</name>
-    <description>This binding connects to Busch and Jäger FreeAtHome HomeAutomation system and supports
-    scene selection and raffstores. Currently not supported: discovery, light, heating.
-    It is based on XMPP.rocks that is used to connect to system access point.
+    <name>FreeAtHome Binding</name>
+    <description>This binding connects to Busch and Jäger FreeAtHome HomeAutomation system and supports 
+    gateway connection via bridge,
+    scene activation,
+    raffstore/shutter control (incl. raffstore groups),
+    switch,
+    dimmer,
+    thermostat,
+    weather station
+    and
+    discovery.
+    Events of the physical devices are fed back to binding.
+    It is based on XMPP.rocks that is used to connect to system access point. Disclaimer: This binding is a private contribution and is not an official B+J product.
      </description>
     <author>Ruebox </author>
 
