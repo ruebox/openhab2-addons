@@ -22,6 +22,7 @@ import org.openhab.binding.freeathome.handler.FreeAtHomeScenarioSelectorHandler;
 import org.openhab.binding.freeathome.handler.FreeAtHomeSceneHandler;
 import org.openhab.binding.freeathome.handler.FreeAtHomeSwitchHandler;
 import org.openhab.binding.freeathome.handler.FreeAtHomeThermostatHandler;
+import org.openhab.binding.freeathome.handler.FreeAtHomeWeatherHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -83,6 +84,12 @@ public class FreeAtHomeHandlerFactory extends BaseThingHandlerFactory {
         if (thingTypeUID.equals(FreeAtHomeBindingConstants.DIMMER_THING_TYPEUID)) {
             logger.debug("create dimmer Handler");
             FreeAtHomeDimmerHandler handler = new FreeAtHomeDimmerHandler(thing);
+            return handler;
+        }
+
+        if (thingTypeUID.equals(FreeAtHomeBindingConstants.WEATHER_THING_TYPEUID)) {
+            logger.debug("create weather station Handler");
+            FreeAtHomeWeatherHandler handler = new FreeAtHomeWeatherHandler(thing);
             return handler;
         }
 

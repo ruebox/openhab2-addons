@@ -101,9 +101,13 @@ public class FreeAtHomeBindingDiscoveryService extends AbstractDiscoveryService 
                         thingDiscovered(discoveryResult);
                     }
                         break;
-                    // Jalousieaktor 1-fach, REG ?2-fac
+
+                    // Sensor/Schaltaktor 2/1-fach
+                    // http://www.busch-jaeger-katalog.de/artikel.php?bereich=1013622&programm=1013638&gruppe=1013642&produkt=1013643
+                    case "1015":
                     case "9015":
                     // 9015 provides 1 channel, but it runs on channel ch0006
+                    // Jalousieaktor 1-fach, REG ?2-fac
                     {
                         String channelId = "ch0006";
                         ThingUID uid = new ThingUID(FreeAtHomeBindingConstants.RAFFSTORE_THING_TYPEUID,
@@ -134,23 +138,6 @@ public class FreeAtHomeBindingDiscoveryService extends AbstractDiscoveryService 
                                 .withBridge(bridgeUID).withProperties(properties).build();
                         thingDiscovered(discoveryResult);
                     }
-                    // // Sensor/Schaltaktor 2/1-fach
-                    // http://www.busch-jaeger-katalog.de/artikel.php?bereich=1013622&programm=1013638&gruppe=1013642&produkt=1013643
-                    case "1015": {
-                        String channelId = "ch0006";
-                        ThingUID uid = new ThingUID(FreeAtHomeBindingConstants.SWITCH_THING_TYPEUID,
-                                device.Serial + "_" + channelId);
-                        Map<String, Object> properties = new HashMap<>(1);
-                        properties.put("deviceId", device.Serial);
-                        properties.put("channelId", channelId);
-
-                        DiscoveryResult discoveryResult = DiscoveryResultBuilder.create(uid)
-                                .withLabel(device.DeviceDisplayName + "_" + device.DeviceTypeName + "_" + deviceTypeId
-                                        + "_" + device.Serial + "_" + channelId)
-                                .withBridge(bridgeUID).withProperties(properties).build();
-                        thingDiscovered(discoveryResult);
-                    }
-                        break;
                     // // Schaltaktor 4-fach, 16A, REG
                     case "B002":
                         for (int i = 0; i < 4; i++) // B002 provides 4 different channels
@@ -366,6 +353,20 @@ public class FreeAtHomeBindingDiscoveryService extends AbstractDiscoveryService 
                         DiscoveryResult discoveryResult = DiscoveryResultBuilder.create(uid)
                                 .withLabel(device.DeviceDisplayName + "_" + device.DeviceTypeName + "_" + deviceTypeId
                                         + "_" + device.Serial + "_" + channelId)
+                                .withBridge(bridgeUID).withProperties(properties).build();
+                        thingDiscovered(discoveryResult);
+                    }
+                        break;
+
+                    case "101D": // weather station
+                    {
+                        ThingUID uid = new ThingUID(FreeAtHomeBindingConstants.WEATHER_THING_TYPEUID, device.Serial);
+                        Map<String, Object> properties = new HashMap<>(1);
+                        properties.put("deviceId", device.Serial);
+
+                        DiscoveryResult discoveryResult = DiscoveryResultBuilder
+                                .create(uid).withLabel(device.DeviceDisplayName + "_" + device.DeviceTypeName + "_"
+                                        + deviceTypeId + "_" + device.Serial)
                                 .withBridge(bridgeUID).withProperties(properties).build();
                         thingDiscovered(discoveryResult);
                     }

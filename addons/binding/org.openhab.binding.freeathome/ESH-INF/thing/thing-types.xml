@@ -203,7 +203,7 @@
         <label>Temperature</label>
         <description>Temperature of device</description>
         <category>Temperature</category>
-        <state min="0" max="30" step="0.1" pattern="%.1f °C" readOnly="false">
+        <state min="0" max="50" step="0.1" pattern="%.1f °C" readOnly="false">
     </state>
     </channel-type>
     
@@ -372,6 +372,129 @@
         <category>Slider</category>
         <state min="0" max="100" step="1" readOnly="false"></state>
     </channel-type>
+    
+    
+   <channel-type id="fh_weather_temp_channel_type">
+        <item-type>Number</item-type>
+        <label>Temperature (°C)</label>
+        <description>Current temperature</description>
+        <category>Temperature</category>
+        <state min="0" max="100" step="0.1" pattern="%.1f °C" readOnly="true">
+        </state>
+    </channel-type>
+    
+    <channel-type id="fh_weather_wind_channel_type">
+        <item-type>Number</item-type>
+        <label>Wind speed (m/s)</label>
+        <description>Current wind speed</description>
+        <category>Wind</category>
+        <state min="0" max="50" step="0.1" pattern="%.1f m/s" readOnly="true">
+        </state>
+    </channel-type>
+    
+    <channel-type id="fh_weather_illumination_channel_type">
+        <item-type>Number</item-type>
+        <label>Illumination (lux)</label>
+        <description>Current illumination</description>
+        <category>Wind</category>
+        <state min="0" step="0.1" pattern="%.1f lux" readOnly="true">
+        </state>
+    </channel-type>
+    
+    <channel-type id="fh_weather_rain_channel_type">
+        <item-type>Switch</item-type>
+        <label>Rain</label>
+        <description>Is it raining?</description>
+        <category>Rain</category>
+        <state readOnly="true"></state>
+    </channel-type>
+    
+      <thing-type id="weather">
+        <supported-bridge-type-refs>
+           <bridge-type-ref id="bridge" />
+       </supported-bridge-type-refs>
+  
+       <label>Weather station</label>
+       <description>Weather station providing wind speed, temperature, illumination.
+       </description>        
+       <channels>
+            <channel id="weather_temperature" typeId="fh_weather_temp_channel_type">
+            </channel>
+            <channel id="weather_wind" typeId="fh_weather_wind_channel_type">
+           </channel>
+           <channel id="weather_illumination" typeId="fh_weather_illumination_channel_type">
+           </channel>
+           <channel id="weather_rain" typeId="fh_weather_rain_channel_type">
+           </channel>
+       </channels>
+       
+        <config-description>
+           <parameter name="deviceId" type="text" required="true">
+               <label>Id of the device</label>
+               <description>DeviceId</description>
+               <default>FFFF00000000</default>
+           </parameter>
+           <parameter name="channelIdIllumination" type="text" required="true">
+               <label>channel id for illumination </label>
+               <description></description>
+               <default>ch0000</default>
+               <advanced>true</advanced>
+           </parameter>
+           <parameter name="dataPointIdIllumination" type="text" required="true">
+               <label>datapoint id for illumination</label>
+               <description></description>
+               <default>odp0001</default>
+               <advanced>true</advanced>
+           </parameter>
+           
+           <parameter name="channelIdRain" type="text" required="true">
+               <label>channel id for rain </label>
+               <description></description>
+               <default>ch0001</default>
+               <advanced>true</advanced>
+           </parameter>
+           <parameter name="dataPointIdRain" type="text" required="true">
+               <label>datapoint id for rain</label>
+               <description></description>
+               <default>odp0000</default>
+               <advanced>true</advanced>
+           </parameter>
+           
+           <parameter name="channelIdTemp" type="text" required="true">
+               <label>channel id for temperature </label>
+               <description></description>
+               <default>ch0002</default>
+               <advanced>true</advanced>
+           </parameter>
+           <parameter name="dataPointIdTemp" type="text" required="true">
+               <label>datapoint id for temperature</label>
+               <description></description>
+               <default>odp0001</default>
+               <advanced>true</advanced>
+           </parameter>
+           
+          <parameter name="channelIdWind" type="text" required="true">
+               <label>channel id for wind </label>
+               <description></description>
+               <default>ch0003</default>
+               <advanced>true</advanced>
+           </parameter>
+           <parameter name="dataPointIdWind" type="text" required="true">
+               <label>datapoint id for wind</label>
+               <description></description>
+               <default>odp0003</default>
+               <advanced>true</advanced>
+           </parameter>
+           
+
+           
+
+           
+
+       </config-description>
+   </thing-type>
+    
+    
     
     <thing-type id="dummy">
        <supported-bridge-type-refs>
