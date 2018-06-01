@@ -24,8 +24,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * The {@link FreeAtHomeHandler} is responsible for handling commands, which are
- * sent to one of the channels.
+ * The {@link FreeAtHomeThermostatHandler} represents thermostat
  *
  * @author ruebox - Initial contribution
  */

@@ -12,6 +12,8 @@ import org.openhab.binding.freeathome.handler.FreeAtHomeBaseHandler;
 import org.openhab.binding.freeathome.internal.stateconvert.StateConverter;
 
 /**
+ * Class to register pubsub events
+ * 
  * @author rue
  *
  */

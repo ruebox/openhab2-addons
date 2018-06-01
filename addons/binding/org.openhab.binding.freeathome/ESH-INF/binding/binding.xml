@@ -16,7 +16,8 @@
     and
     discovery.
     Events of the physical devices are fed back to binding.
-    It is based on XMPP.rocks that is used to connect to system access point. Disclaimer: This binding is a private contribution and is not an official B+J product.
+    It is based on XMPP.rocks that is used to connect to system access point and simple json to parse json files.
+    Disclaimer: This binding is a private contribution and is not an official B+J product.
      </description>
     <author>Ruebox </author>
 

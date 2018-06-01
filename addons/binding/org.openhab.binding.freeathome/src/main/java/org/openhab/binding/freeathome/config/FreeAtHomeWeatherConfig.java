@@ -9,7 +9,7 @@
 package org.openhab.binding.freeathome.config;
 
 /**
- * Configuration of a thermostat
+ * Configuration of a weather station
  *
  * @author ruebox
  *
