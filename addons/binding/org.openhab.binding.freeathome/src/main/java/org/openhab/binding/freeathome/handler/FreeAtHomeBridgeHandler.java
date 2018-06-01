@@ -505,8 +505,7 @@ public class FreeAtHomeBridgeHandler extends BaseBridgeHandler {
             onConnectionLost(ThingStatusDetail.BRIDGE_OFFLINE, "XMPP connection lost");
         }
 
-        if (e != null && e.getStatus() == XmppSession.Status.CONNECTED
-                && e.getStatus() == XmppSession.Status.AUTHENTICATED) {
+        if (e != null && e.getStatus() == XmppSession.Status.AUTHENTICATED) {
             onConnectionEstablished();
         }
     }
