@@ -1,29 +1,35 @@
 /**
- * Copyright (c) 2014-2018 by the respective copyright holders.
+ * Copyright (c) 2010-2019 Contributors to the openHAB project
  *
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * See the NOTICE file(s) distributed with this work for additional
+ * information.
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0
+ *
+ * SPDX-License-Identifier: EPL-2.0
  */
 package org.openhab.binding.freeathome.internal;
 
+import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.smarthome.core.thing.Bridge;
 import org.eclipse.smarthome.core.thing.Thing;
 import org.eclipse.smarthome.core.thing.ThingTypeUID;
 import org.eclipse.smarthome.core.thing.binding.BaseThingHandlerFactory;
 import org.eclipse.smarthome.core.thing.binding.ThingHandler;
-import org.openhab.binding.freeathome.FreeAtHomeBindingConstants;
-import org.openhab.binding.freeathome.handler.FreeAtHomeBridgeHandler;
-import org.openhab.binding.freeathome.handler.FreeAtHomeDimmerHandler;
-import org.openhab.binding.freeathome.handler.FreeAtHomeDummyHandler;
-import org.openhab.binding.freeathome.handler.FreeAtHomeRaffStoreHandler;
-import org.openhab.binding.freeathome.handler.FreeAtHomeScenarioSelectorHandler;
-import org.openhab.binding.freeathome.handler.FreeAtHomeSceneHandler;
-import org.openhab.binding.freeathome.handler.FreeAtHomeSwitchHandler;
-import org.openhab.binding.freeathome.handler.FreeAtHomeThermostatHandler;
-import org.openhab.binding.freeathome.handler.FreeAtHomeWeatherHandler;
-import org.slf4j.Logger;
+import org.eclipse.smarthome.core.thing.binding.ThingHandlerFactory;
+import org.openhab.binding.freeathome.internal.handler.FreeAtHomeBridgeHandler;
+import org.openhab.binding.freeathome.internal.handler.FreeAtHomeDimmerHandler;
+import org.openhab.binding.freeathome.internal.handler.FreeAtHomeDummyHandler;
+import org.openhab.binding.freeathome.internal.handler.FreeAtHomeRaffStoreHandler;
+import org.openhab.binding.freeathome.internal.handler.FreeAtHomeScenarioSelectorHandler;
+import org.openhab.binding.freeathome.internal.handler.FreeAtHomeSceneHandler;
+import org.openhab.binding.freeathome.internal.handler.FreeAtHomeSwitchHandler;
+import org.openhab.binding.freeathome.internal.handler.FreeAtHomeThermostatHandler;
+import org.openhab.binding.freeathome.internal.handler.FreeAtHomeTouchHandler;
+import org.openhab.binding.freeathome.internal.handler.FreeAtHomeWeatherHandler;
+import org.osgi.service.component.annotations.Component;
 import org.slf4j.LoggerFactory;
 
 /**
@@ -31,11 +37,13 @@ import org.slf4j.LoggerFactory;
  * handlers.
  *
  *
- * @author ruebox - Initial contribution
+ * @author kjoglum - Initial contribution
  */
+@NonNullByDefault
+@Component(service = ThingHandlerFactory.class)
 public class FreeAtHomeHandlerFactory extends BaseThingHandlerFactory {
 
-    private Logger logger = LoggerFactory.getLogger(FreeAtHomeHandlerFactory.class);
+    private org.slf4j.Logger logger = LoggerFactory.getLogger(FreeAtHomeHandlerFactory.class);
 
     @Override
     public boolean supportsThingType(ThingTypeUID thingTypeUID) {
@@ -52,51 +60,48 @@ public class FreeAtHomeHandlerFactory extends BaseThingHandlerFactory {
         }
 
         if (thingTypeUID.equals(FreeAtHomeBindingConstants.BRIDGE_THING_TYPEUID)) {
-            logger.debug("create BridgeHandler");
-            FreeAtHomeBridgeHandler handler = new FreeAtHomeBridgeHandler((Bridge) thing);
-            return handler;
+            logger.debug("Create BridgeHandler");
+            return new FreeAtHomeBridgeHandler((Bridge) thing);
         }
 
         if (thingTypeUID.equals(FreeAtHomeBindingConstants.SCENE_THING_TYPEUID)) {
-            logger.debug("create Scene Handler");
-            FreeAtHomeSceneHandler handler = new FreeAtHomeSceneHandler(thing);
-            return handler;
+            logger.debug("Create Scene Handler");
+            return new FreeAtHomeSceneHandler(thing);
         }
 
         if (thingTypeUID.equals(FreeAtHomeBindingConstants.SCENARIO_SELECTOR_THING_TYPEUID)) {
-            logger.debug("create Scenario Selector Handler");
-            FreeAtHomeScenarioSelectorHandler handler = new FreeAtHomeScenarioSelectorHandler(thing);
-            return handler;
+            logger.debug("Create Scenario Selector Handler");
+            return new FreeAtHomeScenarioSelectorHandler(thing);
         }
 
         if (thingTypeUID.equals(FreeAtHomeBindingConstants.SWITCH_THING_TYPEUID)) {
-            logger.debug("create Switch Handler");
-            FreeAtHomeSwitchHandler handler = new FreeAtHomeSwitchHandler(thing);
-            return handler;
+            logger.debug("Create Switch Handler");
+            return new FreeAtHomeSwitchHandler(thing);
         }
 
         if (thingTypeUID.equals(FreeAtHomeBindingConstants.THERMOSTAT_THING_TYPEUID)) {
-            logger.debug("create thermostat Handler");
-            FreeAtHomeThermostatHandler handler = new FreeAtHomeThermostatHandler(thing);
-            return handler;
+            logger.debug("Create thermostat Handler");
+            return new FreeAtHomeThermostatHandler(thing);
         }
 
         if (thingTypeUID.equals(FreeAtHomeBindingConstants.DIMMER_THING_TYPEUID)) {
-            logger.debug("create dimmer Handler");
-            FreeAtHomeDimmerHandler handler = new FreeAtHomeDimmerHandler(thing);
-            return handler;
+            logger.debug("Create dimmer Handler");
+            return new FreeAtHomeDimmerHandler(thing);
+        }
+
+        if (thingTypeUID.equals(FreeAtHomeBindingConstants.TOUCH_THING_TYPEUID)) {
+            logger.debug("Create touch Handler");
+            return new FreeAtHomeTouchHandler(thing);
         }
 
         if (thingTypeUID.equals(FreeAtHomeBindingConstants.WEATHER_THING_TYPEUID)) {
-            logger.debug("create weather station Handler");
-            FreeAtHomeWeatherHandler handler = new FreeAtHomeWeatherHandler(thing);
-            return handler;
+            logger.debug("Create weather station Handler");
+            return new FreeAtHomeWeatherHandler(thing);
         }
 
         if (thingTypeUID.equals(FreeAtHomeBindingConstants.DUMMY_THING_TYPEUID)) {
-            logger.debug("create dummy Handler");
-            FreeAtHomeDummyHandler handler = new FreeAtHomeDummyHandler(thing);
-            return handler;
+            logger.debug("Create dummy Handler");
+            return new FreeAtHomeDummyHandler(thing);
         }
 
         return null;
