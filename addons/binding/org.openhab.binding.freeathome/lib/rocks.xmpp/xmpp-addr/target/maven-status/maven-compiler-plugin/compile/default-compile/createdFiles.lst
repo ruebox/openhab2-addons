@@ -1,0 +1,10 @@
+rocks/xmpp/addr/FullJid$1.class
+rocks/xmpp/util/cache/DirectoryCache$1.class
+rocks/xmpp/addr/MalformedJid.class
+rocks/xmpp/addr/FullJid.class
+rocks/xmpp/addr/Jid.class
+rocks/xmpp/util/cache/DirectoryCache.class
+rocks/xmpp/util/cache/LruCache.class
+rocks/xmpp/addr/JidAdapter.class
+rocks/xmpp/addr/AbstractJid.class
+rocks/xmpp/addr/FullJid$IDNProfile.class
