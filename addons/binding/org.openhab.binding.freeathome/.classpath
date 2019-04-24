@@ -10,12 +10,12 @@
 	<classpathentry kind="lib" path="lib/tyrus-container-jdk-client-1.15.jar" sourcepath="lib/jdk-client-source.jar"/>
 	<classpathentry kind="lib" path="lib/tyrus-spi-1.15.jar" sourcepath="lib/tyrus-spi-source-1.15.jar"/>
 	<classpathentry kind="lib" path="lib/tyrus-core-1.15.jar" sourcepath="lib/tyrus-core-source-1.15.jar"/>
-	<classpathentry kind="lib" path="lib/rocks.xmpp/xmpp-addr/target/xmpp-addr-0.8.1-SNAPSHOT.jar" sourcepath="lib/rocks.xmpp/xmpp-addr/target/xmpp-addr-0.8.1-SNAPSHOT-sources.jar"/>
-	<classpathentry kind="lib" path="lib/rocks.xmpp/xmpp-core/client/target/xmpp-core-client-0.8.1-SNAPSHOT.jar" sourcepath="lib/rocks.xmpp/xmpp-core/client/target/xmpp-core-client-0.8.1-SNAPSHOT-sources.jar"/>
-	<classpathentry kind="lib" path="lib/rocks.xmpp/xmpp-core/common/target/xmpp-core-common-0.8.1-SNAPSHOT.jar" sourcepath="lib/rocks.xmpp/xmpp-core/common/target/xmpp-core-common-0.8.1-SNAPSHOT-sources.jar"/>
-	<classpathentry kind="lib" path="lib/rocks.xmpp/xmpp-extensions/client/target/xmpp-extensions-client-0.8.1-SNAPSHOT.jar" sourcepath="lib/rocks.xmpp/xmpp-extensions/client/target/xmpp-extensions-client-0.8.1-SNAPSHOT-sources.jar"/>
-	<classpathentry kind="lib" path="lib/rocks.xmpp/xmpp-extensions/common/target/xmpp-extensions-common-0.8.1-SNAPSHOT.jar" sourcepath="lib/rocks.xmpp/xmpp-extensions/common/target/xmpp-extensions-common-0.8.1-SNAPSHOT-sources.jar"/>
-	<classpathentry kind="lib" path="lib/rocks.xmpp/xmpp-websocket/client/target/xmpp-websocket-client-0.8.1-SNAPSHOT.jar" sourcepath="lib/rocks.xmpp/xmpp-websocket/client/target/xmpp-websocket-client-0.8.1-SNAPSHOT-sources.jar"/>
-	<classpathentry kind="lib" path="lib/rocks.xmpp/xmpp-websocket/common/target/xmpp-websocket-common-0.8.1-SNAPSHOT.jar" sourcepath="lib/rocks.xmpp/xmpp-websocket/common/target/xmpp-websocket-common-0.8.1-SNAPSHOT-sources.jar"/>
+	<classpathentry kind="lib" path="lib/xmpp-addr-0.8.1-SNAPSHOT.jar" sourcepath="lib/xmpp-addr-0.8.1-SNAPSHOT-sources.jar"/>
+	<classpathentry kind="lib" path="lib/xmpp-core-client-0.8.1-SNAPSHOT.jar" sourcepath="lib/xmpp-core-client-0.8.1-SNAPSHOT-sources.jar"/>
+	<classpathentry kind="lib" path="lib/xmpp-core-common-0.8.1-SNAPSHOT.jar" sourcepath="lib/xmpp-core-common-0.8.1-SNAPSHOT-sources.jar"/>
+	<classpathentry kind="lib" path="lib/xmpp-extensions-client-0.8.1-SNAPSHOT.jar" sourcepath="lib/xmpp-extensions-client-0.8.1-SNAPSHOT-sources.jar"/>
+	<classpathentry kind="lib" path="lib/xmpp-extensions-common-0.8.1-SNAPSHOT.jar" sourcepath="lib/xmpp-extensions-common-0.8.1-SNAPSHOT-sources.jar"/>
+	<classpathentry kind="lib" path="lib/xmpp-websocket-client-0.8.1-SNAPSHOT.jar" sourcepath="lib/xmpp-websocket-client-0.8.1-SNAPSHOT-sources.jar"/>
+	<classpathentry kind="lib" path="lib/xmpp-websocket-common-0.8.1-SNAPSHOT.jar" sourcepath="lib/xmpp-websocket-common-0.8.1-SNAPSHOT-sources.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

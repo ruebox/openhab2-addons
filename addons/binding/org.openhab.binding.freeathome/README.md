@@ -1,7 +1,7 @@
 # Free@Home Binding
 This binding integrates with [Busch-Jaeger Free@Home](https://www.busch-jaeger.de/produkte/systeme/busch-free-at-home/) smarthome system by connecting to the SysAP.
 
-**Disclaimer:** This binding is a private contribution and is not an official B+J product.
+**Disclaimer:** This binding is a private contribution and is not an official Busch-Jaeger product.
 
 **Issues and feature requests:** 
 
