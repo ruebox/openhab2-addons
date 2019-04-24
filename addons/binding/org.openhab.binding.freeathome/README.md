@@ -15,6 +15,7 @@ Scene | Switch that activates a scene that was generated within Free@Hqome webui
 Switch | Binary switch or switch group.
 Dimmer | Dimmer supporting switch on/off, fading, set percentage directly
 Thermostat | Thermostat that can be switch on/off, eco mode on/off or to set the target temperature.
+4.3" Touch panel | 4.3" Touch panel with integrated thermostat.
 Weather station | Weather station providing wind speed, temperature, illumination.
 
 
