@@ -1,36 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
     <groupId>org.openhab.binding</groupId>
     <artifactId>pom</artifactId>
-    <version>2.0.0-SNAPSHOT</version>
+    <version>2.5.0-SNAPSHOT</version>
   </parent>
 
-  <groupId>org.openhab.binding</groupId>
   <artifactId>org.openhab.binding.freeathome</artifactId>
-  <version>0.9.0-SNAPSHOT</version>
 
-  <name>FreeAtHome Binding</name>
+  <name>Free@Home Binding</name>
   <packaging>eclipse-plugin</packaging>
 
   <description>This binding currently supports:
 
-    Gateway connection
+    SysAP connection
     Scene activation
     Raffstore/Shutter control: stepwise and complete incl. raffstore groups
     Switch
     Dimmer
     Thermostat
+    4.3" Touch with integrated Thermostat
     Weather station
 and
     Discovery
 
 Events of the physical devices are fed back to binding.</description>
   <organization>
-  	<name>ruebox</name>
+  	<name>kjoglum</name>
   </organization>
   <dependencies>
   <!-- https://mvnrepository.com/artifact/javax.measure/jsr-275 -->
@@ -67,9 +67,9 @@ Events of the physical devices are fed back to binding.</description>
   
   </dependencies>
   
-  <url>https://github.com/ruebox/openhab2-addons/tree/feature_binding_freeathome/addons/binding/org.openhab.binding.freeathome</url>
+  <url>https://github.com/kjoglum/openhab2-addons/tree/feature_binding_freeathome/addons/binding/org.openhab.binding.freeathome</url>
   <issueManagement>
   	<system>Github</system>
-  	<url>https://github.com/ruebox/openhab2-addons/issues</url>
+  	<url>https://github.com/kjoglum/openhab2-addons/issues</url>
   </issueManagement>
 </project>
