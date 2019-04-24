@@ -1,0 +1,71 @@
+html, body {
+    height: 100%
+}
+
+body {
+    font-family: Georgia, Palatino, serif;
+    font-size: 16px;
+    font-weight: 400;
+    font-style: normal;
+    background: linear-gradient(#FAF7F4 0%, #FFFFFF 25%, #FFFFFF 50%, #F5F2EF 100%) fixed;
+    color: #222222;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: #333333;
+}
+
+.nav-list > .active > a, .nav-list > .active > a:hover, .nav-list > .active > a:focus {
+    background: linear-gradient(#0099E6 0%, #0088cc 100%) repeat scroll 0 0, #0088cc none repeat scroll 0 0;
+}
+
+#bannerLeft, .nav-header {
+    font-variant: small-caps;
+    text-transform: none;
+}
+
+body.topBarDisabled {
+    padding-top: 0;
+}
+
+tt {
+    background-color: transparent;
+}
+
+pre.prettyprint {
+    padding: 1em;
+}
+
+#breadcrumbs {
+    margin: 0 0 20px;
+}
+
+pre.prettyprint, .sidebar-nav, #breadcrumbs {
+    background-color: rgba(245, 242, 239, 0.5);
+    box-shadow: 1px 1px 2px 0 rgba(151, 151, 151, 0.5);
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+}
+
+.breadcrumb {
+    margin: 0;
+    background-color: rgba(245, 242, 239, 0.5);
+}
+
+.source {
+    margin: 20px;
+}
+
+a.externalLink[href^="http"] {
+    background: none;
+    padding-right: 0;
+}
+
+h2, h3, h4 {
+    margin-top: 1.5em;
+    margin-bottom: 1em;
+}
+
+blockquote {
+    margin: 1.5em;
+}

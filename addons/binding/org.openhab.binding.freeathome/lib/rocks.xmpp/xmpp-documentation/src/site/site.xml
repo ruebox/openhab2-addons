@@ -1,0 +1,112 @@
+<!--
+  ~ The MIT License (MIT)
+  ~
+  ~ Copyright (c) 2014-2018 Christian Schudt
+  ~
+  ~ Permission is hereby granted, free of charge, to any person obtaining a copy
+  ~ of this software and associated documentation files (the "Software"), to deal
+  ~ in the Software without restriction, including without limitation the rights
+  ~ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+  ~ copies of the Software, and to permit persons to whom the Software is
+  ~ furnished to do so, subject to the following conditions:
+  ~
+  ~ The above copyright notice and this permission notice shall be included in
+  ~ all copies or substantial portions of the Software.
+  ~
+  ~ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  ~ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  ~ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+  ~ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  ~ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+  ~ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+  ~ THE SOFTWARE.
+  -->
+
+<project name="${project.name}">
+    <bannerLeft>
+        <name>${project.name}</name>
+    </bannerLeft>
+    <bannerRight>
+        <name>${project.name}</name>
+        <src>xmpp.png</src>
+    </bannerRight>
+    <publishDate position="left"/>
+    <version position="left"/>
+    <skin>
+        <groupId>org.apache.maven.skins</groupId>
+        <artifactId>maven-fluido-skin</artifactId>
+        <version>1.7</version>
+    </skin>
+    <!-- http://maven.apache.org/skins/maven-fluido-skin/ -->
+    <!-- from example https://github.com/apache/maven-surefire/blob/master/src/site/site.xml
+    see it in action http://maven.apache.org/surefire/maven-failsafe-plugin/ -->
+    <custom>
+        <fluidoSkin>
+            <topBarEnabled>false</topBarEnabled>
+            <sideBarEnabled>true</sideBarEnabled>
+            <leftColumnClass>span3</leftColumnClass>
+            <bodyColumnClass>span9</bodyColumnClass>
+        </fluidoSkin>
+    </custom>
+    <poweredBy>
+        <logo name="" href="" img=""/>
+    </poweredBy>
+    <body>
+        <!-- http://maven.apache.org/doxia/doxia-sitetools/doxia-decoration-model/decoration.html
+        <item collapse=.. ref=.. name=.. href="README" img=.. position=.. alt=.. border=.. width=.. height=.. target=.. title=.. >
+        -->
+        <menu name="Project Information">
+            <item href="index.html" name="About"/>
+            <item href="xeps.html" name="Supported Specifications"/>
+            <item href="license.html" name="License"/>
+            <item href="changelog.html" name="Changelog"/>
+            <item href="releasenotes.html" name="Release Notes"/>
+        </menu>
+        <menu name="User Guide">
+            <item href="basics.html" name="Getting Started"/>
+            <item href="im.html" name="Contacts, Presence and Messaging"/>
+            <item href="extensions.html" name="Using Extensions"/>
+            <item href="customextensions.html" name="Writing Custom Extensions"/>
+            <item href="customiq.html" name="Custom IQs"/>
+            <item href="customauthentication.html" name="Custom Authentication"/>
+            <item href="errors.html" name="Exceptions and XMPP Errors"/>
+            <item href="reconnection.html" name="Dis- and Reconnection"/>
+            <item href="debugging.html" name="Debugging XMPP Traffic"/>
+            <item href="buildinstructions.html" name="Build Instructions"/>
+        </menu>
+        <menu name="Extension Guide">
+            <item href="xep/filetransfer.html" name="File Transfer"/>
+            <item href="xep/avatar.html" name="Avatars"/>
+            <item href="xep/httpbind.html" name="HTTP Binding / BOSH"/>
+            <item href="xep/externalcomponents.html" name="External Components"/>
+            <item href="xep/rpc.html" name="XEP-0009: Jabber-RPC"/>
+            <item href="xep/last.html" name="Last Activity and Idle Time"/>
+            <item href="xep/privacy.html" name="XEP-0016: Privacy Lists"/>
+            <item href="xep/disco.html" name="XEP-0030: Service Discovery"/>
+            <item href="xep/muc.html" name="XEP-0045: Multi-User Chat"/>
+            <item href="xep/bookmarks.html" name="XEP-0048: Bookmarks"/>
+            <item href="xep/vcard.html" name="XEP-0054: vcard-temp"/>
+            <item href="xep/pubsub.html" name="XEP-0060: Publish-Subscribe"/>
+            <item href="xep/xhtmlim.html" name="XEP-0071: XHTML-IM"/>
+            <item href="xep/soap.html" name="XEP-0072: SOAP Over XMPP"/>
+            <item href="xep/amp.html" name="XEP-0079: Advanced Message Processing"/>
+            <item href="xep/geoloc.html" name="XEP-0080: User Location"/>
+            <item href="xep/version.html" name="XEP-0092: Software Version"/>
+            <item href="xep/rosterx.html" name="XEP-0144: Roster Item Exchange"/>
+            <item href="xep/pep.html" name="XEP-0163: Personal Eventing Protocol"/>
+            <item href="xep/receipts.html" name="XEP-0184: Message Delivery Receipts"/>
+            <item href="xep/time.html" name="XEP-0202: Entity Time"/>
+            <item href="xep/delay.html" name="XEP-0203: Delayed Delivery"/>
+            <item href="xep/carbons.html" name="XEP-0280: Message Carbons"/>
+            <item href="xep/rtt.html" name="XEP-0301: In-Band Real Time Text"/>
+            <item href="xep/message-correct.html" name="XEP-0308: Last Message Correction"/>
+        </menu>
+        <menu name="API Documentation">
+            <item name="JavaDoc" href="apidocs/index.html"/>
+        </menu>
+        <links>
+            <item name="Source Code" href="https://bitbucket.org/sco0ter/babbler/src"/>
+            <item name="Binaries" href="https://bitbucket.org/sco0ter/babbler/downloads"/>
+        </links>
+    </body>
+</project>
