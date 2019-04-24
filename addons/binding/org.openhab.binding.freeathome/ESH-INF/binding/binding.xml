@@ -1,24 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<binding:binding id="freeathome"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xmlns:binding="http://eclipse.org/smarthome/schemas/binding/v1.0.0"
-        xsi:schemaLocation="http://eclipse.org/smarthome/schemas/binding/v1.0.0 http://eclipse.org/smarthome/schemas/binding-1.0.0.xsd">
+<binding:binding id="freeathome" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:binding="http://eclipse.org/smarthome/schemas/binding/v1.0.0"
+	xsi:schemaLocation="http://eclipse.org/smarthome/schemas/binding/v1.0.0 http://eclipse.org/smarthome/schemas/binding-1.0.0.xsd">
 
-    <name>FreeAtHome Binding</name>
-    <description>This binding connects to Busch and Jäger FreeAtHome HomeAutomation system and supports 
-    gateway connection via bridge,
-    scene activation,
-    raffstore/shutter control (incl. raffstore groups),
-    switch,
-    dimmer,
-    thermostat,
-    weather station
-    and
-    discovery.
-    Events of the physical devices are fed back to binding.
-    It is based on XMPP.rocks that is used to connect to system access point and simple json to parse json files.
-    Disclaimer: This binding is a private contribution and is not an official B+J product.
-     </description>
-    <author>Ruebox </author>
+	<name>Free@Home Binding</name>
+	<description>This binding connects to Busch-Jaeger Free@Home Home Automation system and supports
+		gateway connection via bridge, scene activation, raffstore/shutter control (incl. raffstore groups), switch, dimmer, 
+		thermostat, 4.3" touch with thermostat, weather station and discovery.
+		
+		Events of the physical devices are fed back to binding.
+		Binding is based on XMPP.rocks (Websocket) that is used to connect to system access point and simple json to parse json files. Thanks to Christian Schudt (Babbler) for help with customizing code for XMPP over websocket.
+		
+		
+		Disclaimer: This binding is a private contribution and is not an official Busch-Jaeger product.
+	</description>
+	<author>kjoglum</author>
 
 </binding:binding>

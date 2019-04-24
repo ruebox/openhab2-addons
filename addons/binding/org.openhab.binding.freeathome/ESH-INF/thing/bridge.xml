@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<thing:thing-descriptions bindingId="freeathome" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<thing:thing-descriptions bindingId="freeathome"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:thing="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0"
-	xsi:schemaLocation="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0 http://eclipse.org/smarthome/schemas/thing-description-1.0.0.xsd">
+    xsi:schemaLocation="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0 http://eclipse.org/smarthome/schemas/thing-description-1.0.0.xsd">
 
 	<bridge-type id="bridge">
-		<label>FreeAtHome Bridge</label>
-		<description>This bridge represents the Free At Home Gateway.
+		<label>Free@Home Bridge</label>
+		<description>This bridge represents the Free@Home Gateway.
 		</description>
 
 
@@ -21,21 +22,21 @@
 				<advanced>false</advanced>
 			</parameter-group>
 			<parameter-group name="debugging">
-                <label>Debugging</label>
-                <description>This section configures additional logging for debugging</description>
-                <advanced>true</advanced>
-            </parameter-group>
+				<label>Debugging</label>
+				<description>This section configures additional logging for debugging</description>
+				<advanced>true</advanced>
+			</parameter-group>
 
 
-			<parameter name="ipAddress" type="text" required="true" groupName="network">
+			<parameter name="host" type="text" required="true" groupName="network">
 				<context>network-address</context>
-				<label>LAN gateway IP</label>
-				<description>The IP address of the BJ gateway
+				<label>Sysap Host</label>
+				<description>Sysap host address of the Busch-Jaeger gateway
 				</description>
 				<default>192.168.192.100</default>
 			</parameter>
-			<parameter name="port" type="integer" required="false" min="1" max="65335" groupName="network">				
-				<label>BJ gateway port</label>
+			<parameter name="port" type="integer" required="false" min="1" max="65335" groupName="network">
+				<label>Busch-Jaeger sysap port</label>
 				<description>Port of the LAN gateway</description>
 				<default>5280</default>
 				<advanced>true</advanced>
@@ -52,24 +53,24 @@
 				<default>12345</default>
 			</parameter>
 			<parameter name="log_dir" type="text" required="true" groupName="debugging">
-                <label>Log directory</label>
-                <description>Directory where log information is stored
-                </description>
-                <default>/tmp/</default>
-            </parameter>
-            <parameter name="log_enabled" type="boolean" required="true" groupName="debugging">
-                <label>Debug logging</label>
-                <description>Logging of debugging information to disk is enabled
-                </description>
-                <default>false</default>
-            </parameter>
-            <parameter name="dummy_things_enabled" type="boolean" required="true" groupName="debugging">
-                <label>Dummy things enabled</label>
-                <description>If enabled also unsupported things will be discovered but as dummy items without functionality
-                </description>
-                <default>false</default>
-            </parameter>
-			
+				<label>Log directory</label>
+				<description>Directory where log information is stored
+			</description>
+				<default>/tmp/</default>
+			</parameter>
+			<parameter name="log_enabled" type="boolean" required="true" groupName="debugging">
+				<label>Debug logging</label>
+				<description>Logging of debugging information to disk is enabled
+				</description>
+				<default>false</default>
+			</parameter>
+			<parameter name="dummy_things_enabled" type="boolean" required="true" groupName="debugging">
+				<label>Dummy things enabled</label>
+				<description>If enabled also unsupported things will be discovered but as dummy items without functionality
+				</description>
+				<default>false</default>
+			</parameter>
+
 		</config-description>
 	</bridge-type>
 
