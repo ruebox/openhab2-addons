@@ -63,7 +63,6 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.BiConsumer;
 import java.util.function.Supplier;
-import java.util.logging.Logger;
 
 /**
  * A configuration for a WebSocket connection.
@@ -90,8 +89,6 @@ import java.util.logging.Logger;
 public final class WebSocketConnectionConfiguration extends ClientConnectionConfiguration {
 
     private static volatile WebSocketConnectionConfiguration defaultConfiguration;
-    
-    private static final Logger logger = Logger.getLogger(WebSocketConnectionConfiguration.class.getName());
 
     private final String path;
 
@@ -180,7 +177,6 @@ public final class WebSocketConnectionConfiguration extends ClientConnectionConf
             } else if (xmppSession.getDomain() != null) {
                 // If a URL has not been set, try to find the URL by the domain via a DNS-TXT lookup as described in XEP-0156.
                 String resolvedUrl = findWebSocketEndpoint(xmppSession.getDomain().toString(), xmppSession.getConfiguration().getNameServer(), getConnectTimeout());
-                logger.warning(resolvedUrl);
                 if (resolvedUrl != null) {
                     uri = new URI(resolvedUrl);
                 } else {

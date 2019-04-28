@@ -53,7 +53,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
-import java.util.logging.Logger;
 import rocks.xmpp.util.concurrent.QueuedExecutorService;
 
 /**
@@ -64,8 +63,6 @@ import rocks.xmpp.util.concurrent.QueuedExecutorService;
  * @author Christian Schudt
  */
 final class XmppStreamReader {
-    
-    private static final Logger logger = Logger.getLogger(XmppStreamReader.class.getName());
 
     private static final ExecutorService EXECUTOR_SERVICE = Executors.newCachedThreadPool(XmppUtils.createNamedThreadFactory("XMPP Reader Thread"));
 

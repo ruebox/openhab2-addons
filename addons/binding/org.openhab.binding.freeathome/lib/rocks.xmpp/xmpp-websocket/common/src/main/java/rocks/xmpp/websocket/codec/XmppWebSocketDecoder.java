@@ -25,9 +25,6 @@
 package rocks.xmpp.websocket.codec;
 
 import rocks.xmpp.core.stream.model.StreamElement;
-import rocks.xmpp.core.stream.model.StreamHeader;
-import rocks.xmpp.addr.Jid;
-import rocks.xmpp.websocket.model.Open;
 
 import javax.websocket.DecodeException;
 import javax.websocket.Decoder;
@@ -37,7 +34,6 @@ import javax.xml.bind.Unmarshaller;
 import java.io.StringReader;
 import java.util.function.BiConsumer;
 import java.util.function.Supplier;
-import java.util.logging.Logger;
 
 /**
  * Decodes WebSocket text messages to XMPP {@link StreamElement}s.
@@ -52,8 +48,6 @@ import java.util.logging.Logger;
  * @see UserProperties
  */
 public final class XmppWebSocketDecoder implements Decoder.Text<StreamElement> {
-    
-    private static final Logger logger = Logger.getLogger(XmppWebSocketDecoder.class.getName());
 
     private Supplier<Unmarshaller> unmarshaller;
 
@@ -61,28 +55,14 @@ public final class XmppWebSocketDecoder implements Decoder.Text<StreamElement> {
 
     @Override
     public final StreamElement decode(final String s) throws DecodeException {
-        if (s.contains("stream:stream")) {
-            logger.warning("Decode streamheader " + s);
-            String ID = s.substring(s.indexOf("id")+4, s.indexOf("id")+40);
-            // String ID = s.substring(s.indexOf("id=") + 1, s.indexOf(' ') - 1);
-            logger.warning("ID " + ID);
-            String Domain = "busch-jaeger.de";
-            Jid From = Jid.of(Domain);
-            Open streamHead = new Open(null, From, ID, null, "1.0");
-            // StreamHeader Head = StreamHeader.create(From, null, ID, "1.0", null, "jabber:client");
-            return streamHead;
-        }
-        else {
-            logger.warning("Decoding stream feature");
-            try (StringReader reader = new StringReader(s)) {
-                StreamElement streamElement = (StreamElement) unmarshaller.get().unmarshal(reader);
-                if (onRead != null) {
-                    onRead.accept(s, streamElement);
-                }
+        try (StringReader reader = new StringReader(s)) {
+            StreamElement streamElement = (StreamElement) unmarshaller.get().unmarshal(reader);
+            if (onRead != null) {
+                onRead.accept(s, streamElement);
+            }
             return streamElement;
         } catch (JAXBException e) {
             throw new DecodeException(s, e.getMessage(), e);
-        }
         }
     }
 

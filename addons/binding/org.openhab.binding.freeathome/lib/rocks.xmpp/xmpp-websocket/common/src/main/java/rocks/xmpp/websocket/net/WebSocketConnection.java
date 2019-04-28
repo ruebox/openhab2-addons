@@ -30,7 +30,6 @@ import rocks.xmpp.core.net.ConnectionConfiguration;
 import rocks.xmpp.core.session.model.SessionOpen;
 import rocks.xmpp.core.stream.StreamHandler;
 import rocks.xmpp.core.stream.model.StreamElement;
-import rocks.xmpp.core.stream.model.StreamHeader;
 import rocks.xmpp.core.net.ChannelEncryption;
 import rocks.xmpp.websocket.model.Close;
 import rocks.xmpp.websocket.model.Open;
@@ -43,7 +42,6 @@ import java.net.SocketAddress;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 import java.util.function.Consumer;
-import java.util.logging.Logger;
 
 /**
  * An XMPP WebSocket connection.
@@ -55,8 +53,6 @@ import java.util.logging.Logger;
 public class WebSocketConnection extends AbstractConnection {
 
     protected final Session session;
-    
-    private static final Logger logger = Logger.getLogger(WebSocketConnection.class.getName());
 
     private final CompletionStage<Void> closeFuture;
 
@@ -76,12 +72,10 @@ public class WebSocketConnection extends AbstractConnection {
     }
 
     private void onRead(final StreamElement streamElement) {
-        if (streamElement instanceof Open || streamElement instanceof StreamHeader) {
+        if (streamElement instanceof Open) {
             openedByPeer((Open) streamElement);
-            logger.warning("Streamheader open received");
         } else if (streamElement instanceof Close) {
             closedByPeer();
-            logger.warning("Streamheader close received");
         }
         try {
             if (streamHandler.handleElement(streamElement)) {
@@ -154,9 +148,7 @@ public class WebSocketConnection extends AbstractConnection {
     @Override
     public final CompletionStage<Void> open(final SessionOpen sessionOpen) {
         this.sessionOpen = sessionOpen;
-        logger.warning("Websocketconnection open being sent");
         // Opens the stream
-        // Modified by @kjoglum to fit Busch-Jaeger Free@Home XMPP over websocket protocol
         return send(new Open(sessionOpen.getTo(), sessionOpen.getFrom(), sessionOpen.getId(), sessionOpen.getLanguage()));
     }
 
