@@ -393,10 +393,12 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-plugin</artifactId>
-                    <version>2.21.0</version>
-                    <configuration>
-                        <argLine>-Xmx1024m</argLine>
-                    </configuration>
+                    <version>2.22.1</version>
+                            <configuration>
+                                <!-- Skip tests by default -->
+                                <!-- Run integration tests with: mvn failsafe:integration-test -->
+                                <skipTests>true</skipTests>
+                            </configuration>
                 </plugin>
             </plugins>
         </pluginManagement>

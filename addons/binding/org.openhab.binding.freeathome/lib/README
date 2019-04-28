@@ -4,6 +4,11 @@ This binding is based on
 
         https://sco0ter.bitbucket.io/babbler/
         
+        Thanks to kjoglum: 
+        To support websocket protocol used by SysAP, the xmpp.rocks library had to be adapted (in accordance with C. Schudt)
+        Sources of this patched xmpp.rocks are located in lib directory.
+        
+        
 2. Simple JSON Thanks to Yidong Fang
 
         https://github.com/fangyidong/json-simple

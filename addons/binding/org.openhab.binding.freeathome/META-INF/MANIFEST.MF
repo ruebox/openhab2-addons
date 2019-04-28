@@ -5,7 +5,21 @@ Bundle-SymbolicName: org.openhab.binding.freeathome;singleton:=true
 Bundle-Vendor: openHAB
 Bundle-Version: 2.0.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
-Bundle-ClassPath: .,lib/xmpp-addr-0.6.2.jar,lib/xmpp-core-0.6.2.jar,lib/xmpp-core-client-0.6.2.jar,lib/xmpp-extensions-0.6.2.jar,lib/xmpp-extensions-client-0.6.2.jar,lib/json-simple-1.1.1.jar
+Bundle-ClassPath: .,
+ lib/xmpp-addr-0.8.1-SNAPSHOT.jar,
+ lib/xmpp-core-client-0.8.1-SNAPSHOT.jar,
+ lib/xmpp-core-common-0.8.1-SNAPSHOT.jar,
+ lib/xmpp-extensions-common-0.8.1-SNAPSHOT.jar,
+ lib/xmpp-extensions-client-0.8.1-SNAPSHOT.jar,
+ lib/xmpp-websocket-client-0.8.1-SNAPSHOT.jar,
+ lib/xmpp-websocket-common-0.8.1-SNAPSHOT.jar,
+ lib/javax.websocket-api-1.1.jar,
+ lib/precis-1.0.0.jar,
+ lib/tyrus-client-1.15.jar,
+ lib/tyrus-container-jdk-client-1.15.jar,
+ lib/tyrus-core-1.15.jar,
+ lib/tyrus-spi-1.15,
+ lib/json-simple-1.1.1.jar
 Import-Package: 
  org.eclipse.smarthome.config.core,
  org.eclipse.smarthome.core.library.types,

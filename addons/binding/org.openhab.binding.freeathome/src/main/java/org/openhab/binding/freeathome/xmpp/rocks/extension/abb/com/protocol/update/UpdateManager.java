@@ -13,12 +13,12 @@ import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.function.Consumer;
 
-import rocks.xmpp.core.XmppException;
 import rocks.xmpp.core.session.Manager;
 import rocks.xmpp.core.session.XmppSession;
 import rocks.xmpp.core.stanza.MessageEvent;
 import rocks.xmpp.core.stanza.model.Message;
 import rocks.xmpp.extensions.geoloc.model.GeoLocation;
+//import rocks.xmpp.extensions.geoloc.model.GeoLocation;
 import rocks.xmpp.extensions.pubsub.PubSubManager;
 import rocks.xmpp.extensions.pubsub.PubSubService;
 import rocks.xmpp.extensions.pubsub.model.Item;
@@ -86,12 +86,7 @@ public final class UpdateManager extends Manager {
      */
     public void publish(Update geoLocation) {
         PubSubService pepService = xmppSession.getManager(PubSubManager.class).createPersonalEventingService();
-        try {
-            pepService.node(Update.NAMESPACE).publish(geoLocation);
-        } catch (XmppException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+        pepService.node(Update.NAMESPACE).publish(geoLocation);
     }
 
     /**

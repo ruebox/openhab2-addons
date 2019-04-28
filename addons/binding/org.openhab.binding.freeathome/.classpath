@@ -4,10 +4,12 @@
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
 	<classpathentry kind="src" path="src/main/java"/>
 	<classpathentry kind="lib" path="lib/json-simple-1.1.1.jar"/>
-	<classpathentry kind="lib" path="lib/xmpp-addr-0.6.2.jar"/>
-	<classpathentry kind="lib" path="lib/xmpp-core-0.6.2.jar"/>
-	<classpathentry kind="lib" path="lib/xmpp-core-client-0.6.2.jar"/>
-	<classpathentry kind="lib" path="lib/xmpp-extensions-0.6.2.jar"/>
-	<classpathentry kind="lib" path="lib/xmpp-extensions-client-0.6.2.jar"/>
+	<classpathentry kind="lib" path="lib/xmpp-addr-0.8.1-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="lib/xmpp-core-client-0.8.1-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="lib/xmpp-core-common-0.8.1-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="lib/xmpp-extensions-client-0.8.1-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="lib/xmpp-extensions-common-0.8.1-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="lib/xmpp-websocket-client-0.8.1-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="lib/xmpp-websocket-common-0.8.1-SNAPSHOT.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

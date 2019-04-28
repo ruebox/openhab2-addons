@@ -19,7 +19,7 @@ public class FreeAtHomeBridgeConfig {
     /*
      * IP adress of gateway
      */
-    public String ipAddress;
+    public String host;
 
     public Integer port;
 

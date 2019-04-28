@@ -1,10 +1,14 @@
 /**
- * Copyright (c) 2014-2018 by the respective copyright holders.
+ * Copyright (c) 2010-2019 Contributors to the openHAB project
  *
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * See the NOTICE file(s) distributed with this work for additional
+ * information.
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0
+ *
+ * SPDX-License-Identifier: EPL-2.0
  */
 package org.openhab.binding.freeathome.handler;
 
@@ -30,8 +34,6 @@ import org.eclipse.smarthome.core.thing.ChannelUID;
 import org.eclipse.smarthome.core.thing.ThingStatus;
 import org.eclipse.smarthome.core.thing.ThingStatusDetail;
 import org.eclipse.smarthome.core.thing.binding.BaseBridgeHandler;
-import org.eclipse.smarthome.core.types.Command;
-import org.eclipse.smarthome.core.types.RefreshType;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -44,15 +46,14 @@ import org.openhab.binding.freeathome.xmpp.rocks.extensions.abb.com.protocol.dat
 import org.openhab.binding.freeathome.xmpp.rocks.extensions.abb.com.protocol.data.DataPoint;
 import org.openhab.binding.freeathome.xmpp.rocks.extensions.abb.com.protocol.data.Device;
 import org.openhab.binding.freeathome.xmpp.rocks.extensions.abb.com.protocol.data.Project;
-import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import rocks.xmpp.addr.Jid;
 import rocks.xmpp.core.XmppException;
+import rocks.xmpp.core.net.ChannelEncryption;
 import rocks.xmpp.core.session.Extension;
 import rocks.xmpp.core.session.SessionStatusEvent;
 import rocks.xmpp.core.session.XmppClient;
-import rocks.xmpp.core.session.XmppSession;
 import rocks.xmpp.core.session.XmppSessionConfiguration;
 import rocks.xmpp.core.session.debug.ConsoleDebugger;
 import rocks.xmpp.core.stanza.IQEvent;
@@ -60,43 +61,31 @@ import rocks.xmpp.core.stanza.MessageEvent;
 import rocks.xmpp.core.stanza.PresenceEvent;
 import rocks.xmpp.core.stanza.model.Message;
 import rocks.xmpp.core.stanza.model.Presence;
-import rocks.xmpp.extensions.httpbind.BoshConnectionConfiguration;
+import rocks.xmpp.extensions.commands.model.Command;
 import rocks.xmpp.extensions.pubsub.PubSubManager;
 import rocks.xmpp.extensions.pubsub.model.Item;
 import rocks.xmpp.extensions.pubsub.model.event.Event;
-import rocks.xmpp.extensions.rpc.RpcException;
 import rocks.xmpp.extensions.rpc.RpcManager;
-
-//import rocks.xmpp.core.session.SessionStatusEvent;
-//import rocks.xmpp.core.session.XmppSession;
-
-//import rocks.xmpp.addr.Jid;
-//import rocks.xmpp.core.XmppException;
-//import rocks.xmpp.core.session.SessionStatusEvent;
-//import rocks.xmpp.core.session.XmppClient;
-//import rocks.xmpp.core.session.XmppSession;
-//import rocks.xmpp.core.session.XmppSessionConfiguration;
-//import rocks.xmpp.extensions.httpbind.BoshConnectionConfiguration;
-//import rocks.xmpp.extensions.rpc.RpcException;
-//import rocks.xmpp.extensions.rpc.RpcManager;
 import rocks.xmpp.extensions.rpc.model.Value;
 import rocks.xmpp.im.subscription.PresenceManager;
+import rocks.xmpp.websocket.net.client.WebSocketConnectionConfiguration;
 
 /**
  * Handler that connects to FreeAtHome gateway.
  *
- * @author ruebox
+ * @author ruebox - Initial contribution
+ * @author kjoglum - Changed XMPP connection from BOSH to websocket
  *
  */
 public class FreeAtHomeBridgeHandler extends BaseBridgeHandler {
 
     public static FreeAtHomeBridgeHandler g_freeAtHomeBridgeHandler = null;
 
-    private Logger logger = LoggerFactory.getLogger(FreeAtHomeBridgeHandler.class);
+    private org.slf4j.Logger logger = LoggerFactory.getLogger(FreeAtHomeBridgeHandler.class);
 
-    private BoshConnectionConfiguration m_BoshConfiguration;
-    private XmppClient m_XmppClient = null;
+    private WebSocketConnectionConfiguration m_WebSocketConfiguration;
     private XmppSessionConfiguration m_XmppConfiguration;
+    private XmppClient m_XmppClient = null;
     private RpcManager m_RpcManager;
     private int counter = 0;
 
@@ -114,13 +103,12 @@ public class FreeAtHomeBridgeHandler extends BaseBridgeHandler {
 
     @Override
     public void initialize() {
-        logger.debug("Initializing FreeAtHome bridge handler.");
 
         FreeAtHomeBridgeConfig configuration = getConfigAs(FreeAtHomeBridgeConfig.class);
 
         m_Configuration = configuration;
 
-        logger.debug("Gateway IP            {}.", m_Configuration.ipAddress);
+        logger.debug("Gateway IP            {}.", m_Configuration.host);
         logger.debug("Port                  {}.", m_Configuration.port);
         logger.debug("Login                 {}.", m_Configuration.login);
         logger.debug("Password              {}.", m_Configuration.password);
@@ -164,7 +152,6 @@ public class FreeAtHomeBridgeHandler extends BaseBridgeHandler {
         } catch (XmppException e) {
             logger.error("Can not close XMPP Client");
             logger.error(e.getMessage());
-            e.printStackTrace();
         } catch (Exception e) {
             logger.error("Can not close XMPP Client");
             logger.error(e.getMessage());
@@ -172,12 +159,11 @@ public class FreeAtHomeBridgeHandler extends BaseBridgeHandler {
 
     };
 
-    @Override
+    // @Override
     public void handleCommand(ChannelUID channelUID, Command command) {
-        if (command instanceof RefreshType) {
-            logger.debug("Refresh command received.");
-            // refreshData();
-        } else {
+        try {
+            handleCommand(channelUID, command);
+        } catch (Exception e) {
             logger.warn("No bridge commands defined. Cannot process '{}'.", command.toString());
         }
     }
@@ -188,98 +174,40 @@ public class FreeAtHomeBridgeHandler extends BaseBridgeHandler {
     public void setDataPoint(String adress, String value) {
 
         try {
-            // ArrayList parameter = new ArrayList();
-            // parameter.add("ABB260851E51/ch0003/idp0000");
-            // parameter.add(1);
-            // Elevate EG Raffstore
-            // <body rid='531107' sid='2c1433b0-af08-4624-b043-1ff8dca805c6'
-            // xmlns='http://jabber.org/protocol/httpbind' key='03bee55104d73ca72418239c85b2178703a39249'><iq
-            // xmlns="jabber:client" to="mrha@busch-jaeger.de/rpc" type="set" id="1454004737242"><query
-            //
-            // xmlns="jabber:iq:rpc"><methodCall><methodName>RemoteInterface.setDatapoint</methodName><params><param><value><string>FFFF00000000/ch0000/odp0003</string></value></param><param><value><string>0</string></value></param></params></methodCall></query></iq></body>
-            // Value para1 = Value.of("ABB260851E51/ch0003/idp0000");
-
-            Value para0 = Value.of(adress);
-            Value para1 = Value.of(value);
 
             Value response = m_RpcManager.call(Jid.of("mrha@busch-jaeger.de/rpc"), "RemoteInterface.setDatapoint",
-                    para0, para1);
-            logger.debug("Response from RPC RemoteInterface.setDatapoint: " + response.getAsString());
-            boolean resp = response.getAsBoolean();
+                    Value.of(adress), Value.of(value)).getResult();
+            logger.debug("Result:");
+            logger.debug(response.getAsString());
+            response = null;
 
         } catch (XmppException e) {
             logger.error("XMPP Exception: " + e.getMessage());
-            e.printStackTrace();
             // E.g. a StanzaException, if the responder does not support the protocol or an
             // // internal-server-error has occurred.
-        } catch (RpcException e) {
-            logger.error("RPC Exception: " + e.getMessage());
-            e.printStackTrace();
-            // If the responder responded with an application level XML-RPC fault.
         }
     }
 
     public String getAll() {
         try {
-            // ArrayList parameter = new ArrayList();
-            // parameter.add("ABB260851E51/ch0003/idp0000");
-            // parameter.add(1);
-            // Elevate EG Raffstore
-            // <body rid='531107' sid='2c1433b0-af08-4624-b043-1ff8dca805c6'
-            // xmlns='http://jabber.org/protocol/httpbind' key='03bee55104d73ca72418239c85b2178703a39249'><iq
-            // xmlns="jabber:client" to="mrha@busch-jaeger.de/rpc" type="set" id="1454004737242"><query
-            //
-            // xmlns="jabber:iq:rpc"><methodCall><methodName>RemoteInterface.setDatapoint</methodName><params><param><value><string>FFFF00000000/ch0000/odp0003</string></value></param><param><value><string>0</string></value></param></params></methodCall></query></iq></body>
-            // Value para1 = Value.of("ABB260851E51/ch0003/idp0000");
 
-            // Read external xml from file for discovery
-            // FileInputStream inputStream = null;
-            // try {
-            // inputStream = new FileInputStream("/home/rue/getAll.xml");
-            // } catch (FileNotFoundException e1) {
-            // // TODO Auto-generated catch block
-            // e1.printStackTrace();
-            // }
-            // try {
-            // try {
-            // String everything = IOUtils.toString(inputStream);
-            // return everything;
-            // } catch (IOException e) {
-            // // TODO Auto-generated catch block
-            // e.printStackTrace();
-            // }
-            // } finally {
-            // try {
-            // inputStream.close();
-            // } catch (IOException e) {
-            // // TODO Auto-generated catch block
-            // e.printStackTrace();
-            // }
-            // }
-
-            Value para0 = Value.of("de");
-            Value para1 = Value.of(0);
-
-            Value response = m_RpcManager.call(Jid.of("mrha@busch-jaeger.de/rpc"), "RemoteInterface.getAll", para0,
-                    para1, para1, para1);
-            logger.debug("Response from RPC RemoteInterface.setDatapoint: " + response.getAsString());
+            Value response = m_RpcManager.call(Jid.of("mrha@busch-jaeger.de/rpc"), "RemoteInterface.getAll",
+                    Value.of("de"), Value.of(4), Value.of(0), Value.of(0)).getResult();
+            logger.debug("Result:");
+            logger.debug(response.getAsString());
             String resp = response.getAsString();
 
             return resp;
 
         } catch (XmppException e) {
             logger.error("XMPP Exception: " + e.getMessage());
-            e.printStackTrace();
             // E.g. a StanzaException, if the responder does not support the protocol or an
-            // // internal-server-error has occurred.
-        } catch (RpcException e) {
-            logger.error("RPC Exception: " + e.getMessage());
-            e.printStackTrace();
-            // If the responder responded with an application level XML-RPC fault.
+            // internal-server-error has occurred.
         }
         return null;
     }
 
+    @SuppressWarnings("deprecation")
     private void connectGateway() {
 
         // If old session is still connected -> close xmpp session
@@ -287,23 +215,20 @@ public class FreeAtHomeBridgeHandler extends BaseBridgeHandler {
             try {
                 m_XmppClient.close();
             } catch (XmppException e1) {
-                // TODO Auto-generated catch block
-                e1.printStackTrace();
                 logger.error(e1.getMessage());
             }
         }
 
-        m_BoshConfiguration = BoshConnectionConfiguration.builder().hostname(m_Configuration.ipAddress)
-                .port(m_Configuration.port).file("/http-bind/")
-                // .sslContext(getTrustAllSslContext())
-                .secure(false).build();
+        m_WebSocketConfiguration = WebSocketConnectionConfiguration.builder().hostname(m_Configuration.host)
+                .port(m_Configuration.port).path("/xmpp-websocket/").secure(true)
+                .channelEncryption(ChannelEncryption.DISABLED).build();
 
         m_XmppConfiguration = XmppSessionConfiguration.builder().debugger(ConsoleDebugger.class)
                 .extensions(Extension.of("http://abb.com/protocol/update", null, true, true, Update.class),
                         Extension.of("http://abb.com/protocol/update", null, true, Update.class))
                 .build();
 
-        m_XmppClient = new XmppClient("busch-jaeger.de", m_XmppConfiguration, m_BoshConfiguration);
+        m_XmppClient = XmppClient.create("busch-jaeger.de", m_XmppConfiguration, m_WebSocketConfiguration);
 
         // Listen for inbound messages.
         m_XmppClient.addInboundMessageListener(e -> logger.debug("Received Message: " + e.getMessage()));
@@ -327,23 +252,29 @@ public class FreeAtHomeBridgeHandler extends BaseBridgeHandler {
         updateManager.addUpdateListener(e -> onUpdateEvent(e));
         updateManager.addUpdateListener(e -> logger.debug("Received UpdateEvent"));
 
-        // Connect
+        // Connect XMPP client over websocket layer
         try {
-            m_XmppClient.connect();
-        } catch (XmppException e1) {
-            onConnectionLost(ThingStatusDetail.COMMUNICATION_ERROR,
-                    "Can not connect to SysAP with address: " + m_Configuration.ipAddress);
-            logger.error("Can not connect to IP gateway");
-            logger.error(e1.getMessage());
-            e1.printStackTrace();
-            return;
+            Jid From = Jid.of(getJid(m_Configuration.login));
+            // Jid To = Jid.of("busch-jaeger.de");
+
+            try {
+                m_XmppClient.connect(From);
+            } catch (XmppException e1) {
+                onConnectionLost(ThingStatusDetail.COMMUNICATION_ERROR,
+                        "Can not connect to SysAP with address: " + m_Configuration.host);
+                logger.warn(e1.toString());
+                return;
+            }
+        } catch (Exception e3) {
+            logger.warn(e3.toString());
         }
 
         // Login
         try {
             // Extract jID
             String jid = this.getJid(m_Configuration.login);
-            m_XmppClient.login(jid.substring(0, jid.indexOf("@")), m_Configuration.password);
+            String id = jid.split("@")[0];
+            m_XmppClient.login(id, m_Configuration.password);
 
             Presence presence = new Presence(Jid.of("mrha@busch-jaeger.de/rpc"), Presence.Type.SUBSCRIBE, null, null,
                     null, null, Jid.of(jid), null, null, null);
@@ -353,76 +284,30 @@ public class FreeAtHomeBridgeHandler extends BaseBridgeHandler {
             onConnectionLost(ThingStatusDetail.CONFIGURATION_ERROR,
                     "Login on SysAP with login name: " + m_Configuration.login);
             logger.error("Can not login with: " + m_Configuration.login);
-            logger.error(e1.getMessage());
-            e1.printStackTrace();
             try {
                 m_XmppClient.close();
             } catch (XmppException e2) {
                 // TODO Auto-generated catch block
-                e2.printStackTrace();
+                logger.error("Ops!", e2);
             }
             return;
         } catch (Exception e) {
+            logger.warn(e.toString());
             onConnectionLost(ThingStatusDetail.CONFIGURATION_ERROR,
-                    "Login on SysAP with login name: " + m_Configuration.login + " (Login name could not be resolved)");
-            logger.error(
                     "Login on SysAP with login name: " + m_Configuration.login + " (Login name could not be resolved)");
             try {
                 m_XmppClient.close();
             } catch (XmppException e1) {
                 // TODO Auto-generated catch block
-                e1.printStackTrace();
+                logger.error("Ops!", e1);
             }
         }
 
-        // updateManager.publish(Update.builder().data("Test").build());
-
-        // Send a message to myself, which is caught by the listener above.
-        // xmppClient
-        // .send(new Message(xmppClient.getConnectedResource(), Message.Type.CHAT, "Hello World! Echo!"));
-
-        // Jid j = new Jid("mrha", "busch-jaeger.de", "rpc");
-
-        // PubSubService personalEventingService = pubSubManager.createPersonalEventingService();
-
-        // PubSubNode pubSubNode = personalEventingService.node(Update.NAMESPACE);
-        // try {
-        // pubSubNode.publish(Update.builder().data("Test").build());
-        // } catch (XmppException e2) {
-        // // TODO Auto-generated catch block
-        // e2.printStackTrace();
-        // }
-
         m_RpcManager = m_XmppClient.getManager(RpcManager.class);
-
-        // Write to System.out for debugging
-        // m.marshal(emp, System.out);
-
-        // Write to File
-
-        // m_XmppClient.getManager(PresenceManager.class).requestSubscription(j, "");
-        // m_XmppClient.getManager(PresenceManager.class).approveSubscription(j);
 
         Presence presence = new Presence();
 
-        // EntityCapabilities c = new EntityCapabilities("http://gonicus.de/caps", "", "1.0");
-        // presence.addExtension(c);
-
-        // logger.debug(c.getVerificationString());
-
         m_XmppClient.send(presence);
-
-        // try {
-        // InfoNode result = m_XmppClient.getManager(EntityCapabilitiesManager.class).discoverCapabilities(j);
-        // } catch (XmppException e1) {
-        // // TODO Auto-generated catch block
-        // e1.printStackTrace();
-        // }
-
-        // m_XmppClient.getActiveConnection().getXmppSession().getManager(PresenceManager.class)
-        // .requestSubscription(Jid.of("mrha@busch-jaeger.de/rpc"), "");
-
-        // Notify on connection established
 
         onConnectionEstablished();
 
@@ -433,7 +318,7 @@ public class FreeAtHomeBridgeHandler extends BaseBridgeHandler {
         /*
          * Read settings.json from SysAP
          */
-        String url = "http://" + m_Configuration.ipAddress + "/settings.json"; // settings stores mapping to jid
+        String url = "http://" + m_Configuration.host + "/settings.json"; // settings stores mapping to jid
 
         URL obj = new URL(url);
         HttpURLConnection con = (HttpURLConnection) obj.openConnection();
@@ -501,11 +386,11 @@ public class FreeAtHomeBridgeHandler extends BaseBridgeHandler {
 
     private void onUpdateXMPPStatus(SessionStatusEvent e) {
         logger.debug(e.toString());
-        if (e != null && e.getStatus() == XmppSession.Status.DISCONNECTED) {
+        if (e.getStatus() == XmppClient.Status.DISCONNECTED) {
             onConnectionLost(ThingStatusDetail.BRIDGE_OFFLINE, "XMPP connection lost");
         }
 
-        if (e != null && e.getStatus() == XmppSession.Status.AUTHENTICATED) {
+        if (e.getStatus() == XmppClient.Status.AUTHENTICATED) {
             onConnectionEstablished();
         }
     }
@@ -546,10 +431,10 @@ public class FreeAtHomeBridgeHandler extends BaseBridgeHandler {
                 bw = new BufferedWriter(new FileWriter(this.m_Configuration.log_dir + "/update.csv", true));
             } catch (IOException e3) {
                 // TODO Auto-generated catch block
-                e3.printStackTrace();
+                logger.error("Ops!", e3);
                 logger.error(e3.getMessage());
             } catch (Exception ex) {
-                ex.printStackTrace();
+                logger.error("Ops!", ex);
                 logger.error(ex.getMessage());
             }
         }
@@ -559,7 +444,7 @@ public class FreeAtHomeBridgeHandler extends BaseBridgeHandler {
             return;
         }
 
-        if (event != null) {
+        else {
             logger.debug("Namespace: " + event.getNode());
             if (Update.NAMESPACE.equals(event.getNode())) {
                 for (Item item : event.getItems()) {
@@ -627,13 +512,13 @@ public class FreeAtHomeBridgeHandler extends BaseBridgeHandler {
                                 }
 
                             } catch (Exception e2) {
-                                e2.printStackTrace();
+                                logger.error("Ops!", e2);
                                 logger.error("Exception" + e2.getMessage());
                             }
 
                         } catch (JAXBException e1) {
                             // TODO Auto-generated catch block
-                            e1.printStackTrace();
+                            logger.error("Ops!", e1);
                             logger.error("JaxbException" + e1.getMessage());
                         } catch (Exception ex) {
                             logger.error("Generic Exception" + ex.getMessage());
@@ -654,7 +539,7 @@ public class FreeAtHomeBridgeHandler extends BaseBridgeHandler {
                 bw.close();
             } catch (IOException e1) {
                 // TODO Auto-generated catch block
-                e1.printStackTrace();
+                logger.error("Ops!", e1);
             }
         }
 
@@ -682,9 +567,15 @@ public class FreeAtHomeBridgeHandler extends BaseBridgeHandler {
                 out.close();
             } catch (IOException e) {
                 // TODO Auto-generated catch block
-                e.printStackTrace();
+                logger.error("Ops!", e);
             }
         }
+    }
+
+    @Override
+    public void handleCommand(ChannelUID channelUID, org.eclipse.smarthome.core.types.Command command) {
+        // TODO Auto-generated method stub
+
     }
 
 }

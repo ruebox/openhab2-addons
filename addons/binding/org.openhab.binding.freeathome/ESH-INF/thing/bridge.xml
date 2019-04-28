@@ -27,7 +27,7 @@
             </parameter-group>
 
 
-			<parameter name="ipAddress" type="text" required="true" groupName="network">
+			<parameter name="host" type="text" required="true" groupName="network">
 				<context>network-address</context>
 				<label>LAN gateway IP</label>
 				<description>The IP address of the BJ gateway
