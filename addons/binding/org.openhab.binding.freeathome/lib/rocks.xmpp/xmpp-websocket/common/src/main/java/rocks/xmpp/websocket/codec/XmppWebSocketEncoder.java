@@ -25,6 +25,7 @@
 package rocks.xmpp.websocket.codec;
 
 import rocks.xmpp.core.stream.model.StreamElement;
+import rocks.xmpp.core.stream.model.StreamHeader;
 import rocks.xmpp.core.stream.model.StreamError;
 import rocks.xmpp.core.stream.model.StreamFeatures;
 import rocks.xmpp.util.XmppUtils;
@@ -39,6 +40,7 @@ import java.io.StringWriter;
 import java.io.Writer;
 import java.util.function.BiConsumer;
 import java.util.function.Supplier;
+import java.util.logging.Logger;
 
 /**
  * Encodes XMPP {@link StreamElement}s to WebSocket text messages.
@@ -55,11 +57,14 @@ import java.util.function.Supplier;
 public final class XmppWebSocketEncoder implements Encoder.Text<StreamElement> {
 
     private XMLOutputFactory xmlOutputFactory;
+    
+    private static final Logger logger = Logger.getLogger(XmppWebSocketEncoder.class.getName());
 
     private Supplier<Marshaller> marshaller;
 
     private BiConsumer<String, StreamElement> interceptor;
 
+    //Modified by @kjoglum to fit Free@Home Websocket / XMPP protocol
     @Override
     public final String encode(final StreamElement object) throws EncodeException {
         try (Writer writer = new StringWriter()) {
