@@ -1,9 +1,0 @@
-rocks/xmpp/websocket/model/Frame.class
-rocks/xmpp/websocket/model/package-info.class
-rocks/xmpp/websocket/net/WebSocketConnection.class
-rocks/xmpp/websocket/codec/XmppWebSocketDecoder$UserProperties.class
-rocks/xmpp/websocket/codec/XmppWebSocketDecoder.class
-rocks/xmpp/websocket/codec/XmppWebSocketEncoder$UserProperties.class
-rocks/xmpp/websocket/model/Open.class
-rocks/xmpp/websocket/model/Close.class
-rocks/xmpp/websocket/codec/XmppWebSocketEncoder.class

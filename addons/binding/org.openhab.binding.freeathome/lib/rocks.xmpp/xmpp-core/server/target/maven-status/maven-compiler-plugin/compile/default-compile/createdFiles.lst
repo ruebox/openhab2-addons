@@ -1,5 +1,0 @@
-rocks/xmpp/core/tls/server/StartTlsNegotiator.class
-rocks/xmpp/core/stream/server/ServerStreamFeaturesManager$1.class
-rocks/xmpp/core/extensions/compress/server/CompressionNegotiator.class
-rocks/xmpp/core/stream/server/ServerStreamFeatureNegotiator.class
-rocks/xmpp/core/stream/server/ServerStreamFeaturesManager.class
