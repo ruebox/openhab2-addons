@@ -18,6 +18,7 @@
     Events of the physical devices are fed back to binding.
     It is based on XMPP.rocks that is used to connect to system access point and simple json to parse json files.
     Disclaimer: This binding is a private contribution and is not an official B+J product.
+    Thx a lot to all supporter during the development: @lassem, @TheSpirit, @Lucurus, @xlrx, @wojewsky, @jclohmann, @Slave84, @kjoglum.
      </description>
     <author>Ruebox </author>
 

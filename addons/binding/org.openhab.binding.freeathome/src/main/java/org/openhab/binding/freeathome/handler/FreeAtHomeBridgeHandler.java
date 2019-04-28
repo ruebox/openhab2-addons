@@ -24,6 +24,7 @@ import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Scanner;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -51,6 +52,7 @@ import org.slf4j.LoggerFactory;
 import rocks.xmpp.addr.Jid;
 import rocks.xmpp.core.XmppException;
 import rocks.xmpp.core.net.ChannelEncryption;
+import rocks.xmpp.core.net.client.ClientConnectionConfiguration;
 import rocks.xmpp.core.session.Extension;
 import rocks.xmpp.core.session.SessionStatusEvent;
 import rocks.xmpp.core.session.XmppClient;
@@ -62,6 +64,7 @@ import rocks.xmpp.core.stanza.PresenceEvent;
 import rocks.xmpp.core.stanza.model.Message;
 import rocks.xmpp.core.stanza.model.Presence;
 import rocks.xmpp.extensions.commands.model.Command;
+import rocks.xmpp.extensions.httpbind.BoshConnectionConfiguration;
 import rocks.xmpp.extensions.pubsub.PubSubManager;
 import rocks.xmpp.extensions.pubsub.model.Item;
 import rocks.xmpp.extensions.pubsub.model.event.Event;
@@ -83,7 +86,7 @@ public class FreeAtHomeBridgeHandler extends BaseBridgeHandler {
 
     private org.slf4j.Logger logger = LoggerFactory.getLogger(FreeAtHomeBridgeHandler.class);
 
-    private WebSocketConnectionConfiguration m_WebSocketConfiguration;
+    private ClientConnectionConfiguration m_ConnectionConfiguration;
     private XmppSessionConfiguration m_XmppConfiguration;
     private XmppClient m_XmppClient = null;
     private RpcManager m_RpcManager;
@@ -219,16 +222,36 @@ public class FreeAtHomeBridgeHandler extends BaseBridgeHandler {
             }
         }
 
-        m_WebSocketConfiguration = WebSocketConnectionConfiguration.builder().hostname(m_Configuration.host)
-                .port(m_Configuration.port).path("/xmpp-websocket/").secure(true)
-                .channelEncryption(ChannelEncryption.DISABLED).build();
+        /*
+         * To be decided if WebSocket or BOSH connection
+         */
+        String currentSysApVersion = "0.0.0";
+
+        try {
+            currentSysApVersion = getSysAPVersion();
+        } catch (Exception e4) {
+            // TODO Auto-generated catch block
+            logger.error("Could not get sysAp firmware version -> default fallback - websocket connection");
+            e4.printStackTrace();
+        }
+
+        if (versionCompare(currentSysApVersion, "2.2.4") >= 0) {
+            m_ConnectionConfiguration = WebSocketConnectionConfiguration.builder().hostname(m_Configuration.host)
+                    .port(m_Configuration.port).path("/xmpp-websocket/").secure(true)
+                    .channelEncryption(ChannelEncryption.DISABLED).build();
+        } else {
+            m_ConnectionConfiguration = BoshConnectionConfiguration.builder().hostname(m_Configuration.host)
+                    .port(m_Configuration.port).path("/http-bind/")
+                    // .sslContext(getTrustAllSslContext())
+                    .secure(false).build();
+        }
 
         m_XmppConfiguration = XmppSessionConfiguration.builder().debugger(ConsoleDebugger.class)
                 .extensions(Extension.of("http://abb.com/protocol/update", null, true, true, Update.class),
                         Extension.of("http://abb.com/protocol/update", null, true, Update.class))
                 .build();
 
-        m_XmppClient = XmppClient.create("busch-jaeger.de", m_XmppConfiguration, m_WebSocketConfiguration);
+        m_XmppClient = XmppClient.create("busch-jaeger.de", m_XmppConfiguration, m_ConnectionConfiguration);
 
         // Listen for inbound messages.
         m_XmppClient.addInboundMessageListener(e -> logger.debug("Received Message: " + e.getMessage()));
@@ -372,6 +395,80 @@ public class FreeAtHomeBridgeHandler extends BaseBridgeHandler {
 
         return foundJid;
 
+    }
+
+    private String getSysAPVersion() throws Exception {
+        /*
+         * Read settings.json from SysAP
+         */
+        String url = "http://" + m_Configuration.host + "/settings.json"; // settings stores mapping to jid
+
+        URL obj = new URL(url);
+        HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+
+        // optional default is GET
+        con.setRequestMethod("GET");
+        String USER_AGENT = "Mozilla/5.0";
+        // add request header
+        con.setRequestProperty("User-Agent", USER_AGENT);
+
+        int responseCode = con.getResponseCode();
+        System.out.println("\nSending 'GET' request to URL : " + url);
+        System.out.println("Response Code : " + responseCode);
+
+        BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+        String inputLine;
+        StringBuffer response = new StringBuffer();
+
+        while ((inputLine = in.readLine()) != null) {
+            response.append(inputLine);
+        }
+        in.close();
+
+        if (m_Configuration.log_enabled) {
+            this.writeStringToFile(response.toString(), m_Configuration.log_dir + "/settings.json");
+        }
+
+        /*
+         * Parse json to find mapping to jid
+         */
+        Object o = new JSONParser().parse(response.toString());
+
+        JSONObject jo = (JSONObject) o;
+        JSONObject ja = (JSONObject) jo.get("flags");
+        String sysApVersion = (String) ja.get("version");
+
+        logger.info("SysAP Info:" + sysApVersion);
+
+        return sysApVersion;
+
+    }
+
+    // reused from https://stackoverflow.com/questions/6701948/efficient-way-to-compare-version-strings-in-java
+    public int versionCompare(String str1, String str2) {
+        try (Scanner s1 = new Scanner(str1); Scanner s2 = new Scanner(str2);) {
+            s1.useDelimiter("\\.");
+            s2.useDelimiter("\\.");
+
+            while (s1.hasNextInt() && s2.hasNextInt()) {
+                int v1 = s1.nextInt();
+                int v2 = s2.nextInt();
+                if (v1 < v2) {
+                    return -1;
+                } else if (v1 > v2) {
+                    return 1;
+                }
+            }
+
+            if (s1.hasNextInt() && s1.nextInt() != 0) {
+                return 1; // str1 has an additional lower-level version number
+            }
+            if (s2.hasNextInt() && s2.nextInt() != 0) {
+                return -1; // str2 has an additional lower-level version
+            }
+
+            return 0;
+        } // end of try-with-resources
     }
 
     private void onConnectionEstablished() {
