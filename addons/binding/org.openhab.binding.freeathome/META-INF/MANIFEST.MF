@@ -18,7 +18,7 @@ Bundle-ClassPath: .,
  lib/tyrus-client-1.15.jar,
  lib/tyrus-container-jdk-client-1.15.jar,
  lib/tyrus-core-1.15.jar,
- lib/tyrus-spi-1.15,
+ lib/tyrus-spi-1.15.jar,
  lib/json-simple-1.1.1.jar
 Import-Package: 
  org.eclipse.smarthome.config.core,
