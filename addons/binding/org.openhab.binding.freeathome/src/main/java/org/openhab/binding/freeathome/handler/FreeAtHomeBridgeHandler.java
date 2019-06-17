@@ -233,6 +233,8 @@ public class FreeAtHomeBridgeHandler extends BaseBridgeHandler {
             // TODO Auto-generated catch block
             logger.error("Could not get sysAp firmware version -> default fallback - websocket connection");
             e4.printStackTrace();
+            onConnectionLost(ThingStatusDetail.COMMUNICATION_ERROR,
+                    "Can not connect to SysAP to fetch version via http:// from address: " + m_Configuration.host);
         }
 
         if (versionCompare(currentSysApVersion, "2.2.4") >= 0) {
@@ -332,8 +334,9 @@ public class FreeAtHomeBridgeHandler extends BaseBridgeHandler {
 
         m_XmppClient.send(presence);
 
-        onConnectionEstablished();
-
+        if (m_XmppClient.getStatus() == XmppClient.Status.AUTHENTICATED) {
+            onConnectionEstablished();
+        }
     }
 
     private String getJid(String userName) throws Exception {
@@ -485,6 +488,10 @@ public class FreeAtHomeBridgeHandler extends BaseBridgeHandler {
         logger.debug(e.toString());
         if (e.getStatus() == XmppClient.Status.DISCONNECTED) {
             onConnectionLost(ThingStatusDetail.BRIDGE_OFFLINE, "XMPP connection lost");
+        }
+
+        if (e.getStatus() == XmppClient.Status.CLOSED) {
+            onConnectionLost(ThingStatusDetail.BRIDGE_OFFLINE, "Connection closed");
         }
 
         if (e.getStatus() == XmppClient.Status.AUTHENTICATED) {

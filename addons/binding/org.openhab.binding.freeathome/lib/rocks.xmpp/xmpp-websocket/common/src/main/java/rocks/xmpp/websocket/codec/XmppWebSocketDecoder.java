@@ -62,10 +62,10 @@ public final class XmppWebSocketDecoder implements Decoder.Text<StreamElement> {
     @Override
     public final StreamElement decode(final String s) throws DecodeException {
         if (s.contains("stream:stream")) {
-            logger.warning("Decode streamheader " + s);
+            //logger.warning("Decode streamheader " + s);
             String ID = s.substring(s.indexOf("id")+4, s.indexOf("id")+40);
             // String ID = s.substring(s.indexOf("id=") + 1, s.indexOf(' ') - 1);
-            logger.warning("ID " + ID);
+            //logger.warning("ID " + ID);
             String Domain = "busch-jaeger.de";
             Jid From = Jid.of(Domain);
             Open streamHead = new Open(null, From, ID, null, "1.0");
@@ -73,7 +73,7 @@ public final class XmppWebSocketDecoder implements Decoder.Text<StreamElement> {
             return streamHead;
         }
         else {
-            logger.warning("Decoding stream feature");
+            //logger.warning("Decoding stream feature");
             try (StringReader reader = new StringReader(s)) {
                 StreamElement streamElement = (StreamElement) unmarshaller.get().unmarshal(reader);
                 if (onRead != null) {
