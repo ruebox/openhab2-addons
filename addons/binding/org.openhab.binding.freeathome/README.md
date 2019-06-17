@@ -8,7 +8,7 @@ If you find any issue please submit new issues or feature requests on my private
 ### Supported things
 Type | Description
 ------------ | -------------
-Bridge | Gateway that connects to the B+J SysAP. All commands from the things are routed through this bridge. The bridge has to added manually before starting discovery.
+Bridge | Gateway that connects to the B+J SysAP. All commands from the things are routed through this bridge. The bridge has to added manually before starting discovery (fw version >= 2.2.4).
 Raffstore switch | Switch to run blinds or raffstore shutters stepwise or completely.
 Scenario selector | This thing can be used to provide user switches to configure different scenarios e.g. @Home. The status of these switches can be used by rules to setup different scenarios.
 Scene | Switch that activates a scene that was generated within freeathome webui. The switch is autoresetted after a configurable timeout.
