@@ -63,34 +63,34 @@ Events of the physical devices are fed back to binding.</description>
     <version>1.0.9</version>
 </dependency>
 <dependency>
-    <groupId> org.glassfish.tyrus</groupId>
+    <groupId>org.glassfish.tyrus</groupId>
     <artifactId>tyrus-container-grizzly-server</artifactId>
     <version>1.15</version>
-    <scope>test</scope>
+    <scope>provided</scope>
 </dependency>
 <dependency>
     <groupId> org.glassfish.tyrus</groupId>
     <artifactId>tyrus-client</artifactId>
     <version>1.15</version>
-    <scope>test</scope>
+    <scope>provided</scope>
 </dependency>
 <dependency>
     <groupId> org.glassfish.tyrus</groupId>
     <artifactId>tyrus-container-jdk-client</artifactId>
     <version>1.15</version>
-    <scope>test</scope>
+    <scope>provided</scope>
 </dependency>
 <dependency>
     <groupId> org.glassfish.tyrus</groupId>
     <artifactId>tyrus-core</artifactId>
     <version>1.15</version>
-    <scope>test</scope>
+    <scope>provided</scope>
 </dependency>
 <dependency>
     <groupId> org.glassfish.tyrus</groupId>
     <artifactId>tyrus-spi</artifactId>
     <version>1.15</version>
-    <scope>test</scope>
+    <scope>provided</scope>
 </dependency>
 <dependency>
     <groupId>javax.websocket</groupId>
