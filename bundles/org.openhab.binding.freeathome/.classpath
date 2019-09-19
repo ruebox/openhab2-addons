@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" output="target/classes" path="src/main/java">
+		<attributes>
+			<attribute name="optional" value="true"/>
+			<attribute name="maven.pomderived" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry excluding="**" kind="src" output="target/classes" path="src/main/resources">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="src" output="target/test-classes" path="src/test/java">
+		<attributes>
+			<attribute name="test" value="true"/>
+			<attribute name="optional" value="true"/>
+			<attribute name="maven.pomderived" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="con" path="org.eclipse.m2e.MAVEN2_CLASSPATH_CONTAINER">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="lib/javax.websocket-api-1.1.jar" sourcepath="lib/javax.websocket-api-source-1.1.jar"/>
+	<classpathentry kind="lib" path="lib/jdk-client-source.jar"/>
+	<classpathentry kind="lib" path="lib/json-simple-1.1.1.jar"/>
+	<classpathentry kind="lib" path="lib/precis-1.0.0.jar" sourcepath="lib/precis-1.0.0-source.jar"/>
+	<classpathentry kind="lib" path="lib/tyrus-client-1.15.jar" sourcepath="lib/tyrus-client-source.jar"/>
+	<classpathentry kind="lib" path="lib/tyrus-container-jdk-client-1.15.jar"/>
+	<classpathentry kind="lib" path="lib/tyrus-core-1.15.jar" sourcepath="lib/tyrus-core-source-1.15.jar"/>
+	<classpathentry kind="lib" path="lib/tyrus-spi-1.15.jar" sourcepath="lib/tyrus-spi-source-1.15.jar"/>
+	<classpathentry kind="lib" path="lib/rocks.xmpp/xmpp-addr/target/xmpp-addr-0.8.1-SNAPSHOT.jar" sourcepath="lib/rocks.xmpp/xmpp-addr/target/xmpp-addr-0.8.1-SNAPSHOT-sources.jar"/>
+	<classpathentry kind="lib" path="lib/rocks.xmpp/xmpp-core/client/target/xmpp-core-client-0.8.1-SNAPSHOT.jar" sourcepath="lib/rocks.xmpp/xmpp-core/client/target/xmpp-core-client-0.8.1-SNAPSHOT-sources.jar"/>
+	<classpathentry kind="lib" path="lib/rocks.xmpp/xmpp-core/common/target/xmpp-core-common-0.8.1-SNAPSHOT.jar" sourcepath="lib/rocks.xmpp/xmpp-core/common/target/xmpp-core-common-0.8.1-SNAPSHOT-sources.jar"/>
+	<classpathentry kind="lib" path="lib/rocks.xmpp/xmpp-extensions/client/target/xmpp-extensions-client-0.8.1-SNAPSHOT.jar" sourcepath="lib/rocks.xmpp/xmpp-extensions/client/target/xmpp-extensions-client-0.8.1-SNAPSHOT-sources.jar"/>
+	<classpathentry kind="lib" path="lib/rocks.xmpp/xmpp-extensions/common/target/xmpp-extensions-common-0.8.1-SNAPSHOT.jar" sourcepath="lib/rocks.xmpp/xmpp-extensions/common/target/xmpp-extensions-common-0.8.1-SNAPSHOT-sources.jar"/>
+	<classpathentry kind="lib" path="lib/rocks.xmpp/xmpp-websocket/client/target/xmpp-websocket-client-0.8.1-SNAPSHOT.jar" sourcepath="lib/rocks.xmpp/xmpp-websocket/client/target/xmpp-websocket-client-0.8.1-SNAPSHOT-sources.jar"/>
+	<classpathentry kind="lib" path="lib/rocks.xmpp/xmpp-websocket/common/target/xmpp-websocket-common-0.8.1-SNAPSHOT.jar" sourcepath="lib/rocks.xmpp/xmpp-websocket/common/target/xmpp-websocket-common-0.8.1-SNAPSHOT-sources.jar"/>
+	<classpathentry kind="output" path="target/classes"/>
+</classpath>

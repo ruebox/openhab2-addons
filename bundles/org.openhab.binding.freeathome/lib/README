@@ -1,0 +1,10 @@
+This binding is based on 
+
+1. XMPP.Rocks. Thanks to Christian Schudt
+
+        https://sco0ter.bitbucket.io/babbler/
+        
+2. Simple JSON Thanks to Yidong Fang
+
+        https://github.com/fangyidong/json-simple
+        https://code.google.com/archive/p/json-simple/
