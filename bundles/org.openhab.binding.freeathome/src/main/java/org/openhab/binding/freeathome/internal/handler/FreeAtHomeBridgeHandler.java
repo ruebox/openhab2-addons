@@ -439,99 +439,92 @@ public class FreeAtHomeBridgeHandler extends BaseBridgeHandler {
             }
         }
 
-        if (event == null) {
-            logger.debug("Event.class extension can not be extracted");
-            return;
-        }
+        logger.debug("Namespace {}", event.getNode());
+        if (Update.NAMESPACE.equals(event.getNode())) {
+            for (Item item : event.getItems()) {
 
-        else {
-            logger.debug("Namespace {}", event.getNode());
-            if (Update.NAMESPACE.equals(event.getNode())) {
-                for (Item item : event.getItems()) {
+                logger.debug("Payload of Item {}", item.getPayload().toString());
 
-                    logger.debug("Payload of Item {}", item.getPayload().toString());
+                if (item.getPayload() instanceof org.openhab.binding.freeathome.internal.xmpp.rocks.extension.abb.com.protocol.update.Update) {
+                    org.openhab.binding.freeathome.internal.xmpp.rocks.extension.abb.com.protocol.update.Update updateData = (org.openhab.binding.freeathome.internal.xmpp.rocks.extension.abb.com.protocol.update.Update) item
+                            .getPayload();
+                    String data = updateData.getData().replace("&amp;", "&").replace("&apos;", "'").replace("&lt;", "<")
+                            .replace("&gt;", ">").replace("&quot;", "\"");
+                    logger.debug("UpdateEvent {}", data);
 
-                    if (item.getPayload() instanceof org.openhab.binding.freeathome.internal.xmpp.rocks.extension.abb.com.protocol.update.Update) {
-                        org.openhab.binding.freeathome.internal.xmpp.rocks.extension.abb.com.protocol.update.Update updateData = (org.openhab.binding.freeathome.internal.xmpp.rocks.extension.abb.com.protocol.update.Update) item
-                                .getPayload();
-                        String data = updateData.getData().replace("&amp;", "&").replace("&apos;", "'")
-                                .replace("&lt;", "<").replace("&gt;", ">").replace("&quot;", "\"");
-                        logger.debug("UpdateEvent {}", data);
+                    try {
+                        Project p = org.openhab.binding.freeathome.internal.xmpp.rocks.extensions.abb.com.protocol.data.Project
+                                .builder().build(data);
 
-                        try {
-                            Project p = org.openhab.binding.freeathome.internal.xmpp.rocks.extensions.abb.com.protocol.data.Project
-                                    .builder().build(data);
+                        // create JAXB context and instantiate marshaller
+                        JAXBContext context = JAXBContext.newInstance(
+                                org.openhab.binding.freeathome.internal.xmpp.rocks.extensions.abb.com.protocol.data.Project.class);
+                        Marshaller m = context.createMarshaller();
+                        m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
 
-                            // create JAXB context and instantiate marshaller
-                            JAXBContext context = JAXBContext.newInstance(
-                                    org.openhab.binding.freeathome.internal.xmpp.rocks.extensions.abb.com.protocol.data.Project.class);
-                            Marshaller m = context.createMarshaller();
-                            m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-
-                            // Write to File
-                            if (this.m_Configuration.log_enabled) {
-                                m.marshal(p, new File(this.m_Configuration.log_dir + "/update_" + counter + ".xml"));
-                                counter++;
-                            }
-
-                            try {
-                                List<Device> devices = p.getDevices();
-                                for (int i = 0; i < devices.size(); i++) {
-                                    Device currentDevice = devices.get(i);
-
-                                    logger.debug("Update From {}", currentDevice.getSerialNumber());
-                                    List<Channel> channels = currentDevice.getChannels();
-
-                                    for (int j = 0; j < channels.size(); j++) {
-                                        Channel channel = channels.get(j);
-
-                                        /*
-                                         * Outputs
-                                         */
-                                        List<DataPoint> dataPointsOut = channel.getOutputs();
-                                        for (int d = 0; d < dataPointsOut.size(); d++) {
-                                            DataPoint datapoint = dataPointsOut.get(d);
-                                            String dataPoint = "Serial: " + currentDevice.getSerialNumber()
-                                                    + " Channel: " + channel.getI() + " DataPoint: " + datapoint.getI()
-                                                    + " Value: " + datapoint.getValue();
-                                            logger.debug("Datapoint {}", dataPoint);
-
-                                            if (bw != null && this.m_Configuration.log_enabled) {
-                                                Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-                                                bw.write(sdf.format(timestamp) + " ; " + currentDevice.getSerialNumber()
-                                                        + " ; " + channel.getI() + " ; " + datapoint.getI() + " ; "
-                                                        + datapoint.getValue() + " ; ");
-                                                bw.newLine();
-                                                bw.flush();
-                                            }
-
-                                            m_UpdateHandler.NotifyThing(currentDevice.getSerialNumber(), channel.getI(),
-                                                    datapoint.getI(), datapoint.getValue());
-                                        }
-                                    }
-                                }
-
-                            } catch (Exception e2) {
-                                logger.error("Ops!", e2);
-                                logger.error("Exception {}", e2.getMessage());
-                            }
-
-                        } catch (JAXBException e1) {
-                            // TODO Auto-generated catch block
-                            logger.error("Ops!", e1);
-                            logger.error("JaxbException {}", e1.getMessage());
-                        } catch (Exception ex) {
-                            logger.error("General Exception {}", ex.getMessage());
+                        // Write to File
+                        if (this.m_Configuration.log_enabled) {
+                            m.marshal(p, new File(this.m_Configuration.log_dir + "/update_" + counter + ".xml"));
+                            counter++;
                         }
 
-                        // ...
-                    } else {
-                        logger.debug("Payload is not instance of extension.abb.com.protocol.update.Update");
+                        try {
+                            List<Device> devices = p.getDevices();
+                            for (int i = 0; i < devices.size(); i++) {
+                                Device currentDevice = devices.get(i);
+
+                                logger.debug("Update From {}", currentDevice.getSerialNumber());
+                                List<Channel> channels = currentDevice.getChannels();
+
+                                for (int j = 0; j < channels.size(); j++) {
+                                    Channel channel = channels.get(j);
+
+                                    /*
+                                     * Outputs
+                                     */
+                                    List<DataPoint> dataPointsOut = channel.getOutputs();
+                                    for (int d = 0; d < dataPointsOut.size(); d++) {
+                                        DataPoint datapoint = dataPointsOut.get(d);
+                                        String dataPoint = "Serial: " + currentDevice.getSerialNumber() + " Channel: "
+                                                + channel.getI() + " DataPoint: " + datapoint.getI() + " Value: "
+                                                + datapoint.getValue();
+                                        logger.debug("Datapoint {}", dataPoint);
+
+                                        if (bw != null && this.m_Configuration.log_enabled) {
+                                            Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+                                            bw.write(sdf.format(timestamp) + " ; " + currentDevice.getSerialNumber()
+                                                    + " ; " + channel.getI() + " ; " + datapoint.getI() + " ; "
+                                                    + datapoint.getValue() + " ; ");
+                                            bw.newLine();
+                                            bw.flush();
+                                        }
+
+                                        m_UpdateHandler.NotifyThing(currentDevice.getSerialNumber(), channel.getI(),
+                                                datapoint.getI(), datapoint.getValue());
+                                    }
+                                }
+                            }
+
+                        } catch (Exception e2) {
+                            logger.error("Ops!", e2);
+                            logger.error("Exception {}", e2.getMessage());
+                        }
+
+                    } catch (JAXBException e1) {
+                        // TODO Auto-generated catch block
+                        logger.error("Ops!", e1);
+                        logger.error("JaxbException {}", e1.getMessage());
+                    } catch (Exception ex) {
+                        logger.error("General Exception {}", ex.getMessage());
                     }
+
+                    // ...
+                } else {
+                    logger.debug("Payload is not instance of extension.abb.com.protocol.update.Update");
                 }
-            } else {
-                logger.debug("Message does not have namespace" + Update.NAMESPACE);
             }
+        } else {
+            logger.debug("Message does not have namespace" + Update.NAMESPACE);
         }
 
         if (bw != null) {
