@@ -4,12 +4,6 @@
 
     <feature name="openhab-binding-freeathome" description="freeathome Binding" version="${project.version}">
         <feature>openhab-runtime-base</feature> 
-        <bundle dependency="true">mvn:org.glassfish.tyrus/tyrus-container-grizzly-server/1.15</bundle> 
-        <bundle dependency="true">mvn:org.glassfish.tyrus/tyrus-client/1.15</bundle>
-        <bundle dependency="true">mvn:org.glassfish.tyrus/tyrus-container-jdk-client/1.15</bundle>
-        <bundle dependency="true">mvn:org.glassfish.tyrus/tyrus-core/1.15</bundle>
-        <bundle dependency="true">mvn:org.glassfish.tyrus/tyrus-spi/1.15</bundle>
-        <bundle dependency="true">mvn:javax.websocket/javax.websocket-api/1.1</bundle>
         <bundle start-level="80">mvn:org.openhab.addons.bundles/org.openhab.binding.freeathome/${project.version}</bundle>
     </feature>
 </features>
