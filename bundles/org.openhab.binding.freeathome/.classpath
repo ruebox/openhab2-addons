@@ -39,10 +39,9 @@
 	<classpathentry kind="lib" path="lib/json-simple-1.1.1.jar"/>
 	<classpathentry kind="lib" path="lib/precis-1.0.0.jar"/>
 	<classpathentry kind="lib" path="lib/tyrus-client-1.15.jar"/>
-	<classpathentry kind="lib" path="lib/tyrus-container-grizzly-server-1.15.jar"/>
 	<classpathentry kind="lib" path="lib/tyrus-container-jdk-client-1.15.jar"/>
 	<classpathentry kind="lib" path="lib/tyrus-core-1.15.jar"/>
 	<classpathentry kind="lib" path="lib/tyrus-spi-1.15.jar"/>
-	<classpathentry kind="lib" path="lib/glassfish-grizzly-extra-all.jar"/>
+	<classpathentry kind="lib" path="lib/tyrus-container-grizzly-server-1.15.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
