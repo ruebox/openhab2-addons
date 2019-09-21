@@ -296,7 +296,7 @@ public abstract class XmppSession implements StreamHandler, AutoCloseable {
             try {
                 xmppSessionConsumer.accept(xmppSession);
             } catch (Exception e) {
-                logger.log(Level.WARNING, e.getMessage(), e);
+                logger.warning(e.getMessage() + e);
             }
         });
     }
@@ -373,14 +373,14 @@ public abstract class XmppSession implements StreamHandler, AutoCloseable {
                         }
                     }
                     if (connectionIterator.hasNext()) {
-                        logger.warning("{0} failed to connect. Trying alternative connection." + connectionConfiguration);
+                        logger.warning("Failed to connect. Trying alternative connection." + connectionConfiguration);
                         logger.warning(e.getMessage() + e);
                     } else {
                         throw new ConnectionException("Failed to connect to " + connectionConfiguration, e);
                     }
                 }
             }
-            logger.warning("Connected via {0}" + activeConnection);
+            logger.warning("Connected via" + activeConnection);
         }
     }
 
@@ -936,7 +936,7 @@ public abstract class XmppSession implements StreamHandler, AutoCloseable {
                     try {
                         listener.accept(element);
                     } catch (Exception e) {
-                        logger.log(Level.WARNING, e.getMessage(), e);
+                        logger.warning(e.getMessage() + e);
                     }
                 });
                 // The stanza has been successfully sent. Don't track it any longer, unless the connection supports acknowledgements.
@@ -953,7 +953,7 @@ public abstract class XmppSession implements StreamHandler, AutoCloseable {
                     try {
                         listener.accept(element, throwable);
                     } catch (Exception e) {
-                        logger.log(Level.WARNING, e.getMessage(), e);
+                        logger.warning(e.getMessage() + e);
                     }
                 });
             }
