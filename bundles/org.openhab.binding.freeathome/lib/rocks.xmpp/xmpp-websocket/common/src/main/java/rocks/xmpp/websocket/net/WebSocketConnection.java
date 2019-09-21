@@ -78,12 +78,8 @@ public class WebSocketConnection extends AbstractConnection {
     private void onRead(final StreamElement streamElement) {
         if (streamElement instanceof Open || streamElement instanceof StreamHeader) {
             openedByPeer((Open) streamElement);
-            logger.warning("Streamheader open received");
-            logger.warning(streamElement.toString());
         } else if (streamElement instanceof Close) {
             closedByPeer();
-            logger.warning("Streamheader close received");
-            logger.warning(streamElement.toString());
         }
         try {
             if (streamHandler.handleElement(streamElement)) {
@@ -156,8 +152,6 @@ public class WebSocketConnection extends AbstractConnection {
     @Override
     public final CompletionStage<Void> open(final SessionOpen sessionOpen) {
         this.sessionOpen = sessionOpen;
-        logger.warning("Websocketconnection open being sent");
-        logger.warning(sessionOpen.toString());
         // Opens the stream
         // Modified by @kjoglum to fit Busch-Jaeger Free@Home XMPP over websocket protocol
         return send(new Open(sessionOpen.getTo(), sessionOpen.getFrom(), sessionOpen.getId(), sessionOpen.getLanguage()));

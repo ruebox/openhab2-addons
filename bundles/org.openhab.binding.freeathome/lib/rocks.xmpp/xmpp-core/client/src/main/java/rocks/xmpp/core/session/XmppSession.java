@@ -380,7 +380,7 @@ public abstract class XmppSession implements StreamHandler, AutoCloseable {
                     }
                 }
             }
-            logger.warning("Connected via" + activeConnection);
+            logger.warning("Connected via " + activeConnection);
         }
     }
 
