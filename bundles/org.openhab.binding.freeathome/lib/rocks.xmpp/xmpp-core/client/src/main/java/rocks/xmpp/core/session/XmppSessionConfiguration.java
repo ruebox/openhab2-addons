@@ -380,7 +380,8 @@ public final class XmppSessionConfiguration {
         /**
          * The default preferred SASL mechanisms.
          */
-        private List<String> authenticationMechanisms = Arrays.asList("SCRAM-SHA-1",
+        private List<String> authenticationMechanisms = Arrays.asList("SCRAM-SHA-256",
+                "SCRAM-SHA-1",
                 "DIGEST-MD5",
                 "GSSAPI",
                 "CRAM-MD5",
