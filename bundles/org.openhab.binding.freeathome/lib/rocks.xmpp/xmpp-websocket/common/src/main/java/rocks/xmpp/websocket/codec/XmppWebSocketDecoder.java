@@ -64,8 +64,8 @@ public final class XmppWebSocketDecoder implements Decoder.Text<StreamElement> {
     
     @Override
     public final StreamElement decode(final String s) throws DecodeException {
-        logger.warning("Decoding stream" + s);
-        if (s.contains("id")) {
+        // logger.warning("Decoding stream" + s);
+        if (s.contains("open id")) {
             logger.warning("Decoding opening stream " + s);
             String ID = s.substring(s.indexOf("id")+4, s.indexOf("id")+19);
             logger.warning("ID from stream " + ID);
