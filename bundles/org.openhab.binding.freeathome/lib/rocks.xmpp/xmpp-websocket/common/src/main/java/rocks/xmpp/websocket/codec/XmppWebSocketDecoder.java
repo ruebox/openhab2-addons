@@ -66,7 +66,7 @@ public final class XmppWebSocketDecoder implements Decoder.Text<StreamElement> {
     public final StreamElement decode(final String s) throws DecodeException {
         if (s.contains("id")) {
             logger.warning("Decoding stream " + s);
-            String ID = s.substring(s.indexOf("id")+4, s.indexOf("id")+18);
+            String ID = s.substring(s.indexOf("id")+4, s.indexOf("id")+19);
             logger.warning("ID from stream " + ID);
             String Domain = "busch-jaeger.de";
             Jid From = Jid.of(Domain);
