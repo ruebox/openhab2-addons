@@ -349,7 +349,7 @@ public abstract class XmppSession implements StreamHandler, AutoCloseable {
         try {
             closeAndNullifyConnection();
         } catch (Exception e) {
-            logger.log(Level.WARNING, "Failure during closing previous connection.", e);
+            logger.warning("Failure during closing previous connection." + e);
         }
 
         synchronized (connectionConfigurations) {
@@ -373,14 +373,14 @@ public abstract class XmppSession implements StreamHandler, AutoCloseable {
                         }
                     }
                     if (connectionIterator.hasNext()) {
-                        logger.log(Level.WARNING, "{0} failed to connect. Trying alternative connection.", connectionConfiguration);
-                        logger.log(Level.FINE, e.getMessage(), e);
+                        logger.warning("{0} failed to connect. Trying alternative connection." + connectionConfiguration);
+                        logger.warning(e.getMessage() + e);
                     } else {
                         throw new ConnectionException("Failed to connect to " + connectionConfiguration, e);
                     }
                 }
             }
-            logger.log(Level.FINE, "Connected via {0}", activeConnection);
+            logger.warning("Connected via {0}" + activeConnection);
         }
     }
 
@@ -392,7 +392,7 @@ public abstract class XmppSession implements StreamHandler, AutoCloseable {
     protected boolean checkConnected() {
         if (isConnected()) {
             // Silently return, when we are already connected.
-            logger.fine("Already connected. Return silently.");
+            logger.warning("Already connected. Return silently.");
             return true;
         }
         return false;

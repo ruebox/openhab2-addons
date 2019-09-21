@@ -219,8 +219,8 @@ public class FreeAtHomeBridgeHandler extends BaseBridgeHandler {
         }
 
         m_WebSocketConfiguration = WebSocketConnectionConfiguration.builder().hostname(m_Configuration.host)
-                .port(m_Configuration.port).path("/xmpp-websocket/").secure(true)
-                .channelEncryption(ChannelEncryption.DISABLED).build();
+                .port(m_Configuration.port).path("/xmpp-websocket/").channelEncryption(ChannelEncryption.DISABLED)
+                .build();
 
         m_XmppConfiguration = XmppSessionConfiguration.builder().debugger(ConsoleDebugger.class)
                 .extensions(Extension.of("http://abb.com/protocol/update", null, true, true, Update.class),

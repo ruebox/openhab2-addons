@@ -213,7 +213,7 @@ public final class XmppClient extends XmppSession {
 
                 tryConnect(from, "jabber:client", "1.0");
 
-                logger.fine("Negotiating stream, waiting until SASL is ready to be negotiated.");
+                logger.warning("Negotiating stream, waiting until SASL is ready to be negotiated.");
 
                 // Check if connecting failed with an exception.
                 throwAsXmppExceptionIfNotNull(exception);
