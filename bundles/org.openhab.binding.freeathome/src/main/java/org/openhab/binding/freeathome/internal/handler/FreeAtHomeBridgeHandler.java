@@ -176,12 +176,12 @@ public class FreeAtHomeBridgeHandler extends BaseBridgeHandler {
 
             Value response = m_RpcManager.call(Jid.of("mrha@busch-jaeger.de/rpc"), "RemoteInterface.setDatapoint",
                     Value.of(adress), Value.of(value)).getResult();
-            logger.debug("Result:");
-            logger.debug("Result {}", response.getAsString());
+            logger.warn("Result:");
+            logger.warn("Result {}", response.getAsString());
             response = null;
 
         } catch (XmppException e) {
-            logger.error("XMPP Exception{}", e.getMessage());
+            logger.warn("XMPP Exception{}", e.getMessage());
             // E.g. a StanzaException, if the responder does not support the protocol or an
             // // internal-server-error has occurred.
         }
@@ -192,14 +192,14 @@ public class FreeAtHomeBridgeHandler extends BaseBridgeHandler {
 
             Value response = m_RpcManager.call(Jid.of("mrha@busch-jaeger.de/rpc"), "RemoteInterface.getAll",
                     Value.of("de"), Value.of(4), Value.of(0), Value.of(0)).getResult();
-            logger.debug("Result:");
-            logger.debug("Message {}", response.getAsString());
+            logger.warn("Result:");
+            logger.warn("Message {}", response.getAsString());
             String resp = response.getAsString();
 
             return resp;
 
         } catch (XmppException e) {
-            logger.error("XMPP Exception{}", e.getMessage());
+            logger.warn("XMPP Exception{}", e.getMessage());
             // E.g. a StanzaException, if the responder does not support the protocol or an
             // internal-server-error has occurred.
         }
