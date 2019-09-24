@@ -74,6 +74,7 @@ public final class XmppWebSocketEncoder implements Encoder.Text<StreamElement> {
                 marshaller.get().marshal(object, xmlStreamWriter);
                 xmlStreamWriter.flush();
                 String xml = writer.toString();
+                logger.warning("Decoding client stream " + xml);
                 if (interceptor != null) {
                     interceptor.accept(xml, object);
                 }

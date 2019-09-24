@@ -64,17 +64,16 @@ public final class XmppWebSocketDecoder implements Decoder.Text<StreamElement> {
     
     @Override
     public final StreamElement decode(final String s) throws DecodeException {
-        logger.warning("Decoding stream" + s);
-        if (s.contains("open id")) {
-            logger.warning("Decoding opening stream " + s);
-            String ID = s.substring(s.indexOf("id")+4, s.indexOf("id")+19);
-            logger.warning("ID from stream " + ID);
+        if (s.contains("stream:stream")) {
+            logger.warning("Converting wrong server websocket stream");
+            String ID = s.substring(s.indexOf("id")+4, s.indexOf("id")+40);
             String Domain = "busch-jaeger.de";
             Jid From = Jid.of(Domain);
             Open streamHead = new Open(null, From, ID, null, "1.0");
             return streamHead;
         }
         else {
+            logger.warning("Decoding server stream " + s);
             try (StringReader reader = new StringReader(s)) {
                 StreamElement streamElement = (StreamElement) unmarshaller.get().unmarshal(reader);
                 if (onRead != null) {
