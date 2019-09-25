@@ -73,14 +73,26 @@ public final class XmppWebSocketDecoder implements Decoder.Text<StreamElement> {
             return streamHead;
         }
         else if (s.contains("github")) {
-            logger.warning("Server stream: Github reference");
             String correctedElement = s.replace("https://github.com/qxmpp-project/qxmpp", "http://xmpp.rocks");
+            logger.warning("Decoding corrected server websocket stream " + correctedElement);
             try (StringReader reader = new StringReader(correctedElement)) {
                 StreamElement streamElement = (StreamElement) unmarshaller.get().unmarshal(reader);
                 if (onRead != null) {
                     onRead.accept(correctedElement, streamElement);
                 }
-                logger.warning("Decoding corrected server websocket stream " + streamElement.toString());
+            return streamElement;
+        } catch (JAXBException e) {
+            throw new DecodeException(correctedElement, e.getMessage(), e);
+        }
+        }
+        else if (s.contains("subscribe")){
+            logger.warning("Server stream containing subscribe");
+            try (StringReader reader = new StringReader(s)) {
+                logger.warning("Decoding server stream " + s);
+                StreamElement streamElement = (StreamElement) unmarshaller.get().unmarshal(reader);
+                if (onRead != null) {
+                    onRead.accept(s, streamElement);
+                }
             return streamElement;
         } catch (JAXBException e) {
             throw new DecodeException(s, e.getMessage(), e);
@@ -88,11 +100,11 @@ public final class XmppWebSocketDecoder implements Decoder.Text<StreamElement> {
         }
         else {
             try (StringReader reader = new StringReader(s)) {
+                logger.warning("Decoding server stream " + s);
                 StreamElement streamElement = (StreamElement) unmarshaller.get().unmarshal(reader);
                 if (onRead != null) {
                     onRead.accept(s, streamElement);
                 }
-                logger.warning("Decoding server stream " + streamElement.toString());
             return streamElement;
         } catch (JAXBException e) {
             throw new DecodeException(s, e.getMessage(), e);
