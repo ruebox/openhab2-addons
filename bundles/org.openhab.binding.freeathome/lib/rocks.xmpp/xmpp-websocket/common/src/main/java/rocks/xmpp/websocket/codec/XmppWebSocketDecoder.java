@@ -89,13 +89,13 @@ public final class XmppWebSocketDecoder implements Decoder.Text<StreamElement> {
         }
         */
         else if (s.contains("presence") && s.contains("github")){
-            logger.warning("Decoding presence stream from server: " + s);
+            //logger.warning("Decoding presence stream from server: " + s);
             return null;
             
         }
         else {
             try (StringReader reader = new StringReader(s)) {
-                logger.warning("Decoding server stream " + s);
+                //logger.warning("Decoding server stream " + s);
                 StreamElement streamElement = (StreamElement) unmarshaller.get().unmarshal(reader);
                 if (onRead != null) {
                     onRead.accept(s, streamElement);
