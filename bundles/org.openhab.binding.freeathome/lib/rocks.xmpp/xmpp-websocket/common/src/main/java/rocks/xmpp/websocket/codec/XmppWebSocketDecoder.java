@@ -28,7 +28,7 @@ import rocks.xmpp.core.stream.model.StreamElement;
 import rocks.xmpp.core.stream.model.StreamHeader;
 import rocks.xmpp.addr.Jid;
 import rocks.xmpp.websocket.model.Open;
-import rocks.xmpp.websocket.model.Open;
+import rocks.xmpp.core.stanza.model.Presence;
 
 import javax.websocket.DecodeException;
 import javax.websocket.Decoder;
@@ -64,15 +64,17 @@ public final class XmppWebSocketDecoder implements Decoder.Text<StreamElement> {
     
     @Override
     public final StreamElement decode(final String s) throws DecodeException {
+        //Below code valid for 2.2.4 < SysAp version < 2.3.0 
         if (s.contains("stream:stream")) {
             String ID = s.substring(s.indexOf("id")+4, s.indexOf("id")+40);
             String Domain = "busch-jaeger.de";
             Jid From = Jid.of(Domain);
             Open streamHead = new Open(null, From, ID, null, "1.0");
-            logger.warning("Converting wrong server websocket stream: " + streamHead.toString());
+            // logger.warning("Converting wrong server websocket stream: " + streamHead.toString());
             return streamHead;
         }
-        else if (s.contains("github")) {
+       // Below code replaces node = https://github.com/qxmpp-project/qxmpp in the receiving stream from SysAp
+       /* else if (s.contains("github")) {
             String correctedElement = s.replace("https://github.com/qxmpp-project/qxmpp", "http://xmpp.rocks");
             logger.warning("Decoding corrected server websocket stream " + correctedElement);
             try (StringReader reader = new StringReader(correctedElement)) {
@@ -85,18 +87,11 @@ public final class XmppWebSocketDecoder implements Decoder.Text<StreamElement> {
             throw new DecodeException(correctedElement, e.getMessage(), e);
         }
         }
-        else if (s.contains("subscribe")){
-            logger.warning("Server stream containing subscribe");
-            try (StringReader reader = new StringReader(s)) {
-                logger.warning("Decoding server stream " + s);
-                StreamElement streamElement = (StreamElement) unmarshaller.get().unmarshal(reader);
-                if (onRead != null) {
-                    onRead.accept(s, streamElement);
-                }
-            return streamElement;
-        } catch (JAXBException e) {
-            throw new DecodeException(s, e.getMessage(), e);
-        }
+        */
+        else if (s.contains("presence") && s.contains("github")){
+            logger.warning("Decoding presence stream from server: " + s);
+            return null;
+            
         }
         else {
             try (StringReader reader = new StringReader(s)) {

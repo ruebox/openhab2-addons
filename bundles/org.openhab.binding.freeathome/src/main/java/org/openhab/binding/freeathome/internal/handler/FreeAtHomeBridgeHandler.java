@@ -180,7 +180,7 @@ public class FreeAtHomeBridgeHandler extends BaseBridgeHandler {
             response = null;
 
         } catch (XmppException e) {
-            logger.warn("XMPP Exception{}", e.getMessage());
+            logger.debug("XMPP Exception{}", e.getMessage());
             // E.g. a StanzaException, if the responder does not support the protocol or an
             // // internal-server-error has occurred.
         }
@@ -191,13 +191,13 @@ public class FreeAtHomeBridgeHandler extends BaseBridgeHandler {
 
             Value response = m_RpcManager.call(Jid.of("mrha@busch-jaeger.de/rpc"), "RemoteInterface.getAll",
                     Value.of("de"), Value.of(4), Value.of(0), Value.of(0)).getResult();
-            logger.warn("Message {}", response.getAsString());
+            logger.debug("Message {} ", response.getAsString());
             String resp = response.getAsString();
 
             return resp;
 
         } catch (XmppException e) {
-            logger.warn("XMPP Exception{}", e.getMessage());
+            logger.debug("XMPP Exception{} ", e.getMessage());
             // E.g. a StanzaException, if the responder does not support the protocol or an
             // internal-server-error has occurred.
         }
@@ -227,14 +227,14 @@ public class FreeAtHomeBridgeHandler extends BaseBridgeHandler {
         m_XmppClient = XmppClient.create("busch-jaeger.de", m_XmppConfiguration, m_WebSocketConfiguration);
 
         // Listen for inbound messages.
-        m_XmppClient.addInboundMessageListener(e -> logger.debug("Received Message {}", e.getMessage()));
+        m_XmppClient.addInboundMessageListener(e -> logger.debug("Received Message {} ", e.getMessage()));
         m_XmppClient.addInboundMessageListener(e -> onMessageEvent(e));
         m_XmppClient.addOutboundMessageListener(e -> onMessageEvent(e));
-        m_XmppClient.addInboundIQListener(e -> logger.debug("Received IQ {}", e.toString()));
+        m_XmppClient.addInboundIQListener(e -> logger.debug("Received IQ {} ", e.toString()));
         m_XmppClient.addInboundIQListener(e -> onIQEvent(e));
 
         // Listen for inbound presence.
-        m_XmppClient.addInboundPresenceListener(e -> logger.debug("Received Presence {}", e.getPresence()));
+        m_XmppClient.addInboundPresenceListener(e -> logger.debug("Received Presence {} ", e.getPresence()));
         m_XmppClient.addInboundPresenceListener(e -> onPresenceEvent(e));
 
         m_XmppClient.addSessionStatusListener(e -> onUpdateXMPPStatus(e));
@@ -246,7 +246,7 @@ public class FreeAtHomeBridgeHandler extends BaseBridgeHandler {
         updateManager.setEnabled(true);
 
         updateManager.addUpdateListener(e -> onUpdateEvent(e));
-        updateManager.addUpdateListener(e -> logger.debug("Received UpdateEvent"));
+        updateManager.addUpdateListener(e -> logger.debug("Received UpdateEvent "));
 
         // Connect XMPP client over websocket layer
         try {
@@ -261,7 +261,7 @@ public class FreeAtHomeBridgeHandler extends BaseBridgeHandler {
                 return;
             }
         } catch (Exception e3) {
-            logger.warn("Warning {}", e3.toString());
+            logger.debug("Warning {}", e3.toString());
         }
 
         // Login
@@ -273,13 +273,13 @@ public class FreeAtHomeBridgeHandler extends BaseBridgeHandler {
 
             Presence presence = new Presence(Jid.of("mrha@busch-jaeger.de/rpc"), Presence.Type.SUBSCRIBE, null, null,
                     null, null, Jid.of(jid), null, null, null);
-            logger.warn("Presence update {}", presence.toString());
+            logger.debug("Presence update {}", presence.toString());
             m_XmppClient.send(presence);
 
         } catch (XmppException e1) {
             onConnectionLost(ThingStatusDetail.CONFIGURATION_ERROR,
                     "Login on SysAP with login name: " + m_Configuration.login);
-            logger.error("Can not login with{}", m_Configuration.login);
+            logger.error("Can not login with{} ", m_Configuration.login);
             try {
                 m_XmppClient.close();
             } catch (XmppException e2) {
@@ -301,7 +301,6 @@ public class FreeAtHomeBridgeHandler extends BaseBridgeHandler {
         m_RpcManager = m_XmppClient.getManager(RpcManager.class);
 
         Presence presence = new Presence();
-
         m_XmppClient.send(presence);
 
         onConnectionEstablished();
@@ -398,10 +397,10 @@ public class FreeAtHomeBridgeHandler extends BaseBridgeHandler {
         Presence presence = e.getPresence();
         // EntityCapabilities c = presence.getExtension(EntityCapabilities.class);
         if (presence.getType() == Presence.Type.SUBSCRIBE) {
-            logger.warn("Presence {}", presence.toString());
+            logger.debug("Presence {}", presence.toString());
         }
         m_XmppClient.getManager(PresenceManager.class).approveSubscription(presence.getFrom());
-        logger.warn("Presence {}", presence.toString());
+        logger.debug("Presence {}", presence.toString());
 
     }
 
