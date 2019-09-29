@@ -176,7 +176,7 @@ public class FreeAtHomeBridgeHandler extends BaseBridgeHandler {
 
             Value response = m_RpcManager.call(Jid.of("mrha@busch-jaeger.de/rpc"), "RemoteInterface.setDatapoint",
                     Value.of(adress), Value.of(value)).getResult();
-            logger.warn("Datapoint Result {}", response.getAsString());
+            logger.debug("Datapoint Result {}", response.getAsString());
             response = null;
 
         } catch (XmppException e) {

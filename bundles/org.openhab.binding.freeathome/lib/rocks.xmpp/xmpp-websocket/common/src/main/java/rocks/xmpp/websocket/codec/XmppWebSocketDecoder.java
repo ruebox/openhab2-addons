@@ -70,28 +70,36 @@ public final class XmppWebSocketDecoder implements Decoder.Text<StreamElement> {
             String Domain = "busch-jaeger.de";
             Jid From = Jid.of(Domain);
             Open streamHead = new Open(null, From, ID, null, "1.0");
-            // logger.warning("Converting wrong server websocket stream: " + streamHead.toString());
+            //logger.warning("Converting wrong server websocket stream: " + streamHead.toString());
             return streamHead;
         }
-       // Below code replaces node = https://github.com/qxmpp-project/qxmpp in the receiving stream from SysAp
-       /* else if (s.contains("github")) {
-            String correctedElement = s.replace("https://github.com/qxmpp-project/qxmpp", "http://xmpp.rocks");
-            logger.warning("Decoding corrected server websocket stream " + correctedElement);
-            try (StringReader reader = new StringReader(correctedElement)) {
+        else if (s.contains("presence") && s.contains("github") && !s.contains("xmlns=\"jabber:client\"")){
+            String addString = "xmlns=\"jabber:client\" ";
+            String newString = s.substring(0,10) + addString.substring(0, addString.length()) + s.substring(10, s.length());
+            try (StringReader reader = new StringReader(newString)) {
+                //logger.warning("Decoding presence server stream " + newString);
                 StreamElement streamElement = (StreamElement) unmarshaller.get().unmarshal(reader);
                 if (onRead != null) {
-                    onRead.accept(correctedElement, streamElement);
+                    onRead.accept(newString, streamElement);
                 }
             return streamElement;
         } catch (JAXBException e) {
-            throw new DecodeException(correctedElement, e.getMessage(), e);
+            throw new DecodeException(newString, e.getMessage(), e);
+        }            
         }
-        }
-        */
-        else if (s.contains("presence") && s.contains("github")){
-            //logger.warning("Decoding presence stream from server: " + s);
-            return null;
-            
+        else if (s.contains("iq") && s.contains("methodResponse") && !s.contains("xmlns=\"jabber:client\"")){
+            String addString = "xmlns=\"jabber:client\" ";
+            String newString = s.substring(0,4) + addString.substring(0, addString.length()) + s.substring(4, s.length());
+            try (StringReader reader = new StringReader(newString)) {
+                //logger.warning("Decoding method server stream " + newString);
+                StreamElement streamElement = (StreamElement) unmarshaller.get().unmarshal(reader);
+                if (onRead != null) {
+                    onRead.accept(newString, streamElement);
+                }
+            return streamElement;
+        } catch (JAXBException e) {
+            throw new DecodeException(newString, e.getMessage(), e);
+        }            
         }
         else {
             try (StringReader reader = new StringReader(s)) {
