@@ -73,7 +73,7 @@ public final class XmppWebSocketDecoder implements Decoder.Text<StreamElement> {
             //logger.warning("Converting wrong server websocket stream: " + streamHead.toString());
             return streamHead;
         }
-        else if (s.contains("presence") && s.contains("github") && !s.contains("xmlns=\"jabber:client\"")){
+        else if (s.contains("presence") && !s.contains("xmlns=\"jabber:client\"")){
             String addString = "xmlns=\"jabber:client\" ";
             String newString = s.substring(0,10) + addString.substring(0, addString.length()) + s.substring(10, s.length());
             try (StringReader reader = new StringReader(newString)) {
@@ -87,7 +87,7 @@ public final class XmppWebSocketDecoder implements Decoder.Text<StreamElement> {
             throw new DecodeException(newString, e.getMessage(), e);
         }            
         }
-        else if (s.contains("iq") && s.contains("methodResponse") && !s.contains("xmlns=\"jabber:client\"")){
+        else if (s.contains("iq") && !s.contains("xmlns=\"jabber:client\"")){
             String addString = "xmlns=\"jabber:client\" ";
             String newString = s.substring(0,4) + addString.substring(0, addString.length()) + s.substring(4, s.length());
             try (StringReader reader = new StringReader(newString)) {
