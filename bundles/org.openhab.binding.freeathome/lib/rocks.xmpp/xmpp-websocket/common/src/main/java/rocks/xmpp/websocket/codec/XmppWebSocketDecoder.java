@@ -65,7 +65,7 @@ public final class XmppWebSocketDecoder implements Decoder.Text<StreamElement> {
     @Override
     public final StreamElement decode(final String s) throws DecodeException {
         //Below code valid for 2.2.4 < SysAp version < 2.3.0 
-        if (s.contains("stream:stream")) {
+        if (s.contains("<stream:stream")) {
             String ID = s.substring(s.indexOf("id")+4, s.indexOf("id")+40);
             String Domain = "busch-jaeger.de";
             Jid From = Jid.of(Domain);
@@ -73,7 +73,7 @@ public final class XmppWebSocketDecoder implements Decoder.Text<StreamElement> {
             //logger.warning("Converting wrong server websocket stream: " + streamHead.toString());
             return streamHead;
         }
-        else if (s.contains("presence") && !s.contains("xmlns=\"jabber:client\"")){
+        else if (s.contains("<presence") && !s.contains("xmlns=\"jabber:client\"")){
             String addString = "xmlns=\"jabber:client\" ";
             String newString = s.substring(0,10) + addString.substring(0, addString.length()) + s.substring(10, s.length());
             try (StringReader reader = new StringReader(newString)) {
@@ -87,11 +87,11 @@ public final class XmppWebSocketDecoder implements Decoder.Text<StreamElement> {
             throw new DecodeException(newString, e.getMessage(), e);
         }            
         }
-        else if (s.contains("iq") && !s.contains("xmlns=\"jabber:client\"")){
+        else if (s.contains("<iq") && !s.contains("xmlns=\"jabber:client\"")){
             String addString = "xmlns=\"jabber:client\" ";
             String newString = s.substring(0,4) + addString.substring(0, addString.length()) + s.substring(4, s.length());
             try (StringReader reader = new StringReader(newString)) {
-                //logger.warning("Decoding method server stream " + newString);
+                //logger.warning("Decoding IQ server stream " + newString);
                 StreamElement streamElement = (StreamElement) unmarshaller.get().unmarshal(reader);
                 if (onRead != null) {
                     onRead.accept(newString, streamElement);
@@ -101,9 +101,21 @@ public final class XmppWebSocketDecoder implements Decoder.Text<StreamElement> {
             throw new DecodeException(newString, e.getMessage(), e);
         }            
         }
+        else if (s.contains("<presence") && s.contains("subscribed")){
+            try (StringReader reader = new StringReader(s)) {
+                logger.info("Successful Connection");
+                StreamElement streamElement = (StreamElement) unmarshaller.get().unmarshal(reader);
+                if (onRead != null) {
+                    onRead.accept(s, streamElement);
+                }
+            return streamElement;
+        } catch (JAXBException e) {
+            throw new DecodeException(s, e.getMessage(), e);
+        }
+        }
         else {
             try (StringReader reader = new StringReader(s)) {
-                //logger.warning("Decoding server stream " + s);
+                //logger.warning("Decoding regular server stream " + s);
                 StreamElement streamElement = (StreamElement) unmarshaller.get().unmarshal(reader);
                 if (onRead != null) {
                     onRead.accept(s, streamElement);

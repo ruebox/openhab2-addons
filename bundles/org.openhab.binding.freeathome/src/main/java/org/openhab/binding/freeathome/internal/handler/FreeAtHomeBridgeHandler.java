@@ -111,7 +111,6 @@ public class FreeAtHomeBridgeHandler extends BaseBridgeHandler {
         logger.debug("Port                  {}.", m_Configuration.port);
         logger.debug("Login                 {}.", m_Configuration.login);
         logger.debug("Password              {}.", m_Configuration.password);
-        logger.debug("log_enabled           {}.", m_Configuration.log_enabled);
         logger.debug("log_dir               {}.", m_Configuration.log_dir);
         logger.debug("dummy_things_enabled  {}.", m_Configuration.dummy_things_enabled);
 
@@ -130,7 +129,6 @@ public class FreeAtHomeBridgeHandler extends BaseBridgeHandler {
         }
 
         g_freeAtHomeBridgeHandler = this;
-
         // TODO iterate over things and register update
 
     }
@@ -279,7 +277,7 @@ public class FreeAtHomeBridgeHandler extends BaseBridgeHandler {
         } catch (XmppException e1) {
             onConnectionLost(ThingStatusDetail.CONFIGURATION_ERROR,
                     "Login on SysAP with login name: " + m_Configuration.login);
-            logger.error("Can not login with{} ", m_Configuration.login);
+            logger.error("Can not login with {}", m_Configuration.login);
             try {
                 m_XmppClient.close();
             } catch (XmppException e2) {
