@@ -78,6 +78,9 @@ public final class XmppWebSocketDecoder implements Decoder.Text<StreamElement> {
             String newString = s.substring(0,10) + addString.substring(0, addString.length()) + s.substring(10, s.length());
             try (StringReader reader = new StringReader(newString)) {
                 //logger.warning("Decoding presence server stream " + newString);
+                if (newString.contains("<presence") && newString.contains("subscribed")) {
+                    logger.warning("Successful Websocket Connection");
+                }
                 StreamElement streamElement = (StreamElement) unmarshaller.get().unmarshal(reader);
                 if (onRead != null) {
                     onRead.accept(newString, streamElement);
@@ -100,18 +103,6 @@ public final class XmppWebSocketDecoder implements Decoder.Text<StreamElement> {
         } catch (JAXBException e) {
             throw new DecodeException(newString, e.getMessage(), e);
         }            
-        }
-        else if (s.contains("<presence") && s.contains("subscribed")){
-            try (StringReader reader = new StringReader(s)) {
-                logger.info("Successful Connection");
-                StreamElement streamElement = (StreamElement) unmarshaller.get().unmarshal(reader);
-                if (onRead != null) {
-                    onRead.accept(s, streamElement);
-                }
-            return streamElement;
-        } catch (JAXBException e) {
-            throw new DecodeException(s, e.getMessage(), e);
-        }
         }
         else {
             try (StringReader reader = new StringReader(s)) {
