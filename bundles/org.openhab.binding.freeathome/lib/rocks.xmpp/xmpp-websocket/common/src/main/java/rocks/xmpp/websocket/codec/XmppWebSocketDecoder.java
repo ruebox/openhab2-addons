@@ -77,10 +77,7 @@ public final class XmppWebSocketDecoder implements Decoder.Text<StreamElement> {
             String addString = "xmlns=\"jabber:client\" ";
             String newString = s.substring(0,10) + addString.substring(0, addString.length()) + s.substring(10, s.length());
             try (StringReader reader = new StringReader(newString)) {
-                //logger.warning("Decoding presence server stream " + newString);
-                if (newString.contains("<presence") && newString.contains("subscribed")) {
-                    logger.warning("Successful Websocket Connection");
-                }
+                // logger.warning("Decoding presence server stream " + newString);
                 StreamElement streamElement = (StreamElement) unmarshaller.get().unmarshal(reader);
                 if (onRead != null) {
                     onRead.accept(newString, streamElement);
@@ -94,7 +91,7 @@ public final class XmppWebSocketDecoder implements Decoder.Text<StreamElement> {
             String addString = "xmlns=\"jabber:client\" ";
             String newString = s.substring(0,4) + addString.substring(0, addString.length()) + s.substring(4, s.length());
             try (StringReader reader = new StringReader(newString)) {
-                //logger.warning("Decoding IQ server stream " + newString);
+                // logger.warning("Decoding IQ server stream " + newString);
                 StreamElement streamElement = (StreamElement) unmarshaller.get().unmarshal(reader);
                 if (onRead != null) {
                     onRead.accept(newString, streamElement);
@@ -106,7 +103,10 @@ public final class XmppWebSocketDecoder implements Decoder.Text<StreamElement> {
         }
         else {
             try (StringReader reader = new StringReader(s)) {
-                //logger.warning("Decoding regular server stream " + s);
+                // logger.warning("Decoding regular server stream " + s);
+                if (s.contains("presence") && s.contains("subscribed")) {
+                    logger.warning("Successful Websocket Connection");
+                }
                 StreamElement streamElement = (StreamElement) unmarshaller.get().unmarshal(reader);
                 if (onRead != null) {
                     onRead.accept(s, streamElement);
