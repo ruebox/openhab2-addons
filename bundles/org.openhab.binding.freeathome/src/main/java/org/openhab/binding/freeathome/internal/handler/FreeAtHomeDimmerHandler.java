@@ -1,12 +1,16 @@
 /**
- * Copyright (c) 2014-2018 by the respective copyright holders.
+ * Copyright (c) 2010-2019 Contributors to the openHAB project
  *
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * See the NOTICE file(s) distributed with this work for additional
+ * information.
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0
+ *
+ * SPDX-License-Identifier: EPL-2.0
  */
-package org.openhab.binding.freeathome.handler;
+package org.openhab.binding.freeathome.internal.handler;
 
 import org.eclipse.smarthome.core.library.types.DecimalType;
 import org.eclipse.smarthome.core.library.types.OnOffType;
@@ -15,11 +19,11 @@ import org.eclipse.smarthome.core.library.types.UpDownType;
 import org.eclipse.smarthome.core.thing.ChannelUID;
 import org.eclipse.smarthome.core.thing.Thing;
 import org.eclipse.smarthome.core.types.Command;
-import org.openhab.binding.freeathome.FreeAtHomeBindingConstants;
-import org.openhab.binding.freeathome.config.FreeAtHomeDimmerConfig;
+import org.openhab.binding.freeathome.internal.FreeAtHomeBindingConstants;
 import org.openhab.binding.freeathome.internal.FreeAtHomeUpdateChannel;
-import org.openhab.binding.freeathome.internal.stateconvert.DefaultOnOffTypeConverter;
-import org.openhab.binding.freeathome.internal.stateconvert.DefaultPercentTypeConverter;
+import org.openhab.binding.freeathome.internal.config.FreeAtHomeDimmerConfig;
+import org.openhab.binding.freeathome.internal.internal.stateconvert.DefaultOnOffTypeConverter;
+import org.openhab.binding.freeathome.internal.internal.stateconvert.DefaultPercentTypeConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,6 +31,7 @@ import org.slf4j.LoggerFactory;
  * The {@link FreeAtHomeDimmerHandler} represents a dimmer
  *
  * @author ruebox - Initial contribution
+ * @author kjoglum - Update copyright header / package / logging
  */
 
 public class FreeAtHomeDimmerHandler extends FreeAtHomeBaseHandler {
@@ -61,13 +66,13 @@ public class FreeAtHomeDimmerHandler extends FreeAtHomeBaseHandler {
 
                 if (udCommand.equals(OnOffType.ON)) {
 
-                    logger.debug("Switch on" + channel);
+                    logger.debug("Switch ON {}", channel);
                     bridge.setDataPoint(channel, "1");
 
                 }
                 if (udCommand.equals(OnOffType.OFF)) {
 
-                    logger.debug("Switch off: " + channel);
+                    logger.debug("Switch OFF {}", channel);
                     bridge.setDataPoint(channel, "0");
 
                 }
@@ -83,8 +88,8 @@ public class FreeAtHomeDimmerHandler extends FreeAtHomeBaseHandler {
             if (udCommand.equals(StopMoveType.STOP)) {
                 String channel = m_Configuration.deviceId + "/" + m_Configuration.channelId + "/"
                         + m_Configuration.dataPointIdFade;
-
-                logger.debug("Fading STOP" + channel + " 0");
+                String raffstoreSwitch = "Fading STOP " + channel + " 0";
+                logger.debug("Event {}", raffstoreSwitch);
                 bridge.setDataPoint(channel, "0");
             }
         }
@@ -99,7 +104,7 @@ public class FreeAtHomeDimmerHandler extends FreeAtHomeBaseHandler {
                 String channel = m_Configuration.deviceId + "/" + m_Configuration.channelId + "/"
                         + m_Configuration.dataPointIdFade;
 
-                logger.info("Called channel fading: " + channel);
+                logger.info("Called channel fading {}", channel);
 
                 if (udCommand.equals(UpDownType.UP)) {
                     logger.debug("Fading UP");
@@ -122,7 +127,8 @@ public class FreeAtHomeDimmerHandler extends FreeAtHomeBaseHandler {
                 String channel = m_Configuration.deviceId + "/" + m_Configuration.channelId + "/"
                         + m_Configuration.dataPointIdValue;
 
-                logger.debug("Set target value: " + channel + "   value(" + udCommand.toString() + ")");
+                String dimmerSwitch = "Set target value: " + channel + " value(" + udCommand.toString() + ")";
+                logger.debug("Target Value {}", dimmerSwitch);
                 bridge.setDataPoint(channel, udCommand.toString());
             }
         }

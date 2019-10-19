@@ -180,7 +180,7 @@ public final class WebSocketConnectionConfiguration extends ClientConnectionConf
             } else if (xmppSession.getDomain() != null) {
                 // If a URL has not been set, try to find the URL by the domain via a DNS-TXT lookup as described in XEP-0156.
                 String resolvedUrl = findWebSocketEndpoint(xmppSession.getDomain().toString(), xmppSession.getConfiguration().getNameServer(), getConnectTimeout());
-                //logger.warning(resolvedUrl);
+                logger.warning(resolvedUrl);
                 if (resolvedUrl != null) {
                     uri = new URI(resolvedUrl);
                 } else {

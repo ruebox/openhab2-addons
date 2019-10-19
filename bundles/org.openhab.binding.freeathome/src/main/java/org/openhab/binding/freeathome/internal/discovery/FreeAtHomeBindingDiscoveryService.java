@@ -1,13 +1,16 @@
 /**
- * Copyright (c) 2014-2018 by the respective copyright holders.
+ * Copyright (c) 2010-2019 Contributors to the openHAB project
  *
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * See the NOTICE file(s) distributed with this work for additional
+ * information.
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0
+ *
+ * SPDX-License-Identifier: EPL-2.0
  */
-
-package org.openhab.binding.freeathome.discovery;
+package org.openhab.binding.freeathome.internal.discovery;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -15,24 +18,25 @@ import java.util.Map;
 import org.eclipse.smarthome.config.discovery.AbstractDiscoveryService;
 import org.eclipse.smarthome.config.discovery.DiscoveryResult;
 import org.eclipse.smarthome.config.discovery.DiscoveryResultBuilder;
+import org.eclipse.smarthome.config.discovery.DiscoveryService;
 import org.eclipse.smarthome.core.thing.ThingUID;
-import org.openhab.binding.freeathome.FreeAtHomeBindingConstants;
-import org.openhab.binding.freeathome.handler.FreeAtHomeBridgeHandler;
-import org.openhab.binding.freeathome.handler.FreeAtHomeRaffStoreHandler;
+import org.openhab.binding.freeathome.internal.FreeAtHomeBindingConstants;
+import org.openhab.binding.freeathome.internal.handler.FreeAtHomeBridgeHandler;
+import org.osgi.service.component.annotations.Component;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-//@Component(service = DiscoveryService.class, immediate = true, configurationPid = "discovery.freeathome")
 
 /**
  * Implements manually triggered discovery
  *
- * @author ruebox
+ * @author ruebox - Initial contribution
+ * @author kjoglum - Update copyright header / package / logging / touch / discovery service
  *
  */
+@Component(service = DiscoveryService.class)
 public class FreeAtHomeBindingDiscoveryService extends AbstractDiscoveryService {
 
-    private Logger logger = LoggerFactory.getLogger(FreeAtHomeRaffStoreHandler.class);
+    private final Logger logger = LoggerFactory.getLogger(FreeAtHomeBindingDiscoveryService.class);
 
     public FreeAtHomeBindingDiscoveryService(int timeout) throws IllegalArgumentException {
         super(FreeAtHomeBindingConstants.SUPPORTED_THING_TYPES_UIDS, 90, false);
@@ -59,7 +63,7 @@ public class FreeAtHomeBindingDiscoveryService extends AbstractDiscoveryService 
 
             while (iter.iter_hasnext()) {
                 FreeAtHomeBindingInventoryIterator.DeviceDescription device = iter.iter_get();
-                logger.debug(device.toString());
+                logger.debug("Device {}", device);
 
                 String deviceTypeId = device.DeviceTypeId;
 
@@ -277,6 +281,19 @@ public class FreeAtHomeBindingDiscoveryService extends AbstractDiscoveryService 
                         thingDiscovered(discoveryResult);
                         break;
                     }
+                    // touch
+                    case "1020": {
+                        ThingUID uid = new ThingUID(FreeAtHomeBindingConstants.TOUCH_THING_TYPEUID, device.Serial);
+                        Map<String, Object> properties = new HashMap<>(1);
+                        properties.put("deviceId", device.Serial);
+
+                        DiscoveryResult discoveryResult = DiscoveryResultBuilder
+                                .create(uid).withLabel(device.DeviceDisplayName + "_" + device.DeviceTypeName + "_"
+                                        + deviceTypeId + "_" + device.Serial)
+                                .withBridge(bridgeUID).withProperties(properties).build();
+                        thingDiscovered(discoveryResult);
+                        break;
+                    }
                     // neue Szene
                     case "4800": {
                         ThingUID uid = new ThingUID(FreeAtHomeBindingConstants.SCENE_THING_TYPEUID, device.Serial);
@@ -401,7 +418,7 @@ public class FreeAtHomeBindingDiscoveryService extends AbstractDiscoveryService 
 
     @Override
     protected void stopBackgroundDiscovery() {
-        logger.debug("Stop free at home background discovery");
+        logger.debug("Stop freeathome background discovery");
 
     }
 

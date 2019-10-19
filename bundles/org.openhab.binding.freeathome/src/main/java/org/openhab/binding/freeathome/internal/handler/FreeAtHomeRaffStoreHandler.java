@@ -1,14 +1,18 @@
 /**
- * Copyright (c) 2014-2018 by the respective copyright holders.
+ * Copyright (c) 2010-2019 Contributors to the openHAB project
  *
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * See the NOTICE file(s) distributed with this work for additional
+ * information.
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0
+ *
+ * SPDX-License-Identifier: EPL-2.0
  */
-package org.openhab.binding.freeathome.handler;
+package org.openhab.binding.freeathome.internal.handler;
 
-import static org.openhab.binding.freeathome.FreeAtHomeBindingConstants.*;
+import static org.openhab.binding.freeathome.internal.FreeAtHomeBindingConstants.*;
 
 import org.eclipse.smarthome.core.library.types.DecimalType;
 import org.eclipse.smarthome.core.library.types.StopMoveType;
@@ -16,10 +20,10 @@ import org.eclipse.smarthome.core.library.types.UpDownType;
 import org.eclipse.smarthome.core.thing.ChannelUID;
 import org.eclipse.smarthome.core.thing.Thing;
 import org.eclipse.smarthome.core.types.Command;
-import org.openhab.binding.freeathome.FreeAtHomeBindingConstants;
-import org.openhab.binding.freeathome.config.FreeAtHomeRaffStoreConfig;
+import org.openhab.binding.freeathome.internal.FreeAtHomeBindingConstants;
 import org.openhab.binding.freeathome.internal.FreeAtHomeUpdateChannel;
-import org.openhab.binding.freeathome.internal.stateconvert.DefaultPercentTypeConverter;
+import org.openhab.binding.freeathome.internal.config.FreeAtHomeRaffStoreConfig;
+import org.openhab.binding.freeathome.internal.internal.stateconvert.DefaultPercentTypeConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,6 +31,7 @@ import org.slf4j.LoggerFactory;
  * The {@link FreeAtHomeRaffStoreHandler} represents raffstore switch or group
  *
  * @author ruebox - Initial contribution
+ * @author kjoglum - Update copyright header / package / logging
  */
 public class FreeAtHomeRaffStoreHandler extends FreeAtHomeBaseHandler {
 
@@ -57,8 +62,8 @@ public class FreeAtHomeRaffStoreHandler extends FreeAtHomeBaseHandler {
                 DecimalType udCommand = (DecimalType) command;
                 String channel = m_Configuration.DeviceId + "/" + m_Configuration.ChannelId + "/"
                         + m_Configuration.InputIdPercentage;
-
-                logger.debug("Set percentage value: " + channel + "   value(" + udCommand.toString() + ")");
+                String raffstoreSwitch = "Set percentage value: " + channel + " value(" + udCommand.toString() + ")";
+                logger.debug("Set percentage value {}", raffstoreSwitch);
                 bridge.setDataPoint(channel, udCommand.toString());
             }
         }
@@ -69,7 +74,7 @@ public class FreeAtHomeRaffStoreHandler extends FreeAtHomeBaseHandler {
                 String channel = m_Configuration.DeviceId + "/" + m_Configuration.ChannelId + "/"
                         + m_Configuration.InputIdStepwise;
 
-                logger.debug("Stop complete run" + channel);
+                logger.debug("Stop complete run {}", channel);
                 bridge.setDataPoint(channel, "1");
             }
         }
@@ -84,7 +89,7 @@ public class FreeAtHomeRaffStoreHandler extends FreeAtHomeBaseHandler {
                 String channel = m_Configuration.DeviceId + "/" + m_Configuration.ChannelId + "/"
                         + m_Configuration.InputIdStepwise;
 
-                logger.info("Called channel STEPWISE: " + channel);
+                logger.info("Called channel STEPWISE {}", channel);
 
                 if (udCommand.equals(UpDownType.UP)) {
                     logger.debug("STEPWISE UP");
@@ -99,7 +104,7 @@ public class FreeAtHomeRaffStoreHandler extends FreeAtHomeBaseHandler {
                 String channel = m_Configuration.DeviceId + "/" + m_Configuration.ChannelId + "/"
                         + m_Configuration.InputIdComplete;
 
-                logger.debug("Called channel COMPLETE: " + channel);
+                logger.debug("Called channel COMPLETE {}", channel);
 
                 if (udCommand.equals(UpDownType.UP)) {
                     logger.debug("COMPLETE UP");

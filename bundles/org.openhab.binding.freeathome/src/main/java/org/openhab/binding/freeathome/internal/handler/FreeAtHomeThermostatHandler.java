@@ -1,12 +1,16 @@
 /**
- * Copyright (c) 2014-2018 by the respective copyright holders.
+ * Copyright (c) 2010-2019 Contributors to the openHAB project
  *
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * See the NOTICE file(s) distributed with this work for additional
+ * information.
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0
+ *
+ * SPDX-License-Identifier: EPL-2.0
  */
-package org.openhab.binding.freeathome.handler;
+package org.openhab.binding.freeathome.internal.handler;
 
 import org.eclipse.smarthome.core.library.types.DecimalType;
 import org.eclipse.smarthome.core.library.types.OnOffType;
@@ -14,12 +18,12 @@ import org.eclipse.smarthome.core.thing.ChannelUID;
 import org.eclipse.smarthome.core.thing.Thing;
 import org.eclipse.smarthome.core.types.Command;
 import org.eclipse.smarthome.core.types.State;
-import org.openhab.binding.freeathome.FreeAtHomeBindingConstants;
-import org.openhab.binding.freeathome.config.FreeAtHomeThermostatConfig;
+import org.openhab.binding.freeathome.internal.FreeAtHomeBindingConstants;
 import org.openhab.binding.freeathome.internal.FreeAtHomeUpdateChannel;
-import org.openhab.binding.freeathome.internal.stateconvert.DefaultDecimalTypeConverter;
-import org.openhab.binding.freeathome.internal.stateconvert.DefaultOnOffTypeConverter;
-import org.openhab.binding.freeathome.internal.stateconvert.StateConverter;
+import org.openhab.binding.freeathome.internal.config.FreeAtHomeThermostatConfig;
+import org.openhab.binding.freeathome.internal.internal.stateconvert.DefaultDecimalTypeConverter;
+import org.openhab.binding.freeathome.internal.internal.stateconvert.DefaultOnOffTypeConverter;
+import org.openhab.binding.freeathome.internal.internal.stateconvert.StateConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,6 +31,7 @@ import org.slf4j.LoggerFactory;
  * The {@link FreeAtHomeThermostatHandler} represents thermostat
  *
  * @author ruebox - Initial contribution
+ * @author kjoglum - Update copyright header / package / logging
  */
 public class FreeAtHomeThermostatHandler extends FreeAtHomeBaseHandler {
 
@@ -56,8 +61,9 @@ public class FreeAtHomeThermostatHandler extends FreeAtHomeBaseHandler {
                 DecimalType udCommand = (DecimalType) command;
                 String channel = m_Configuration.deviceId + "/" + m_Configuration.channelId + "/"
                         + m_Configuration.dataPointIdTarget;
-
-                logger.debug("Set target temperature: " + channel + "   value(" + udCommand.toString() + ")");
+                String targetTemperature = "Set target temperature: " + channel + " value(" + udCommand.toString()
+                        + ")";
+                logger.debug("Set target temperature {}", targetTemperature);
                 bridge.setDataPoint(channel, udCommand.toString());
             }
         }
@@ -74,13 +80,13 @@ public class FreeAtHomeThermostatHandler extends FreeAtHomeBaseHandler {
 
                 if (udCommand.equals(OnOffType.ON)) {
 
-                    logger.debug("Thermostat: Switch on " + channel);
+                    logger.debug("Thermostat Switch ON {}", channel);
                     bridge.setDataPoint(channel, "1");
 
                 }
                 if (udCommand.equals(OnOffType.OFF)) {
 
-                    logger.debug("Thermostat: Switch off " + channel);
+                    logger.debug("Thermostat Switch OFF {}", channel);
                     bridge.setDataPoint(channel, "0");
 
                 }
@@ -93,13 +99,13 @@ public class FreeAtHomeThermostatHandler extends FreeAtHomeBaseHandler {
 
                 if (udCommand.equals(OnOffType.ON)) {
 
-                    logger.debug("Thermostat: Eco switch on " + channel);
+                    logger.debug("Thermostat ECO switch ON {}", channel);
                     bridge.setDataPoint(channel, "1");
 
                 }
                 if (udCommand.equals(OnOffType.OFF)) {
 
-                    logger.debug("Thermostat: Eco switch off " + channel);
+                    logger.debug("Thermostat ECO switch OFF {}", channel);
                     bridge.setDataPoint(channel, "0");
 
                 }

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<thing:thing-descriptions bindingId="freeathome"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:thing="https://openhab.org/schemas/thing-description/v1.0.0"
+    xsi:schemaLocation="https://openhab.org/schemas/thing-description/v1.0.0 https://openhab.org/schemas/thing-description-1.0.0.xsd">
+
+	<bridge-type id="bridge">
+		<label>Free@Home Bridge</label>
+		<description>This bridge represents the Free@Home Gateway.
+		</description>
+
+
+		<config-description>
+			<parameter-group name="identification">
+				<label>Identification</label>
+				<description>Hardware &amp; location identification</description>
+				<advanced>false</advanced>
+			</parameter-group>
+			<parameter-group name="network">
+				<label>Connection</label>
+				<description>Connection Settings</description>
+				<advanced>false</advanced>
+			</parameter-group>
+			<parameter-group name="debugging">
+				<label>Debugging</label>
+				<description>This section configures additional logging for debugging</description>
+				<advanced>true</advanced>
+			</parameter-group>
+
+
+			<parameter name="host" type="text" required="true" groupName="network">
+				<context>network-address</context>
+				<label>Sysap Host</label>
+				<description>Sysap host address of the Busch-Jaeger gateway
+				</description>
+				<default>192.168.192.100</default>
+			</parameter>
+			<parameter name="port" type="integer" required="false" min="1" max="65335" groupName="network">
+				<label>Busch-Jaeger sysap port</label>
+				<description>Port of the LAN gateway</description>
+				<default>5280</default>
+				<advanced>true</advanced>
+			</parameter>
+			<parameter name="login" type="text" required="true" groupName="identification">
+				<label>Login name</label>
+				<description>The login name</description>
+				<default>Installer</default>
+			</parameter>
+			<parameter name="password" type="text" required="true" groupName="identification">
+				<label>Password</label>
+				<description>Password for gateway
+				</description>
+				<default>12345</default>
+			</parameter>
+			<parameter name="log_dir" type="text" required="true" groupName="debugging">
+				<label>Log directory</label>
+				<description>Directory where log information is stored
+			</description>
+				<default>/tmp/</default>
+			</parameter>
+			<parameter name="log_enabled" type="boolean" required="true" groupName="debugging">
+				<label>Debug logging</label>
+				<description>Logging of debugging information to disk is enabled
+				</description>
+				<default>false</default>
+			</parameter>
+			<parameter name="dummy_things_enabled" type="boolean" required="true" groupName="debugging">
+				<label>Dummy things enabled</label>
+				<description>If enabled also unsupported things will be discovered but as dummy items without functionality
+				</description>
+				<default>false</default>
+			</parameter>
+
+		</config-description>
+	</bridge-type>
+
+
+</thing:thing-descriptions>

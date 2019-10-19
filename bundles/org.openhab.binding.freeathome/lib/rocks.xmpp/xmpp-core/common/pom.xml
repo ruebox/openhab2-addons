@@ -71,15 +71,6 @@
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>jaxb2-maven-plugin</artifactId>
                 <version>2.3.1</version>
-                <executions>
-                    <execution>
-                        <id>xjc</id>
-                        <phase>generate-test-sources</phase>
-                        <goals>
-                            <goal>xjc</goal>
-                        </goals>
-                    </execution>
-                </executions>
                 <configuration>
                     <outputDirectory>${project.build.directory}/generated-test-sources/jaxb</outputDirectory>
                     <packageName>rocks.xmpp.core.issue137</packageName>

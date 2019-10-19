@@ -360,7 +360,7 @@ public abstract class XmppSession implements StreamHandler, AutoCloseable {
                 try {
                     connection = connectionConfiguration.createConnection(this);
                     StreamHeader Head = StreamHeader.create(from, xmppServiceDomain, null, version, configuration.getLanguage(), namespace);
-                    //logger.warning(Head.toString());
+                    logger.warning(Head.toString());
                     connection.open(Head);
                     activeConnection = connection;
                     break;

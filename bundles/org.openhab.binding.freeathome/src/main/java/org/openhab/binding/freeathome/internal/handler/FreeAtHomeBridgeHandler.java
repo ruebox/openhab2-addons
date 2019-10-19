@@ -10,7 +10,7 @@
  *
  * SPDX-License-Identifier: EPL-2.0
  */
-package org.openhab.binding.freeathome.handler;
+package org.openhab.binding.freeathome.internal.handler;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -24,7 +24,6 @@ import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Scanner;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -38,15 +37,15 @@ import org.eclipse.smarthome.core.thing.binding.BaseBridgeHandler;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
-import org.openhab.binding.freeathome.config.FreeAtHomeBridgeConfig;
 import org.openhab.binding.freeathome.internal.FreeAtHomeUpdateHandler;
-import org.openhab.binding.freeathome.xmpp.rocks.extension.abb.com.protocol.update.Update;
-import org.openhab.binding.freeathome.xmpp.rocks.extension.abb.com.protocol.update.UpdateEvent;
-import org.openhab.binding.freeathome.xmpp.rocks.extension.abb.com.protocol.update.UpdateManager;
-import org.openhab.binding.freeathome.xmpp.rocks.extensions.abb.com.protocol.data.Channel;
-import org.openhab.binding.freeathome.xmpp.rocks.extensions.abb.com.protocol.data.DataPoint;
-import org.openhab.binding.freeathome.xmpp.rocks.extensions.abb.com.protocol.data.Device;
-import org.openhab.binding.freeathome.xmpp.rocks.extensions.abb.com.protocol.data.Project;
+import org.openhab.binding.freeathome.internal.config.FreeAtHomeBridgeConfig;
+import org.openhab.binding.freeathome.internal.xmpp.rocks.extension.abb.com.protocol.update.Update;
+import org.openhab.binding.freeathome.internal.xmpp.rocks.extension.abb.com.protocol.update.UpdateEvent;
+import org.openhab.binding.freeathome.internal.xmpp.rocks.extension.abb.com.protocol.update.UpdateManager;
+import org.openhab.binding.freeathome.internal.xmpp.rocks.extensions.abb.com.protocol.data.Channel;
+import org.openhab.binding.freeathome.internal.xmpp.rocks.extensions.abb.com.protocol.data.DataPoint;
+import org.openhab.binding.freeathome.internal.xmpp.rocks.extensions.abb.com.protocol.data.Device;
+import org.openhab.binding.freeathome.internal.xmpp.rocks.extensions.abb.com.protocol.data.Project;
 import org.slf4j.LoggerFactory;
 
 import rocks.xmpp.addr.Jid;
@@ -78,6 +77,8 @@ import rocks.xmpp.websocket.net.client.WebSocketConnectionConfiguration;
  *
  * @author ruebox - Initial contribution
  * @author kjoglum - Changed XMPP connection from BOSH to websocket
+  *@author ruebox - Backward support for older fw
+ * @author kjoglum - Update copyright header / package / change to websocket
  *
  */
 public class FreeAtHomeBridgeHandler extends BaseBridgeHandler {
@@ -154,10 +155,10 @@ public class FreeAtHomeBridgeHandler extends BaseBridgeHandler {
             m_XmppClient.close();
         } catch (XmppException e) {
             logger.error("Can not close XMPP Client");
-            logger.error(e.getMessage());
+            logger.error("Message {}", e.getMessage());
         } catch (Exception e) {
             logger.error("Can not close XMPP Client");
-            logger.error(e.getMessage());
+            logger.error("Message {}", e.getMessage());
         }
 
     };
@@ -181,11 +182,11 @@ public class FreeAtHomeBridgeHandler extends BaseBridgeHandler {
             Value response = m_RpcManager.call(Jid.of("mrha@busch-jaeger.de/rpc"), "RemoteInterface.setDatapoint",
                     Value.of(adress), Value.of(value)).getResult();
             logger.debug("Result:");
-            logger.debug(response.getAsString());
+            logger.debug("Result {}", response.getAsString());
             response = null;
 
         } catch (XmppException e) {
-            logger.error("XMPP Exception: " + e.getMessage());
+            logger.error("XMPP Exception{}", e.getMessage());
             // E.g. a StanzaException, if the responder does not support the protocol or an
             // // internal-server-error has occurred.
         }
@@ -197,13 +198,13 @@ public class FreeAtHomeBridgeHandler extends BaseBridgeHandler {
             Value response = m_RpcManager.call(Jid.of("mrha@busch-jaeger.de/rpc"), "RemoteInterface.getAll",
                     Value.of("de"), Value.of(4), Value.of(0), Value.of(0)).getResult();
             logger.debug("Result:");
-            logger.debug(response.getAsString());
+            logger.debug("Message {}", response.getAsString());
             String resp = response.getAsString();
 
             return resp;
 
         } catch (XmppException e) {
-            logger.error("XMPP Exception: " + e.getMessage());
+            logger.error("XMPP Exception{}", e.getMessage());
             // E.g. a StanzaException, if the responder does not support the protocol or an
             // internal-server-error has occurred.
         }
@@ -253,17 +254,17 @@ public class FreeAtHomeBridgeHandler extends BaseBridgeHandler {
                         Extension.of("http://abb.com/protocol/update", null, true, Update.class))
                 .build();
 
-        m_XmppClient = XmppClient.create("busch-jaeger.de", m_XmppConfiguration, m_ConnectionConfiguration);
+        m_XmppClient = XmppClient.create("busch-jaeger.de", m_XmppConfiguration, m_WebSocketConfiguration);
 
         // Listen for inbound messages.
-        m_XmppClient.addInboundMessageListener(e -> logger.debug("Received Message: " + e.getMessage()));
+        m_XmppClient.addInboundMessageListener(e -> logger.debug("Received Message {}", e.getMessage()));
         m_XmppClient.addInboundMessageListener(e -> onMessageEvent(e));
         m_XmppClient.addOutboundMessageListener(e -> onMessageEvent(e));
-        m_XmppClient.addInboundIQListener(e -> logger.debug("Received IQ: " + e.toString()));
+        m_XmppClient.addInboundIQListener(e -> logger.debug("Received IQ {}", e.toString()));
         m_XmppClient.addInboundIQListener(e -> onIQEvent(e));
 
         // Listen for inbound presence.
-        m_XmppClient.addInboundPresenceListener(e -> logger.debug("Received Presence: " + e.getPresence()));
+        m_XmppClient.addInboundPresenceListener(e -> logger.debug("Received Presence {}", e.getPresence()));
         m_XmppClient.addInboundPresenceListener(e -> onPresenceEvent(e));
 
         m_XmppClient.addSessionStatusListener(e -> onUpdateXMPPStatus(e));
@@ -287,11 +288,11 @@ public class FreeAtHomeBridgeHandler extends BaseBridgeHandler {
             } catch (XmppException e1) {
                 onConnectionLost(ThingStatusDetail.COMMUNICATION_ERROR,
                         "Can not connect to SysAP with address: " + m_Configuration.host);
-                logger.warn(e1.toString());
+                logger.warn("Warning {}", e1.toString());
                 return;
             }
         } catch (Exception e3) {
-            logger.warn(e3.toString());
+            logger.warn("Warning {}", e3.toString());
         }
 
         // Login
@@ -308,7 +309,7 @@ public class FreeAtHomeBridgeHandler extends BaseBridgeHandler {
         } catch (XmppException e1) {
             onConnectionLost(ThingStatusDetail.CONFIGURATION_ERROR,
                     "Login on SysAP with login name: " + m_Configuration.login);
-            logger.error("Can not login with: " + m_Configuration.login);
+            logger.error("Can not login with{}", m_Configuration.login);
             try {
                 m_XmppClient.close();
             } catch (XmppException e2) {
@@ -317,7 +318,7 @@ public class FreeAtHomeBridgeHandler extends BaseBridgeHandler {
             }
             return;
         } catch (Exception e) {
-            logger.warn(e.toString());
+            logger.warn("Warning {}", e.toString());
             onConnectionLost(ThingStatusDetail.CONFIGURATION_ERROR,
                     "Login on SysAP with login name: " + m_Configuration.login + " (Login name could not be resolved)");
             try {
@@ -334,9 +335,8 @@ public class FreeAtHomeBridgeHandler extends BaseBridgeHandler {
 
         m_XmppClient.send(presence);
 
-        if (m_XmppClient.getStatus() == XmppClient.Status.AUTHENTICATED) {
-            onConnectionEstablished();
-        }
+        onConnectionEstablished();
+
     }
 
     private String getJid(String userName) throws Exception {
@@ -388,13 +388,14 @@ public class FreeAtHomeBridgeHandler extends BaseBridgeHandler {
             JSONObject currentUser = ((JSONObject) itr2.next());
             String login = (String) currentUser.get("name");
             String jid = (String) currentUser.get("jid");
-            logger.info("Login: " + login + "      with the current jid: " + jid);
+            String loginName = login + " with the current JID: " + jid;
+            logger.info("Login Parameters {}", loginName);
             if (login.equals(userName)) {
                 foundJid = jid;
             }
         }
-
-        logger.info("Matching jid for login(" + userName + ")      " + foundJid);
+        String loginMatch = "Matching JID for login: " + userName + " & " + foundJid;
+        logger.info("Login Match {}", loginMatch);
 
         return foundJid;
 
@@ -485,7 +486,7 @@ public class FreeAtHomeBridgeHandler extends BaseBridgeHandler {
     }
 
     private void onUpdateXMPPStatus(SessionStatusEvent e) {
-        logger.debug(e.toString());
+        logger.debug("Error {}", e.toString());
         if (e.getStatus() == XmppClient.Status.DISCONNECTED) {
             onConnectionLost(ThingStatusDetail.BRIDGE_OFFLINE, "XMPP connection lost");
         }
@@ -507,10 +508,10 @@ public class FreeAtHomeBridgeHandler extends BaseBridgeHandler {
         Presence presence = e.getPresence();
         // EntityCapabilities c = presence.getExtension(EntityCapabilities.class);
         if (presence.getType() == Presence.Type.SUBSCRIBE) {
-            logger.debug(presence.toString());
+            logger.debug("Presence {}", presence.toString());
         }
         m_XmppClient.getManager(PresenceManager.class).approveSubscription(presence.getFrom());
-        logger.debug(presence.toString());
+        logger.debug("Presence {}", presence.toString());
 
     }
 
@@ -536,106 +537,99 @@ public class FreeAtHomeBridgeHandler extends BaseBridgeHandler {
             } catch (IOException e3) {
                 // TODO Auto-generated catch block
                 logger.error("Ops!", e3);
-                logger.error(e3.getMessage());
+                logger.error("Error {}", e3.getMessage());
             } catch (Exception ex) {
                 logger.error("Ops!", ex);
-                logger.error(ex.getMessage());
+                logger.error("Error {}", ex.getMessage());
             }
         }
 
-        if (event == null) {
-            logger.debug("Event.class extension can not be extracted");
-            return;
-        }
+        logger.debug("Namespace {}", event.getNode());
+        if (Update.NAMESPACE.equals(event.getNode())) {
+            for (Item item : event.getItems()) {
 
-        else {
-            logger.debug("Namespace: " + event.getNode());
-            if (Update.NAMESPACE.equals(event.getNode())) {
-                for (Item item : event.getItems()) {
+                logger.debug("Payload of Item {}", item.getPayload().toString());
 
-                    logger.debug("Payload of item" + item.getPayload().toString());
+                if (item.getPayload() instanceof org.openhab.binding.freeathome.internal.xmpp.rocks.extension.abb.com.protocol.update.Update) {
+                    org.openhab.binding.freeathome.internal.xmpp.rocks.extension.abb.com.protocol.update.Update updateData = (org.openhab.binding.freeathome.internal.xmpp.rocks.extension.abb.com.protocol.update.Update) item
+                            .getPayload();
+                    String data = updateData.getData().replace("&amp;", "&").replace("&apos;", "'").replace("&lt;", "<")
+                            .replace("&gt;", ">").replace("&quot;", "\"");
+                    logger.debug("UpdateEvent {}", data);
 
-                    if (item.getPayload() instanceof org.openhab.binding.freeathome.xmpp.rocks.extension.abb.com.protocol.update.Update) {
-                        org.openhab.binding.freeathome.xmpp.rocks.extension.abb.com.protocol.update.Update updateData = (org.openhab.binding.freeathome.xmpp.rocks.extension.abb.com.protocol.update.Update) item
-                                .getPayload();
-                        String data = updateData.getData().replace("&amp;", "&").replace("&apos;", "'")
-                                .replace("&lt;", "<").replace("&gt;", ">").replace("&quot;", "\"");
-                        logger.debug("UpdateEvent" + data);
+                    try {
+                        Project p = org.openhab.binding.freeathome.internal.xmpp.rocks.extensions.abb.com.protocol.data.Project
+                                .builder().build(data);
 
-                        try {
-                            Project p = org.openhab.binding.freeathome.xmpp.rocks.extensions.abb.com.protocol.data.Project
-                                    .builder().build(data);
+                        // create JAXB context and instantiate marshaller
+                        JAXBContext context = JAXBContext.newInstance(
+                                org.openhab.binding.freeathome.internal.xmpp.rocks.extensions.abb.com.protocol.data.Project.class);
+                        Marshaller m = context.createMarshaller();
+                        m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
 
-                            // create JAXB context and instantiate marshaller
-                            JAXBContext context = JAXBContext.newInstance(
-                                    org.openhab.binding.freeathome.xmpp.rocks.extensions.abb.com.protocol.data.Project.class);
-                            Marshaller m = context.createMarshaller();
-                            m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-
-                            // Write to File
-                            if (this.m_Configuration.log_enabled) {
-                                m.marshal(p, new File(this.m_Configuration.log_dir + "/update_" + counter + ".xml"));
-                                counter++;
-                            }
-
-                            try {
-                                List<Device> devices = p.getDevices();
-                                for (int i = 0; i < devices.size(); i++) {
-                                    Device currentDevice = devices.get(i);
-
-                                    logger.debug("Update from " + currentDevice.getSerialNumber());
-                                    List<Channel> channels = currentDevice.getChannels();
-
-                                    for (int j = 0; j < channels.size(); j++) {
-                                        Channel channel = channels.get(j);
-
-                                        /*
-                                         * Outputs
-                                         */
-                                        List<DataPoint> dataPointsOut = channel.getOutputs();
-                                        for (int d = 0; d < dataPointsOut.size(); d++) {
-                                            DataPoint datapoint = dataPointsOut.get(d);
-
-                                            logger.debug("Serial: " + currentDevice.getSerialNumber() + "  Channel: "
-                                                    + channel.getI() + "  DataPoint: " + datapoint.getI() + "  Value: "
-                                                    + datapoint.getValue());
-
-                                            if (bw != null && this.m_Configuration.log_enabled) {
-                                                Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-                                                bw.write(sdf.format(timestamp) + " ; " + currentDevice.getSerialNumber()
-                                                        + " ; " + channel.getI() + " ; " + datapoint.getI() + " ; "
-                                                        + datapoint.getValue() + " ; ");
-                                                bw.newLine();
-                                                bw.flush();
-                                            }
-
-                                            m_UpdateHandler.NotifyThing(currentDevice.getSerialNumber(), channel.getI(),
-                                                    datapoint.getI(), datapoint.getValue());
-                                        }
-                                    }
-                                }
-
-                            } catch (Exception e2) {
-                                logger.error("Ops!", e2);
-                                logger.error("Exception" + e2.getMessage());
-                            }
-
-                        } catch (JAXBException e1) {
-                            // TODO Auto-generated catch block
-                            logger.error("Ops!", e1);
-                            logger.error("JaxbException" + e1.getMessage());
-                        } catch (Exception ex) {
-                            logger.error("Generic Exception" + ex.getMessage());
+                        // Write to File
+                        if (this.m_Configuration.log_enabled) {
+                            m.marshal(p, new File(this.m_Configuration.log_dir + "/update_" + counter + ".xml"));
+                            counter++;
                         }
 
-                        // ...
-                    } else {
-                        logger.debug("Payload is not instance of extension.abb.com.protocol.update.Update");
+                        try {
+                            List<Device> devices = p.getDevices();
+                            for (int i = 0; i < devices.size(); i++) {
+                                Device currentDevice = devices.get(i);
+
+                                logger.debug("Update From {}", currentDevice.getSerialNumber());
+                                List<Channel> channels = currentDevice.getChannels();
+
+                                for (int j = 0; j < channels.size(); j++) {
+                                    Channel channel = channels.get(j);
+
+                                    /*
+                                     * Outputs
+                                     */
+                                    List<DataPoint> dataPointsOut = channel.getOutputs();
+                                    for (int d = 0; d < dataPointsOut.size(); d++) {
+                                        DataPoint datapoint = dataPointsOut.get(d);
+                                        String dataPoint = "Serial: " + currentDevice.getSerialNumber() + " Channel: "
+                                                + channel.getI() + " DataPoint: " + datapoint.getI() + " Value: "
+                                                + datapoint.getValue();
+                                        logger.debug("Datapoint {}", dataPoint);
+
+                                        if (bw != null && this.m_Configuration.log_enabled) {
+                                            Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+                                            bw.write(sdf.format(timestamp) + " ; " + currentDevice.getSerialNumber()
+                                                    + " ; " + channel.getI() + " ; " + datapoint.getI() + " ; "
+                                                    + datapoint.getValue() + " ; ");
+                                            bw.newLine();
+                                            bw.flush();
+                                        }
+
+                                        m_UpdateHandler.NotifyThing(currentDevice.getSerialNumber(), channel.getI(),
+                                                datapoint.getI(), datapoint.getValue());
+                                    }
+                                }
+                            }
+
+                        } catch (Exception e2) {
+                            logger.error("Ops!", e2);
+                            logger.error("Exception {}", e2.getMessage());
+                        }
+
+                    } catch (JAXBException e1) {
+                        // TODO Auto-generated catch block
+                        logger.error("Ops!", e1);
+                        logger.error("JaxbException {}", e1.getMessage());
+                    } catch (Exception ex) {
+                        logger.error("General Exception {}", ex.getMessage());
                     }
+
+                    // ...
+                } else {
+                    logger.debug("Payload is not instance of extension.abb.com.protocol.update.Update");
                 }
-            } else {
-                logger.debug("Message does not have namespace" + Update.NAMESPACE);
             }
+        } else {
+            logger.debug("Message does not have namespace" + Update.NAMESPACE);
         }
 
         if (bw != null) {
@@ -654,7 +648,7 @@ public class FreeAtHomeBridgeHandler extends BaseBridgeHandler {
     }
 
     private void onUpdateEvent(UpdateEvent e) {
-        logger.debug("UpdateEvent:" + e.toString());
+        logger.debug("UpdateEvent {}", e.toString());
     }
 
     private void writeStringToFile(String content, String file) {

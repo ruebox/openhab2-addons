@@ -1,13 +1,16 @@
 /**
- * Copyright (c) 2014-2018 by the respective copyright holders.
+ * Copyright (c) 2010-2019 Contributors to the openHAB project
  *
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * See the NOTICE file(s) distributed with this work for additional
+ * information.
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0
+ *
+ * SPDX-License-Identifier: EPL-2.0
  */
-
-package org.openhab.binding.freeathome.discovery;
+package org.openhab.binding.freeathome.internal.discovery;
 
 import java.io.IOException;
 import java.io.StringReader;
@@ -29,7 +32,8 @@ import org.xml.sax.SAXException;
 /**
  * Helper class to perform xml parsing and iterate over the devices
  *
- * @author ruebox
+ * @author ruebox - Initial contribution
+ * @author kjoglum - Update copyright header / package / logging
  *
  */
 public class FreeAtHomeBindingInventoryIterator {
@@ -67,22 +71,22 @@ public class FreeAtHomeBindingInventoryIterator {
                     doc = dBuilder.parse(new InputSource(new StringReader(xmlTree)));
                 } catch (SAXException e) {
                     // TODO Auto-generated catch block
-                    e.printStackTrace();
+                    logger.error("Ops!", e);
                     throw new RuntimeException();
                 } catch (IOException e) {
                     // TODO Auto-generated catch block
-                    e.printStackTrace();
+                    logger.error("Ops!", e);
                     throw new RuntimeException();
                 }
 
             } catch (ParserConfigurationException e) {
                 // TODO Auto-generated catch block
-                e.printStackTrace();
+                logger.error("Ops!", e);
                 throw new RuntimeException();
             }
         } catch (Exception e1) {
             // TODO Auto-generated catch block
-            e1.printStackTrace();
+            logger.error("Ops!", e1);
             throw new RuntimeException();
         }
 
@@ -99,7 +103,8 @@ public class FreeAtHomeBindingInventoryIterator {
             String nameId = nNode.getAttributes().getNamedItem("nameId").getTextContent();
             String content = nNode.getTextContent();
 
-            logger.debug(nameId + "  " + content);
+            logger.debug("NameID{}", nameId);
+            logger.debug("Content{}", content);
             nameMapping.put(nameId, content);
         }
 
@@ -114,7 +119,9 @@ public class FreeAtHomeBindingInventoryIterator {
          * hm.put("10C0", "Hue Aktor (LED Strip)");
          * hm.put("B001", " Jalousieaktor 4-fach, REG");
          * hm.put("1013", " Sensor/ Jalousieaktor 1/1-fach");
+         * hm.put("9000", "Sensoreinheit 1-fach");
          * hm.put("9004", "Thermostat");
+         * hm.put("1020", "4.3" with thermostat");
          * hm.put("FFFF", "SysAp");
          */
         deviceNodes = doc.getElementsByTagName("device");
@@ -136,16 +143,16 @@ public class FreeAtHomeBindingInventoryIterator {
                 .getOrDefault(deviceNode.getAttributes().getNamedItem("nameId").getTextContent(), "n.a.");
 
         Element deviceElement = (Element) deviceNode;
-        logger.debug(deviceNode.toString());
+        logger.debug("DeviceNode {}", deviceNode.toString());
 
         NodeList attributeList = deviceElement.getElementsByTagName("attribute"); // reads all attributes of device tag
                                                                                   // (also of channels)
-        logger.debug(attributeList.toString());
+        logger.debug("AttributeList {}", attributeList.toString());
 
         for (int i = 0; i < attributeList.getLength(); i++) {
             Node node = attributeList.item(i); // <attribute name="busVoltage">29.175</attribute>
 
-            logger.debug(node.getAttributes().getNamedItem("name").getNodeValue());
+            logger.debug("Node {}", node.getAttributes().getNamedItem("name").getNodeValue());
 
             // <attribute name="displayName">VMA Treppe OG</attribute>
             if (node.getAttributes().getNamedItem("name").getNodeValue().equals("displayName")) // found description of
@@ -159,7 +166,7 @@ public class FreeAtHomeBindingInventoryIterator {
             }
         }
 
-        logger.debug("Read device: " + local.toString());
+        logger.debug("Read Device {}", local.toString());
 
         return local;
     }

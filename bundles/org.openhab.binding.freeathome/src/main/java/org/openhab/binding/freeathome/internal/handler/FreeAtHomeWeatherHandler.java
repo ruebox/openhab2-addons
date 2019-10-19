@@ -1,4 +1,5 @@
 /**
+<<<<<<< HEAD
  * Copyright (c) 2014-2018 by the respective copyright holders.
  *
  * All rights reserved. This program and the accompanying materials
@@ -7,22 +8,48 @@
  * http://www.eclipse.org/legal/epl-v10.html
  */
 package org.openhab.binding.freeathome.handler;
+=======
+ * Copyright (c) 2010-2019 Contributors to the openHAB project
+ *
+ * See the NOTICE file(s) distributed with this work for additional
+ * information.
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0
+ *
+ * SPDX-License-Identifier: EPL-2.0
+ */
+package org.openhab.binding.freeathome.internal.handler;
+>>>>>>> 27b57273dd980306b76ae97cf96e434f3c45d934
 
 import org.eclipse.smarthome.core.thing.ChannelUID;
 import org.eclipse.smarthome.core.thing.Thing;
 import org.eclipse.smarthome.core.types.Command;
+<<<<<<< HEAD
 import org.openhab.binding.freeathome.FreeAtHomeBindingConstants;
 import org.openhab.binding.freeathome.config.FreeAtHomeWeatherConfig;
 import org.openhab.binding.freeathome.internal.FreeAtHomeUpdateChannel;
 import org.openhab.binding.freeathome.internal.stateconvert.DefaultDecimalTypeConverter;
 import org.openhab.binding.freeathome.internal.stateconvert.DefaultOnOffTypeConverter;
+=======
+import org.openhab.binding.freeathome.internal.FreeAtHomeBindingConstants;
+import org.openhab.binding.freeathome.internal.FreeAtHomeUpdateChannel;
+import org.openhab.binding.freeathome.internal.config.FreeAtHomeWeatherConfig;
+import org.openhab.binding.freeathome.internal.internal.stateconvert.DefaultDecimalTypeConverter;
+import org.openhab.binding.freeathome.internal.internal.stateconvert.DefaultOnOffTypeConverter;
+>>>>>>> 27b57273dd980306b76ae97cf96e434f3c45d934
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
  * The {@link FreeAtHomeWeatherHandler} represents weather station
  *
+<<<<<<< HEAD
  * @author ruebox - Initial contribution
+=======
+ * @author kjoglum - Initial contribution
+>>>>>>> 27b57273dd980306b76ae97cf96e434f3c45d934
  */
 
 public class FreeAtHomeWeatherHandler extends FreeAtHomeBaseHandler {

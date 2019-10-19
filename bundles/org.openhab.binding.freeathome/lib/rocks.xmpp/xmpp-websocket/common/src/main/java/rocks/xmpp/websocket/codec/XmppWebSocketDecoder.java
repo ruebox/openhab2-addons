@@ -28,6 +28,7 @@ import rocks.xmpp.core.stream.model.StreamElement;
 import rocks.xmpp.core.stream.model.StreamHeader;
 import rocks.xmpp.addr.Jid;
 import rocks.xmpp.websocket.model.Open;
+import rocks.xmpp.websocket.model.Open;
 
 import javax.websocket.DecodeException;
 import javax.websocket.Decoder;
@@ -50,6 +51,8 @@ import java.util.logging.Logger;
  * @author Christian Schudt
  * @see XmppWebSocketEncoder
  * @see UserProperties
+ * 
+ * Modified by @kjoglum to adapt to Busch-Jaeger Free@Home SysAp websocket protocol
  */
 public final class XmppWebSocketDecoder implements Decoder.Text<StreamElement> {
     
@@ -58,22 +61,19 @@ public final class XmppWebSocketDecoder implements Decoder.Text<StreamElement> {
     private Supplier<Unmarshaller> unmarshaller;
 
     private BiConsumer<String, StreamElement> onRead;
-
+    
     @Override
     public final StreamElement decode(final String s) throws DecodeException {
         if (s.contains("stream:stream")) {
-            //logger.warning("Decode streamheader " + s);
-            String ID = s.substring(s.indexOf("id")+4, s.indexOf("id")+40);
-            // String ID = s.substring(s.indexOf("id=") + 1, s.indexOf(' ') - 1);
-            //logger.warning("ID " + ID);
+            logger.warning("Decode open stream from server " + s);
+            String ID = s.substring(s.indexOf("id")+4, s.indexOf("id")+18);
+            logger.warning("ID " + ID);
             String Domain = "busch-jaeger.de";
             Jid From = Jid.of(Domain);
             Open streamHead = new Open(null, From, ID, null, "1.0");
-            // StreamHeader Head = StreamHeader.create(From, null, ID, "1.0", null, "jabber:client");
             return streamHead;
         }
         else {
-            //logger.warning("Decoding stream feature");
             try (StringReader reader = new StringReader(s)) {
                 StreamElement streamElement = (StreamElement) unmarshaller.get().unmarshal(reader);
                 if (onRead != null) {

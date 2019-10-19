@@ -1,12 +1,16 @@
 /**
- * Copyright (c) 2014-2018 by the respective copyright holders.
+ * Copyright (c) 2010-2019 Contributors to the openHAB project
  *
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * See the NOTICE file(s) distributed with this work for additional
+ * information.
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0
+ *
+ * SPDX-License-Identifier: EPL-2.0
  */
-package org.openhab.binding.freeathome.handler;
+package org.openhab.binding.freeathome.internal.handler;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +33,7 @@ import org.slf4j.LoggerFactory;
  * relevant for all things
  *
  * @author ruebox - Initial contribution
+ * @author kjoglum - Update header / package / logging
  */
 public abstract class FreeAtHomeBaseHandler extends BaseThingHandler {
 
@@ -85,7 +90,7 @@ public abstract class FreeAtHomeBaseHandler extends BaseThingHandler {
         }
 
         for (int i = 0; i < m_UpdateChannels.size(); i++) {
-            logger.debug("Register: " + m_UpdateChannels.get(i).toString());
+            logger.debug("Register {}", m_UpdateChannels.get(i).toString());
             bridge.m_UpdateHandler.Register(m_UpdateChannels.get(i));
         }
 
@@ -100,7 +105,7 @@ public abstract class FreeAtHomeBaseHandler extends BaseThingHandler {
         }
 
         for (int i = 0; i < m_UpdateChannels.size(); i++) {
-            logger.debug("Register: " + m_UpdateChannels.get(i).toString());
+            logger.debug("Register {}", m_UpdateChannels.get(i).toString());
             bridge.m_UpdateHandler.Unregister(m_UpdateChannels.get(i));
         }
 

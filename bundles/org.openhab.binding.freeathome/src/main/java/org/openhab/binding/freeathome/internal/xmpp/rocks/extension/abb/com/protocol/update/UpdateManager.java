@@ -1,13 +1,16 @@
 /**
- * Copyright (c) 2014-2018 by the respective copyright holders.
+ * Copyright (c) 2010-2019 Contributors to the openHAB project
  *
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * See the NOTICE file(s) distributed with this work for additional
+ * information.
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0
+ *
+ * SPDX-License-Identifier: EPL-2.0
  */
-
-package org.openhab.binding.freeathome.xmpp.rocks.extension.abb.com.protocol.update;
+package org.openhab.binding.freeathome.internal.xmpp.rocks.extension.abb.com.protocol.update;
 
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
@@ -18,7 +21,6 @@ import rocks.xmpp.core.session.XmppSession;
 import rocks.xmpp.core.stanza.MessageEvent;
 import rocks.xmpp.core.stanza.model.Message;
 import rocks.xmpp.extensions.geoloc.model.GeoLocation;
-//import rocks.xmpp.extensions.geoloc.model.GeoLocation;
 import rocks.xmpp.extensions.pubsub.PubSubManager;
 import rocks.xmpp.extensions.pubsub.PubSubService;
 import rocks.xmpp.extensions.pubsub.model.Item;

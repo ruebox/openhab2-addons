@@ -1,13 +1,17 @@
 /**
- * Copyright (c) 2014-2018 by the respective copyright holders.
+ * Copyright (c) 2010-2019 Contributors to the openHAB project
  *
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * See the NOTICE file(s) distributed with this work for additional
+ * information.
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0
+ *
+ * SPDX-License-Identifier: EPL-2.0
  */
 
-package org.openhab.binding.freeathome.xmpp.rocks.extensions.abb.com.protocol.data;
+package org.openhab.binding.freeathome.internal.xmpp.rocks.extensions.abb.com.protocol.data;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStreamReader;
@@ -30,7 +34,8 @@ import javax.xml.bind.annotation.XmlRootElement;
  * as XEP-0163: Personal Eventing Protocol
  * based on https://sco0ter.bitbucket.io/babbler/xep/pep.html
  *
- * @author ruebox
+ * @author ruebox - Initial contribution
+ * @author kjoglum - Update copyright header / package 
  *
  *         <update xmlns='http://abb.com/protocol/update'>
  *         <data>
@@ -138,7 +143,7 @@ public class Project {
             JAXBContext context;
 
             context = JAXBContext.newInstance(
-                    org.openhab.binding.freeathome.xmpp.rocks.extensions.abb.com.protocol.data.Project.class);
+                    org.openhab.binding.freeathome.internal.xmpp.rocks.extensions.abb.com.protocol.data.Project.class);
 
             /*
              * Marshaller m = context.createMarshaller();
@@ -156,7 +161,8 @@ public class Project {
             ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
             InputStreamReader isr = new InputStreamReader(bais);
 
-            p = (org.openhab.binding.freeathome.xmpp.rocks.extensions.abb.com.protocol.data.Project) u.unmarshal(isr);
+            p = (org.openhab.binding.freeathome.internal.xmpp.rocks.extensions.abb.com.protocol.data.Project) u
+                    .unmarshal(isr);
 
             return p;
         }

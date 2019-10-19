@@ -1,21 +1,25 @@
 /**
- * Copyright (c) 2014-2018 by the respective copyright holders.
+ * Copyright (c) 2010-2019 Contributors to the openHAB project
  *
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * See the NOTICE file(s) distributed with this work for additional
+ * information.
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0
+ *
+ * SPDX-License-Identifier: EPL-2.0
  */
-package org.openhab.binding.freeathome.handler;
+package org.openhab.binding.freeathome.internal.handler;
 
 import org.eclipse.smarthome.core.library.types.OnOffType;
 import org.eclipse.smarthome.core.thing.ChannelUID;
 import org.eclipse.smarthome.core.thing.Thing;
 import org.eclipse.smarthome.core.types.Command;
-import org.openhab.binding.freeathome.FreeAtHomeBindingConstants;
-import org.openhab.binding.freeathome.config.FreeAtHomeSwitchConfig;
+import org.openhab.binding.freeathome.internal.FreeAtHomeBindingConstants;
 import org.openhab.binding.freeathome.internal.FreeAtHomeUpdateChannel;
-import org.openhab.binding.freeathome.internal.stateconvert.DefaultOnOffTypeConverter;
+import org.openhab.binding.freeathome.internal.config.FreeAtHomeSwitchConfig;
+import org.openhab.binding.freeathome.internal.internal.stateconvert.DefaultOnOffTypeConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,6 +27,7 @@ import org.slf4j.LoggerFactory;
  * The {@link FreeAtHomeSwitchHandler} represents binary switch or group
  *
  * @author ruebox - Initial contribution
+ * @author kjoglum - Update copyright header / package / logging
  */
 
 public class FreeAtHomeSwitchHandler extends FreeAtHomeBaseHandler {
@@ -57,13 +62,13 @@ public class FreeAtHomeSwitchHandler extends FreeAtHomeBaseHandler {
 
                 if (udCommand.equals(OnOffType.ON)) {
 
-                    logger.debug("Switch on" + channel);
+                    logger.debug("Switch ON {}", channel);
                     bridge.setDataPoint(channel, "1");
 
                 }
                 if (udCommand.equals(OnOffType.OFF)) {
 
-                    logger.debug("Switch off: " + channel);
+                    logger.debug("Switch OFF {}", channel);
                     bridge.setDataPoint(channel, "0");
 
                 }
