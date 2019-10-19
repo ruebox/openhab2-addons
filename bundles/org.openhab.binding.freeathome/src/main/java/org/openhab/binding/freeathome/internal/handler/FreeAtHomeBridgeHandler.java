@@ -24,6 +24,7 @@ import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Scanner;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -77,7 +78,7 @@ import rocks.xmpp.websocket.net.client.WebSocketConnectionConfiguration;
  *
  * @author ruebox - Initial contribution
  * @author kjoglum - Changed XMPP connection from BOSH to websocket
-  *@author ruebox - Backward support for older fw
+ * @author ruebox - Backward support for older fw
  * @author kjoglum - Update copyright header / package / change to websocket
  *
  */
@@ -249,7 +250,7 @@ public class FreeAtHomeBridgeHandler extends BaseBridgeHandler {
                         Extension.of("http://abb.com/protocol/update", null, true, Update.class))
                 .build();
 
-        m_XmppClient = XmppClient.create("busch-jaeger.de", m_XmppConfiguration, m_WebSocketConfiguration);
+        m_XmppClient = XmppClient.create("busch-jaeger.de", m_XmppConfiguration, m_ConnectionConfiguration);
 
         // Listen for inbound messages.
         m_XmppClient.addInboundMessageListener(e -> logger.debug("Received Message {} ", e.getMessage()));
